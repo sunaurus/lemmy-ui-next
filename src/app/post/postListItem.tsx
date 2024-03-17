@@ -19,7 +19,7 @@ type Props = {
 
 export const PostListItem = (props: Props) => {
   return (
-    <article className="mx-auto flex gap-y-2 rounded p-2 text-neutral-300 items-center">
+    <div className="mx-auto flex gap-y-2 rounded p-2 text-neutral-300 items-start">
       <VoteActions score={props.postView.counts.score} />
       <Thumbnail post={props.postView.post} />
       <div>
@@ -30,7 +30,7 @@ export const PostListItem = (props: Props) => {
         />
         <PostActions postView={props.postView} />
       </div>
-    </article>
+    </div>
   );
 };
 
