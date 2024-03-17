@@ -4,7 +4,7 @@ import { getAuthData } from "@/app/login/auth";
 const baseUrl = process.env.LEMMY_BACKEND;
 
 if (!baseUrl) {
-  throw new Error("Ensure LEMMY_BACKEND is configured in .env.local!");
+  console.warn("Ensure LEMMY_BACKEND environment variable is set!");
 }
 
 const fetchWithNextConfig = async (
@@ -31,6 +31,6 @@ const fetchWithNextConfig = async (
   });
 };
 
-export const apiClient = new LemmyHttp(baseUrl, {
+export const apiClient = new LemmyHttp(baseUrl ?? "", {
   fetchFunction: fetchWithNextConfig,
 });
