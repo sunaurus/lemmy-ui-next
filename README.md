@@ -1,6 +1,9 @@
 # lemmy-ui-next
 Alternative frontend for Lemmy. Built with NextJS.
 
+![image](https://github.com/sunaurus/lemmy-ui-next/assets/5356547/def4c8ff-838b-4fa8-82e9-3f4635fc5205)
+
+
 ## Goals
 
 * Drop-in replacement for lemmy-ui
