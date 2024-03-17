@@ -6,9 +6,7 @@ Alternative frontend for Lemmy. Built with NextJS.
 * Drop-in replacement for lemmy-ui
 * Minimalistic design, heavily inspired by old Reddit
 * Fast!
-* Only a few core dependencies
-* SWR for data fetching
-* SSR
+* Super vanilla NextJS architecture
 
 ## Motivation
 
@@ -16,4 +14,14 @@ The original lemmy-ui has been extremely important for the growth of Lemmy, and 
 
 ## Current status
 
-The project is in its initial setup phase and not open to PRs yet. Once the basic structure is in place and there is at least one staging environment running the code.
+The project is in its initial setup phase and not open to PRs yet. PRs will be welcome once the basic structure is in place and there is at least one staging environment running the code.
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Running locally
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
