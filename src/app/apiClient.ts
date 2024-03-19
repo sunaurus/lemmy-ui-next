@@ -1,5 +1,6 @@
 import { LemmyHttp } from "lemmy-js-client";
 import { getAuthData } from "@/app/login/auth";
+import "server-only"; // All API calls must be done on the server
 
 const baseUrl = process.env.LEMMY_BACKEND;
 
@@ -26,7 +27,7 @@ const fetchWithNextConfig = async (
     },
     next: {
       // Cache API responses for 60 seconds for logged out users
-      revalidate: authData ? false : 60,
+      revalidate: 60,
     },
   });
 };

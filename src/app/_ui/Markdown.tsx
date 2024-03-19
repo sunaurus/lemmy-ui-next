@@ -20,7 +20,9 @@ export const Markdown = (props: Props) => {
       prose-hr:border-neutral-700
       prose-ul:list-disc
       prose-li:leading-snug
-      prose-p:leading-snug"
+      prose-p:leading-snug
+      prose-p:mx-0
+      prose-p:my-1"
     >
       <div dangerouslySetInnerHTML={{ __html: renderedHtml }} />
     </div>

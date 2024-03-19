@@ -20,7 +20,7 @@ export const CommentTree = (props: { node: CommentNode }) => {
     <div
       className={
         props.node.parent
-          ? "ml-4 border-l-neutral-700 border-l"
+          ? "ml-4 mt-4 border-l-neutral-700 border-l"
           : "mt-4 pt-4 border-t border-t-neutral-700"
       }
     >
