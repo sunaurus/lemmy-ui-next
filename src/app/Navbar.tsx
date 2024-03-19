@@ -9,7 +9,7 @@ export const Navbar = async () => {
   const { site_view: siteView } = await apiClient.getSite();
 
   return (
-    <nav className="bg-neutral-900 shadow-lg text-neutral-300 p-2 pr-12 flex items-center">
+    <nav className="bg-neutral-900 shadow-lg text-neutral-300 py-2 px-4 pr-12 lg:pr-4 flex items-center">
       <Link href={"/"} className="flex items-center mr-2">
         {siteView.site.icon && (
           <Image
