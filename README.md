@@ -9,7 +9,7 @@ Alternative frontend for Lemmy. Built with NextJS.
 * Drop-in replacement for lemmy-ui
 * Minimalistic design, following in the footsteps of other timeless link aggregator UIs
 * Fast!
-* Super vanilla NextJS architecture
+* Super basic NextJS architecture, taking advantage of features like the app router & server actions
 
 ## Motivation
 
