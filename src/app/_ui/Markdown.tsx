@@ -17,6 +17,7 @@ export const Markdown = (props: Props) => {
       prose-neutral
       hover:prose-a:text-slate-300
       prose-a:text-slate-400
+      prose-a:no-underline
       prose-hr:border-neutral-700
       prose-ul:list-disc
       prose-li:leading-snug
