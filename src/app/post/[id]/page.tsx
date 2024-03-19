@@ -3,8 +3,6 @@ import { apiClient } from "@/app/apiClient";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { Markdown } from "@/app/_ui/Markdown";
-import { Suspense } from "react";
-import { Spinner } from "@/app/_ui/Spinner";
 import { PageWithSidebar } from "@/app/PageWithSidebar";
 
 const PostPage = async ({ params }: { params: { id: Number } }) => {
@@ -28,10 +26,10 @@ const PostPage = async ({ params }: { params: { id: Number } }) => {
           <PostListItem key={postView.post.id} postView={postView} />
           {postView.post.body && <PostBody body={postView.post.body} />}
           {postView.counts.comments > 0 ? (
-            <Suspense fallback={<CommentsLoading />}>
-              <Comments postId={postView.post.id} />
-            </Suspense>
+            // <Suspense fallback={<CommentsLoading />}>
+            <Comments postId={postView.post.id} />
           ) : (
+            // </Suspense>
             <NoComments />
           )}
         </article>
@@ -64,15 +62,6 @@ const Comments = async (props: { postId: number }) => {
       {commentTrees.map((node) => (
         <CommentTree key={node.commentView.comment.id} node={node} />
       ))}
-    </div>
-  );
-};
-
-const CommentsLoading = () => {
-  return (
-    <div className="m-6 text-neutral-400 flex items-center">
-      <Spinner />
-      Loading comments...
     </div>
   );
 };

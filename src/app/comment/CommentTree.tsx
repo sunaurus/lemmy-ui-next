@@ -1,74 +1,22 @@
-"use client";
-
-import { useState } from "react";
-import {
-  buildCommentTrees,
-  CommentNode,
-} from "@/app/comment/buildCommentTrees";
+import { CommentNode } from "@/app/comment/buildCommentTrees";
 import { Comment } from "@/app/comment/Comment";
-import { ArrowRightIcon } from "@heroicons/react/16/solid";
-import { loadChildCommentsAction } from "@/app/comment/loadChildCommentsAction";
+import classNames from "classnames";
+import { LazyChildComments } from "@/app/comment/LazyChildComments";
 
 export const CommentTree = (props: { node: CommentNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
-
   return (
     <div
-      className={
-        "mt-4" +
-        " " +
-        (props.node.parent
-          ? "ml-4 border-l border-l-neutral-700"
-          : "pt-4 border-t border-t-neutral-700")
-      }
+      className={classNames("border-neutral-700 group mt-4", {
+        "border-l": !!props.node.parent,
+        "pt-4 border-t": !props.node.parent,
+      })}
     >
-      <Comment
-        commentView={props.node.commentView}
-        setCollapsed={setCollapsed}
-        isCollapsed={collapsed}
-      />
-      <div className={collapsed ? "hidden" : ""}>
+      <Comment commentView={props.node.commentView}>
         {props.node.children.map((node) => (
           <CommentTree key={node.commentView.comment.id} node={node} />
         ))}
-        <LoadMoreChildComments node={props.node} />
-      </div>
+        <LazyChildComments node={props.node} />
+      </Comment>
     </div>
   );
-};
-
-const LoadMoreChildComments = (props: { node: CommentNode }) => {
-  const [loadedComments, setLoadedComments] = useState<CommentNode[] | null>(
-    null,
-  );
-
-  if (
-    props.node.children.length > 0 ||
-    props.node.commentView.counts.child_count === 0
-  ) {
-    return null;
-  }
-
-  const onLoadMore = async () => {
-    const comments = await loadChildCommentsAction(
-      props.node.commentView.comment.id,
-    );
-
-    setLoadedComments(buildCommentTrees(comments)[0].children);
-  };
-
-  if (loadedComments === null) {
-    return (
-      <div
-        className="flex items-center text-slate-400 hover:text-slate-300 mt-2 ml-10 cursor-pointer text-xs"
-        onClick={onLoadMore}
-      >
-        Load more comments <ArrowRightIcon className="ml-2 h-4" />
-      </div>
-    );
-  }
-
-  return loadedComments.map((node) => (
-    <CommentTree key={node.commentView.comment.id} node={node} />
-  ));
 };
