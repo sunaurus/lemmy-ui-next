@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { apiClient } from "@/app/apiClient";
 
 // These styles apply to every route in the application
@@ -13,6 +13,10 @@ export async function generateMetadata(): Promise<Metadata> {
     description: site.site_view.site.description,
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: "#171717",
+};
 
 type Props = {
   children: React.ReactNode;
