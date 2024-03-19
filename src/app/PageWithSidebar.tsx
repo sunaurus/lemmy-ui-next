@@ -83,7 +83,7 @@ const SidebarToggleButton = () => {
 
 const SidebarToggleContents = (props: { children: ReactNode[] }) => {
   return (
-    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[48px] lg:top-0 right-0 transition-all duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
+    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[48px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
       {props.children}
     </div>
   );
