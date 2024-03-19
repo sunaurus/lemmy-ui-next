@@ -18,11 +18,13 @@ type Props = {
   admins?: Person[];
   mods?: Person[];
   stats: CommunityAggregates | SiteAggregates;
+  children: ReactNode | ReactNode[];
 };
 
-export const Sidebar = (props: Props) => {
+export const PageWithSidebar = (props: Props) => {
   return (
-    <div>
+    <div className="lg:flex w-full">
+      <div className="p-4 mr-auto">{props.children}</div>
       <SidebarToggleButton />
       <SidebarToggleContents>
         {props.community && (
@@ -71,7 +73,7 @@ const SidebarToggleButton = () => {
       />
       <label
         htmlFor="sidebar-toggle"
-        className="absolute cursor-pointer right-0 z-10 top-0 inline-block p-3  bg-neutral-900 rounded"
+        className="lg:hidden absolute cursor-pointer right-0 z-10 top-0 inline-block p-3  bg-neutral-900 rounded"
       >
         <Bars3Icon className="h-6 peer-checked:rotate-180" />
       </label>
@@ -81,7 +83,7 @@ const SidebarToggleButton = () => {
 
 const SidebarToggleContents = (props: { children: ReactNode[] }) => {
   return (
-    <div className="max-w-[300px] absolute top-[48px] right-0 transition-all duration-500 transform lg:peer-checked:translate-x-[300px] lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
+    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[48px] lg:top-0 right-0 transition-all duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
       {props.children}
     </div>
   );

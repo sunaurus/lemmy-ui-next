@@ -5,7 +5,7 @@ import { buildCommentTrees } from "@/app/post/[id]/buildCommentTrees";
 import { Markdown } from "@/app/_ui/Markdown";
 import { Suspense } from "react";
 import { Spinner } from "@/app/_ui/Spinner";
-import { Sidebar } from "@/app/Sidebar";
+import { PageWithSidebar } from "@/app/PageWithSidebar";
 
 const PostPage = async ({ params }: { params: { id: Number } }) => {
   const { post_view: postView } = await apiClient.getPost({
@@ -19,22 +19,23 @@ const PostPage = async ({ params }: { params: { id: Number } }) => {
 
   return (
     <div className="">
-      <Sidebar
+      <PageWithSidebar
         community={communityView.community}
         mods={moderators.map((mod) => mod.moderator)}
         stats={communityView.counts}
-      />
-      <article>
-        <PostListItem key={postView.post.id} postView={postView} />
-        {postView.post.body && <PostBody body={postView.post.body} />}
-        {postView.counts.comments > 0 ? (
-          <Suspense fallback={<CommentsLoading />}>
-            <Comments postId={postView.post.id} />
-          </Suspense>
-        ) : (
-          <NoComments />
-        )}
-      </article>
+      >
+        <article>
+          <PostListItem key={postView.post.id} postView={postView} />
+          {postView.post.body && <PostBody body={postView.post.body} />}
+          {postView.counts.comments > 0 ? (
+            <Suspense fallback={<CommentsLoading />}>
+              <Comments postId={postView.post.id} />
+            </Suspense>
+          ) : (
+            <NoComments />
+          )}
+        </article>
+      </PageWithSidebar>
     </div>
   );
 };

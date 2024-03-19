@@ -3,7 +3,7 @@ import { CommunityView, PostView } from "lemmy-js-client";
 import Image from "next/image";
 import { PostListItem } from "@/app/post/postListItem";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
-import { Sidebar } from "@/app/Sidebar";
+import { PageWithSidebar } from "@/app/PageWithSidebar";
 
 const CommunityPage = async (props: { params: { name: string } }) => {
   const communityName = decodeURIComponent(props.params.name);
@@ -22,22 +22,24 @@ const CommunityPage = async (props: { params: { name: string } }) => {
   });
 
   return (
-    <>
-      <Header communityView={communityView} />
-      <Sidebar
-        community={communityView.community}
-        mods={moderators.map((mod) => mod.moderator)}
-        stats={communityView.counts}
-        site={site}
-      />
-      {posts.map((postView: PostView) => (
-        <PostListItem
-          key={postView.post.id}
-          postView={postView}
-          hideCommunityName={true}
-        />
-      ))}
-    </>
+    <PageWithSidebar
+      community={communityView.community}
+      mods={moderators.map((mod) => mod.moderator)}
+      stats={communityView.counts}
+      site={site}
+    >
+      <>
+        <Header communityView={communityView} />
+
+        {posts.map((postView: PostView) => (
+          <PostListItem
+            key={postView.post.id}
+            postView={postView}
+            hideCommunityName={true}
+          />
+        ))}
+      </>
+    </PageWithSidebar>
   );
 };
 
