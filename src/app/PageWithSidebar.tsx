@@ -73,7 +73,7 @@ const SidebarToggleButton = () => {
       />
       <label
         htmlFor="sidebar-toggle"
-        className="lg:hidden absolute cursor-pointer right-0 z-10 top-0 inline-block p-3  bg-neutral-900 rounded"
+        className="lg:hidden absolute cursor-pointer right-0 z-10 top-0 inline-block m-3  bg-neutral-900 rounded"
       >
         <Bars3Icon className="h-6 peer-checked:rotate-180" />
       </label>
