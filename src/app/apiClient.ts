@@ -1,6 +1,7 @@
+import "server-only"; // All API calls must be done on the server
 import { LemmyHttp } from "lemmy-js-client";
 import { getAuthData } from "@/app/login/auth";
-import "server-only"; // All API calls must be done on the server
+import { headers } from "next/headers";
 
 const baseUrl = process.env.LEMMY_BACKEND;
 
@@ -16,7 +17,19 @@ const fetchWithNextConfig = async (
   const authData = await getAuthData();
 
   if (authData) {
-    additionalHeaders["Authorization"] = `Bearer ${authData.jwt}`;
+    additionalHeaders["authorization"] = `Bearer ${authData.jwt}`;
+  }
+
+  const incomingHeaders = headers();
+
+  const forwardedFor = incomingHeaders.get("x-forwarded-for");
+  if (forwardedFor) {
+    additionalHeaders["x-forwarded-for"] = forwardedFor;
+  }
+  const realIp = incomingHeaders.get("x-real-ip");
+
+  if (realIp) {
+    additionalHeaders["x-real-ip"] = realIp;
   }
 
   return fetch(input, {
