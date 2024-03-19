@@ -23,10 +23,10 @@ type Props = {
 };
 export default function RootLayout(props: Props) {
   return (
-    <html lang="en" className="overflow-x-hidden">
-      <body className="bg-[#1f1f1f] overflow-x-hidden">
+    <html lang="en" className="w-screen overflow-x-hidden">
+      <body className="w-screen bg-[#1f1f1f] overflow-x-hidden relative">
         <Navbar />
-        <main className="w-full min-h-[calc(100vh_-_48px)] text-[#e4e4e4] overflow-x-hidden">
+        <main className="w-screen min-h-[calc(100vh_-_48px)] text-[#e4e4e4] overflow-x-clip">
           {props.children}
         </main>
       </body>
