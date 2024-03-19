@@ -11,6 +11,7 @@ const AUTH_COOKIE_NAME = "auth";
 export const loginAction = async (data: FormData) => {
   const username = data.get("username")?.toString();
   const password = data.get("password")?.toString();
+  const twofactor = data.get("twofactor")?.toString();
 
   if (!username || !password) {
     throw new Error("Missing username or password");
@@ -19,6 +20,7 @@ export const loginAction = async (data: FormData) => {
   const loginResponse = await apiClient.login({
     username_or_email: username,
     password: password,
+    totp_2fa_token: twofactor,
   });
 
   if (!loginResponse.jwt) {
