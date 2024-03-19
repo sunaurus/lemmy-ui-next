@@ -34,7 +34,7 @@ export default function RootLayout(props: Props) {
           showSpinner={false}
           shadow={"0 0 10px #94a3b8,0 0 5px #94a3b8"}
         />
-        <main className="w-screen min-h-[calc(100vh_-_48px)] text-[#e4e4e4] overflow-x-clip">
+        <main className="w-full min-h-[calc(100vh_-_48px)] text-[#e4e4e4] overflow-x-clip">
           {props.children}
         </main>
       </body>
