@@ -1,24 +1,17 @@
 import { CommentView } from "lemmy-js-client";
-import { formatDistanceToNowStrict } from "date-fns";
 import { VoteActions } from "@/app/_ui/VoteActions";
 import { UserLink } from "@/app/u/UserLink";
 import { Markdown } from "@/app/_ui/Markdown";
+import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
 
 export const Comment = (props: {
   commentView: CommentView;
   isCollapsed: boolean;
   setCollapsed(input: boolean): void;
 }) => {
-  const commentTime = formatDistanceToNowStrict(
-    new Date(props.commentView.comment.published),
-    {
-      addSuffix: true,
-    },
-  );
-
   return (
     <div className="mt-2 mr-2 flex items-start">
-      {props.isCollapsed ? <div className="w-10" /> : <VoteActions />}
+      {props.isCollapsed ? <div className="w-9" /> : <VoteActions />}
       <div>
         <div className={"text-xs flex items-center flex-wrap"}>
           <div className="flex items-center">
@@ -32,7 +25,10 @@ export const Comment = (props: {
           </div>
           <div className="flex items-center">
             <div className="ml-2">{props.commentView.counts.score} points</div>
-            <div className="ml-2">{commentTime}</div>
+            <FormattedTimestamp
+              timeString={props.commentView.comment.published}
+              className="ml-2"
+            />
           </div>
         </div>
         {!props.isCollapsed && (

@@ -3,7 +3,6 @@ import {
   LinkIcon,
 } from "@heroicons/react/24/outline";
 import { Post, PostView } from "lemmy-js-client";
-import { formatDistanceToNowStrict } from "date-fns";
 import { formatCompactNumber } from "@/utils/formatCompactNumber";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +10,7 @@ import { ChatBubbleLeftRightIcon } from "@heroicons/react/16/solid";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteActions } from "@/app/_ui/VoteActions";
+import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
 
 type Props = {
   postView: PostView;
@@ -54,16 +54,11 @@ const Title = (props: TitleProps) => {
 };
 
 const PostDetails = (props: Props) => {
-  const postTime = formatDistanceToNowStrict(
-    new Date(props.postView.post.published),
-    {
-      addSuffix: true,
-    },
-  );
-
   return (
     <div className="text-gray-100 text-xs lg:text-sm flex flex-wrap gap-1">
-      <div className="flex items-center gap-1">posted {postTime}</div>
+      <div className="flex items-center gap-1">
+        posted <FormattedTimestamp timeString={props.postView.post.published} />{" "}
+      </div>
       <div className="flex items-center gap-1">
         by <UserLink person={props.postView.creator} />
       </div>
