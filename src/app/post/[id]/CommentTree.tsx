@@ -19,9 +19,10 @@ export const CommentTree = (props: { node: CommentNode }) => {
   return (
     <div
       className={
-        props.node.parent
-          ? "ml-4 mt-4 border-l-neutral-700 border-l"
-          : "mt-4 pt-4 border-t border-t-neutral-700"
+        "mt-4 w-full " +
+        (props.node.parent
+          ? "ml-4 border-l border-l-neutral-700"
+          : "pt-4 border-t border-t-neutral-700")
       }
     >
       <Comment
@@ -104,12 +105,12 @@ const Comment = (props: {
           </div>
         </div>
         {!props.isCollapsed && (
-          <>
+          <div className="max-w-[840px]">
             <Markdown content={props.commentView.comment.content} />
             <div className="text-xs font-semibold cursor-pointer">
               permalink embed save report reply
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -24,7 +24,7 @@ type Props = {
 export const PageWithSidebar = (props: Props) => {
   return (
     <div className="lg:flex w-full">
-      <div className="p-4 mr-auto">{props.children}</div>
+      <div className="p-4 flex-grow">{props.children}</div>
       <SidebarToggleButton />
       <SidebarToggleContents>
         {props.community && (

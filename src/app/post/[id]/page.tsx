@@ -24,7 +24,7 @@ const PostPage = async ({ params }: { params: { id: Number } }) => {
         mods={moderators.map((mod) => mod.moderator)}
         stats={communityView.counts}
       >
-        <article>
+        <article className="w-full">
           <PostListItem key={postView.post.id} postView={postView} />
           {postView.post.body && <PostBody body={postView.post.body} />}
           {postView.counts.comments > 0 ? (
