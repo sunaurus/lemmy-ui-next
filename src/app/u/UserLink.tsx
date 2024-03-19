@@ -1,7 +1,7 @@
-import Link from "next/link";
 import Image from "next/image";
 import { Person } from "lemmy-js-client";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
+import { StyledLink } from "@/app/_ui/StyledLink";
 
 type Props = {
   person: Person;
@@ -10,8 +10,8 @@ type Props = {
 export const UserLink = (props: Props) => {
   const creatorName = formatPersonUsername(props.person);
   return (
-    <Link
-      className="text-slate-400 hover:text-slate-300 flex gap-1 items-center"
+    <StyledLink
+      className="flex gap-1 items-center"
       href={`/u/${props.person.name}@${new URL(props.person.actor_id).host}`}
     >
       <div className="relative h-[20px] w-[20px]">
@@ -24,6 +24,6 @@ export const UserLink = (props: Props) => {
         />
       </div>
       {creatorName}
-    </Link>
+    </StyledLink>
   );
 };

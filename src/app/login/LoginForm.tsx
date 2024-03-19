@@ -2,8 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 import { loginAction } from "@/app/login/auth";
-import Link from "next/link";
 import { Input } from "@/app/_ui/Input";
+import { StyledLink } from "@/app/_ui/StyledLink";
 
 export const LoginForm = () => {
   return (
@@ -33,12 +33,9 @@ export const LoginForm = () => {
             Password
           </label>
           <div className="text-sm">
-            <Link
-              href={"/login_reset"}
-              className="font-semibold text-slate-500 hover:text-slate-400"
-            >
+            <StyledLink href={"/login_reset"} className="font-semibold">
               Forgot password?
-            </Link>
+            </StyledLink>
           </div>
         </div>
         <Input

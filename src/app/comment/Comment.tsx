@@ -3,7 +3,8 @@ import { VoteActions } from "@/app/_ui/VoteActions";
 import { UserLink } from "@/app/u/UserLink";
 import { Markdown } from "@/app/_ui/Markdown";
 import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { StyledLink } from "@/app/_ui/StyledLink";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -40,8 +41,17 @@ export const Comment = (props: {
         </div>
         <div className="peer-checked:group-[]:hidden max-w-[840px] overflow-x-clip">
           <Markdown content={props.commentView.comment.content} />
-          <div className="text-xs font-semibold cursor-pointer mt-2">
-            permalink embed save report reply
+          <div className="text-xs font-semibold mt-2 flex gap-1">
+            <StyledLink
+              className="text-neutral-300"
+              href={`/comment/${props.commentView.comment.id}`}
+            >
+              permalink
+            </StyledLink>
+            <div>embed</div>
+            <div>save</div>
+            <div>report</div>
+            <div>reply</div>
           </div>
         </div>
         <div className="peer-checked:group-[]:hidden">{props.children}</div>

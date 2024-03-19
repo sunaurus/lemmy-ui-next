@@ -11,6 +11,7 @@ import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteActions } from "@/app/_ui/VoteActions";
 import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
+import { StyledLink } from "@/app/_ui/StyledLink";
 
 type Props = {
   postView: PostView;
@@ -42,12 +43,12 @@ const Title = (props: TitleProps) => {
   return (
     <header>
       <h1>
-        <Link
+        <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}
-          className="hover:text-neutral-100 visited:text-neutral-400 lg:text-xl font-bold"
+          className="text-neutral-300 visited:text-neutral-400 lg:text-xl font-bold"
         >
           {props.post.name}
-        </Link>
+        </StyledLink>
       </h1>
     </header>
   );
@@ -77,13 +78,13 @@ const PostActions = (props: Props) => {
   const commentCount = props.postView.counts.comments;
   return (
     <div className="text-xs mt-1">
-      <Link
+      <StyledLink
         href={`/post/${props.postView.post.id}`}
-        className="flex text-neutral-400 hover:text-slate-300 items-center"
+        className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
         <ChatBubbleLeftRightIcon className="h-4 mr-1" />
         {formatCompactNumber.format(commentCount)}
-      </Link>
+      </StyledLink>
     </div>
   );
 };

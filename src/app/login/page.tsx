@@ -1,7 +1,7 @@
 import { apiClient } from "@/app/apiClient";
 import Image from "next/image";
 import { LoginForm } from "@/app/login/LoginForm";
-import Link from "next/link";
+import { StyledLink } from "@/app/_ui/StyledLink";
 
 const LoginPage = async () => {
   const { site_view: siteView } = await apiClient.getSite();
@@ -25,12 +25,12 @@ const LoginPage = async () => {
 
         <p className="mt-10 text-center text-sm">
           No account?{" "}
-          <Link
+          <StyledLink
             href={"/signup"}
-            className="font-semibold leading-6 text-slate-500 hover:text-slate-400"
+            className="font-semibold leading-6 hover:text-slate-400"
           >
             Sign up here
-          </Link>
+          </StyledLink>
         </p>
       </div>
     </div>
