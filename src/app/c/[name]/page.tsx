@@ -48,13 +48,15 @@ const Header = (props: { communityView: CommunityView }) => {
   return (
     <header>
       {bannerSrc && (
-        <Image
-          className={"fill object-cover max-h-[240px] rounded"}
-          src={bannerSrc}
-          alt={"Community banner"}
-          width={1000}
-          height={240}
-        />
+        <div className="relative h-[240px] max-w-[1000px]">
+          <Image
+            className={"object-cover rounded"}
+            src={bannerSrc}
+            fill={true}
+            alt={"Community banner"}
+            sizes="1000px"
+          />
+        </div>
       )}
 
       <h1 className="text-2xl">{props.communityView.community.name}</h1>

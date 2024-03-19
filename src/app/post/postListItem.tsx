@@ -106,7 +106,8 @@ const Thumbnail = (props: ThumbnailProps) => {
             className="rounded object-cover"
             src={props.post.thumbnail_url}
             alt="Thumbnail"
-            fill
+            fill={true}
+            sizes="70px"
           />
         ) : props.post.url ? (
           <LinkIcon className="h-8 text-neutral-900" />

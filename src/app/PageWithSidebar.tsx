@@ -98,13 +98,15 @@ const DetailsSection = (props: {
     <SidebarSection>
       <header className="flex flex-col items-center">
         {props.logoSrc && (
-          <Image
-            className="mt-4"
-            src={props.logoSrc}
-            width={230}
-            height={90}
-            alt="Logo"
-          />
+          <div className="relative h-[90px] w-[230px]">
+            <Image
+              className="mt-4 object-cover h-auto"
+              src={props.logoSrc}
+              fill={true}
+              sizes="230px"
+              alt="Logo"
+            />
+          </div>
         )}
         <h1 className="mt-4">{props.name}</h1>
       </header>
