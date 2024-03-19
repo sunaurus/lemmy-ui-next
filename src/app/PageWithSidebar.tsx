@@ -12,14 +12,24 @@ import {
 import { ReactNode } from "react";
 import { formatCompactNumber } from "@/utils/formatCompactNumber";
 
-type Props = {
-  community?: Community;
-  site?: Site;
-  admins?: Person[];
-  mods?: Person[];
-  stats: CommunityAggregates | SiteAggregates;
+type SidebarProps = {
   children: ReactNode | ReactNode[];
 };
+
+type InstanceSidebarProps = SidebarProps & {
+  site: Site;
+  admins: Person[];
+  stats: SiteAggregates;
+};
+
+type CommunitySidebarProps = SidebarProps & {
+  community: Community;
+  site?: Site;
+  mods: Person[];
+  stats: CommunityAggregates;
+};
+
+type Props = InstanceSidebarProps | CommunitySidebarProps;
 
 export const PageWithSidebar = (props: Props) => {
   return (
@@ -27,19 +37,22 @@ export const PageWithSidebar = (props: Props) => {
       <div className="p-1 lg:p-4 flex-grow">{props.children}</div>
       <SidebarToggleButton />
       <SidebarToggleContents>
-        {props.community && (
+        {isCommunitySidebar(props) && (
           <>
             <DetailsSection
               logoSrc={props.community.icon}
               name={props.community.name}
               markdownContent={props.community.description}
             />
-            <StatsSection stats={props.stats} />
+            <StatsSection title={"Community stats"} stats={props.stats} />
           </>
         )}
 
-        {props.mods && (
-          <ContactsSection title={"Moderators"} persons={props.mods} />
+        {isCommunitySidebar(props) && (
+          <ContactsSection
+            title={"Community moderators"}
+            persons={props.mods}
+          />
         )}
 
         {props.site && (
@@ -52,14 +65,20 @@ export const PageWithSidebar = (props: Props) => {
           </>
         )}
 
-        {!props.community && <StatsSection stats={props.stats} />}
+        {!isCommunitySidebar(props) && (
+          <StatsSection title={"Community stats"} stats={props.stats} />
+        )}
 
-        {props.admins && (
-          <ContactsSection title={"Admins"} persons={props.admins} />
+        {!isCommunitySidebar(props) && (
+          <ContactsSection title={"Instance admins"} persons={props.admins} />
         )}
       </SidebarToggleContents>
     </div>
   );
+};
+
+const isCommunitySidebar = (props: Props): props is CommunitySidebarProps => {
+  return (props as CommunitySidebarProps).community !== undefined;
 };
 
 const SidebarToggleButton = () => {
@@ -117,11 +136,12 @@ const DetailsSection = (props: {
 };
 
 const StatsSection = (props: {
+  title: string;
   stats: CommunityAggregates | SiteAggregates;
 }) => {
   return (
     <SidebarSection>
-      <h1 className="text-lg">Statistics</h1>
+      <h1 className="text-lg">{props.title}</h1>
       <ul>
         <StatItem
           label={"Monthly active users"}
@@ -159,7 +179,7 @@ const ContactsSection = (props: { title: string; persons: Person[] }) => {
 };
 
 const SidebarSection = (props: { children: ReactNode[] | ReactNode }) => (
-  <div className="bg-neutral-900 rounded-b shadow-lg p-4 mb-4 w-full">
+  <div className="bg-neutral-900 last-of-type:rounded-b shadow-lg p-4 w-full border-b border-neutral-700 last-of-type:border-0">
     {props.children}
   </div>
 );
