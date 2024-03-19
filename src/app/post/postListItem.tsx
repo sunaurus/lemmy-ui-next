@@ -95,7 +95,7 @@ type ThumbnailProps = {
 const Thumbnail = (props: ThumbnailProps) => {
   return (
     <Link href={props.post.url ?? `/post/${props.post.id}`}>
-      <div className="rounded bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative mr-3 flex items-center justify-center">
+      <div className="rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative mr-3 flex items-center justify-center">
         {props.post.thumbnail_url ? (
           <Image
             className="rounded object-cover"
