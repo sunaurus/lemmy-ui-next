@@ -1,17 +1,13 @@
 "use client";
 
-import { CommentView } from "lemmy-js-client";
 import { useState } from "react";
 import {
   buildCommentTrees,
   CommentNode,
-} from "@/app/post/[id]/buildCommentTrees";
-import { UserLink } from "@/app/u/UserLink";
+} from "@/app/comment/buildCommentTrees";
+import { Comment } from "@/app/comment/Comment";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
-import { Markdown } from "@/app/_ui/Markdown";
-import { VoteActions } from "@/app/_ui/VoteActions";
-import { formatDistanceToNowStrict } from "date-fns";
-import { loadChildCommentsAction } from "@/app/post/[id]/loadChildCommentsAction";
+import { loadChildCommentsAction } from "@/app/comment/loadChildCommentsAction";
 
 export const CommentTree = (props: { node: CommentNode }) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -19,7 +15,8 @@ export const CommentTree = (props: { node: CommentNode }) => {
   return (
     <div
       className={
-        "mt-4 w-full " +
+        "mt-4" +
+        " " +
         (props.node.parent
           ? "ml-4 border-l border-l-neutral-700"
           : "pt-4 border-t border-t-neutral-700")
@@ -74,45 +71,4 @@ const LoadMoreChildComments = (props: { node: CommentNode }) => {
   return loadedComments.map((node) => (
     <CommentTree key={node.commentView.comment.id} node={node} />
   ));
-};
-
-const Comment = (props: {
-  commentView: CommentView;
-  isCollapsed: boolean;
-  setCollapsed(input: boolean): void;
-}) => {
-  const commentTime = formatDistanceToNowStrict(
-    new Date(props.commentView.comment.published),
-    {
-      addSuffix: true,
-    },
-  );
-
-  return (
-    <div className="mt-2 flex items-start">
-      {props.isCollapsed ? <div className="w-10" /> : <VoteActions />}
-      <div>
-        <div className={"text-xs flex items-center"}>
-          <div
-            className="hover:text-slate-400 hover:cursor-pointer mr-2"
-            onClick={() => props.setCollapsed(!props.isCollapsed)}
-          >
-            [ {props.isCollapsed ? "+" : "-"} ]
-          </div>
-          <UserLink person={props.commentView.creator} />
-          <div className="ml-2">
-            {props.commentView.counts.score} points {commentTime}
-          </div>
-        </div>
-        {!props.isCollapsed && (
-          <div className="max-w-[840px]">
-            <Markdown content={props.commentView.comment.content} />
-            <div className="text-xs font-semibold cursor-pointer">
-              permalink embed save report reply
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 };

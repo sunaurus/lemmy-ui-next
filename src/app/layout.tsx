@@ -5,6 +5,7 @@ import { apiClient } from "@/app/apiClient";
 import "./globals.css";
 import { Navbar } from "@/app/Navbar";
 import NextTopLoader from "nextjs-toploader";
+import { ReactNode } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await apiClient.getSite();
@@ -15,17 +16,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+// noinspection JSUnusedGlobalSymbols
 export const viewport: Viewport = {
   themeColor: "#171717",
 };
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 export default function RootLayout(props: Props) {
   return (
-    <html lang="en" className="w-screen overflow-x-hidden">
-      <body className="w-screen bg-[#1f1f1f] overflow-x-hidden relative">
+    <html lang="en" className="w-full overflow-x-hidden overscroll-x-none">
+      <body className="w-full bg-[#1f1f1f] overflow-x-hidden relative">
         <Navbar />
         <NextTopLoader
           color="#94a3b8"

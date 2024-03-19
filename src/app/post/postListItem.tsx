@@ -19,9 +19,11 @@ type Props = {
 
 export const PostListItem = (props: Props) => {
   return (
-    <div className="mx-auto flex gap-y-2 rounded p-2 text-neutral-300 items-start">
-      <VoteActions score={props.postView.counts.score} />
-      <Thumbnail post={props.postView.post} />
+    <div className="mx-auto flex gap-y-2 rounded p-1 pl-0 lg:p-2 text-neutral-300 items-start">
+      <div className="flex items-center">
+        <VoteActions score={props.postView.counts.score} />
+        <Thumbnail post={props.postView.post} />
+      </div>
       <div>
         <Title post={props.postView.post} />
         <PostDetails
@@ -42,7 +44,7 @@ const Title = (props: TitleProps) => {
       <h1>
         <Link
           href={props.post.url ?? `/post/${props.post.id}`}
-          className="hover:text-neutral-100 visited:text-neutral-400 text-xl font-bold"
+          className="hover:text-neutral-100 visited:text-neutral-400 lg:text-xl font-bold"
         >
           {props.post.name}
         </Link>
@@ -60,14 +62,17 @@ const PostDetails = (props: Props) => {
   );
 
   return (
-    <div className="text-gray-100 text-sm flex flex-wrap gap-1">
-      posted {postTime} by <UserLink person={props.postView.creator} />
+    <div className="text-gray-100 text-xs lg:text-sm flex flex-wrap gap-1">
+      <div className="flex items-center gap-1">posted {postTime}</div>
+      <div className="flex items-center gap-1">
+        by <UserLink person={props.postView.creator} />
+      </div>
       {props.hideCommunityName ? (
         ""
       ) : (
-        <>
+        <div className="flex items-center gap-1">
           in <CommunityLink community={props.postView.community} />
-        </>
+        </div>
       )}
     </div>
   );

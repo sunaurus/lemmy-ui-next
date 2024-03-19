@@ -1,7 +1,7 @@
 import { PostListItem } from "@/app/post/postListItem";
 import { apiClient } from "@/app/apiClient";
-import { CommentTree } from "@/app/post/[id]/CommentTree";
-import { buildCommentTrees } from "@/app/post/[id]/buildCommentTrees";
+import { CommentTree } from "@/app/comment/CommentTree";
+import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { Markdown } from "@/app/_ui/Markdown";
 import { Suspense } from "react";
 import { Spinner } from "@/app/_ui/Spinner";
