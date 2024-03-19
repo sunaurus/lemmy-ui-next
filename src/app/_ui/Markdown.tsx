@@ -3,7 +3,7 @@ import MarkdownIt from "markdown-it";
 type Props = {
   content: string;
 };
-const md = new MarkdownIt();
+const md = new MarkdownIt({ linkify: true });
 
 export const Markdown = (props: Props) => {
   const renderedHtml = md.render(props.content ?? "");
@@ -23,7 +23,8 @@ export const Markdown = (props: Props) => {
       prose-li:leading-snug
       prose-p:leading-snug
       prose-p:mx-0
-      prose-p:my-1"
+      prose-p:my-1
+      prose-p:break-words"
     >
       <div dangerouslySetInnerHTML={{ __html: renderedHtml }} />
     </div>
