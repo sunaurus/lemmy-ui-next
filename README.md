@@ -7,7 +7,7 @@ Alternative frontend for Lemmy. Built with NextJS.
 ## Goals
 
 * Drop-in replacement for lemmy-ui
-* Minimalistic design, heavily inspired by old Reddit
+* Minimalistic design, following in the footsteps of other timeless link aggregator UIs
 * Fast!
 * Super vanilla NextJS architecture
 
