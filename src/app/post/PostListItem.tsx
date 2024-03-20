@@ -86,7 +86,12 @@ const PostDetails = (props: Props) => {
         posted <FormattedTimestamp timeString={props.postView.post.published} />{" "}
       </div>
       <div className="flex items-center gap-1">
-        by <UserLink person={props.postView.creator} />
+        by
+        <UserLink
+          person={props.postView.creator}
+          showAdminBadge={props.postView.creator_is_admin}
+          showModBadge={props.postView.creator_is_moderator}
+        />
       </div>
       {props.hideCommunityName ? (
         ""

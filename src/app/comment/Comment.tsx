@@ -36,7 +36,15 @@ export const Comment = (props: {
               [ <span className={`hidden peer-checked:group-[]:inline`}>+</span>
               <span className={`peer-checked:group-[]:hidden`}>-</span> ]
             </label>
-            <UserLink person={props.commentView.creator} />
+            <UserLink
+              person={props.commentView.creator}
+              showAdminBadge={props.commentView.creator_is_admin}
+              showModBadge={props.commentView.creator_is_moderator}
+              showOpBadge={
+                props.commentView.post.creator_id ===
+                props.commentView.comment.creator_id
+              }
+            />
           </div>
           <div className="flex items-center">
             <div className="ml-2">{props.commentView.counts.score} points</div>
