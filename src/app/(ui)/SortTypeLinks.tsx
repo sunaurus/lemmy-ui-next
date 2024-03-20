@@ -1,17 +1,22 @@
-import { SortType } from "lemmy-js-client";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import classNames from "classnames";
 
 type Props = {
-  enabledSortOptions: SortType[];
-  currentSortType: SortType;
+  enabledSortOptions: string[];
+  currentSortType: string;
   basePath: string;
   searchParams: Record<string, string>;
+  className?: string;
 };
 
 export const SortTypeLinks = (props: Props) => {
   return (
-    <div className="m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm">
+    <div
+      className={classNames(
+        "m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm",
+        props.className,
+      )}
+    >
       <div>Sort:</div>
       {props.enabledSortOptions.map((target) => {
         return (
@@ -31,8 +36,8 @@ export const SortTypeLinks = (props: Props) => {
 const SortTypeLink = (props: {
   path: string;
   currentSearchParams: Record<string, string>;
-  currentSortType: SortType;
-  targetSortType: SortType;
+  currentSortType: string;
+  targetSortType: string;
 }) => {
   return (
     <StyledLink

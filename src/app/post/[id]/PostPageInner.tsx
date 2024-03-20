@@ -6,10 +6,13 @@ import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
+import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
+import { CommentSortType } from "lemmy-js-client";
 
 export const PostPageInner = async (props: {
   postId: number;
   commentThreadParentId?: number;
+  searchParams: Record<string, string>;
 }) => {
   const { post_view: postView } = await apiClient.getPost({
     id: props.postId,
@@ -30,13 +33,13 @@ export const PostPageInner = async (props: {
         <PostListItem postView={postView} />
         {postView.post.body && <PostBody body={postView.post.body} />}
         {postView.counts.comments > 0 ? (
-          // <Suspense fallback={<CommentsLoading />}>
           <Comments
             postId={postView.post.id}
             commentThreadParentId={props.commentThreadParentId}
+            searchParams={props.searchParams}
+            commentCount={postView.counts.comments}
           />
         ) : (
-          // </Suspense>
           <NoComments />
         )}
       </article>
@@ -55,17 +58,42 @@ const PostBody = (props: { body: string }) => {
 const Comments = async (props: {
   postId: number;
   commentThreadParentId?: number;
+  searchParams: Record<string, string>;
+  commentCount: number;
 }) => {
+  const searchParamsSortType = props.searchParams[
+    "sortType"
+  ] as CommentSortType;
+  const currentSortType = searchParamsSortType ?? "Hot";
+
+  let maxDepth = 4;
+  if (props.commentThreadParentId) {
+    // If we're only rendering a single thread, we can fetch a few more comments at once
+    maxDepth = 6;
+  } else if (props.commentCount > 500) {
+    // For huge threads, we can improve performance by auto-collapsing very aggressively
+    maxDepth = 1;
+  } else if (props.commentCount > 100) {
+    maxDepth = 3;
+  }
   const { comments } = await apiClient.getComments({
     post_id: props.postId,
     parent_id: props.commentThreadParentId,
-    max_depth: props.commentThreadParentId ? 6 : 4,
-    sort: "Hot",
+    max_depth: maxDepth,
+    sort: currentSortType,
     type_: "All",
     saved_only: false,
   });
 
   const commentTrees = buildCommentTrees(comments);
+
+  const enabledSortOptions: CommentSortType[] = [
+    "Hot",
+    "Top",
+    "Controversial",
+    "New",
+    "Old",
+  ];
 
   return (
     <div>
@@ -80,6 +108,17 @@ const Comments = async (props: {
           </StyledLink>
         </div>
       )}
+      <SortTypeLinks
+        enabledSortOptions={enabledSortOptions}
+        currentSortType={currentSortType}
+        className="mt-8"
+        basePath={
+          props.commentThreadParentId
+            ? `/comment/${props.commentThreadParentId}`
+            : `/post/${props.postId}`
+        }
+        searchParams={props.searchParams}
+      />
       {commentTrees.map((node) => (
         <CommentTree key={node.commentView.comment.id} node={node} />
       ))}
