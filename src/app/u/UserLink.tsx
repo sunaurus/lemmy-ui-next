@@ -11,14 +11,15 @@ type Props = {
 };
 
 export const UserLink = (props: Props) => {
-  const creatorName = formatPersonUsername(props.person);
+  const creatorFormattedName = formatPersonUsername(props.person);
+  const creatorUsername = `${props.person.name}@${new URL(props.person.actor_id).host}`;
   return (
     <StyledLink
       className="flex gap-1 items-center"
-      href={`/u/${props.person.name}@${new URL(props.person.actor_id).host}`}
+      href={`/u/${creatorUsername}`}
     >
       <Avatar avatarSrc={props.person.avatar} size={"mini"} />
-      {creatorName}
+      <span title={creatorUsername}>{creatorFormattedName}</span>
       {props.showAdminBadge && (
         <span
           title="Instance admin"
