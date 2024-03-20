@@ -6,6 +6,7 @@ import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
 import { ListingType, SortType } from "lemmy-js-client";
 import { ListingTypeLinks } from "@/app/(ui)/ListingTypeLinks";
 import { SubscribeButton } from "@/app/communities/SubscribeButton";
+import { Pagination } from "@/app/(ui)/Pagination";
 
 const CommunitiesListPage = async ({
   searchParams,
@@ -21,10 +22,14 @@ const CommunitiesListPage = async ({
   const currentListingType =
     searchParamsListingType ?? (loggedInUser ? "Subscribed" : "All");
 
+  const currentPage = searchParams["page"]
+    ? Number(searchParams["page"])
+    : undefined;
   const { communities } = await apiClient.listCommunities({
     limit: 25,
     sort: currentSortType,
     type_: currentListingType,
+    page: currentPage,
   });
 
   const availableSortOptions: SortType[] = [
@@ -36,19 +41,21 @@ const CommunitiesListPage = async ({
 
   return (
     <div className="w-full flex flex-col items-start content-center">
-      <SortTypeLinks
-        enabledSortOptions={availableSortOptions}
-        currentSortType={currentSortType}
-        basePath={"/communities"}
-        searchParams={searchParams}
-      />
-      <ListingTypeLinks
-        loggedInUser={loggedInUser}
-        currentListingType={currentListingType}
-        basePath={"/communities"}
-        searchParams={searchParams}
-      />
-      <table className="w-full  table-auto divide-y divide-neutral-700">
+      <div className="flex flex-col gap-1 m-2">
+        <SortTypeLinks
+          enabledSortOptions={availableSortOptions}
+          currentSortType={currentSortType}
+          basePath={"/communities"}
+          searchParams={searchParams}
+        />
+        <ListingTypeLinks
+          loggedInUser={loggedInUser}
+          currentListingType={currentListingType}
+          basePath={"/communities"}
+          searchParams={searchParams}
+        />
+      </div>
+      <table className="w-full table-auto divide-y divide-neutral-700">
         <thead className="">
           <tr className="hidden lg:table-row">
             <ColumnHeader>Name</ColumnHeader>
@@ -68,16 +75,28 @@ const CommunitiesListPage = async ({
                   <div className={"flex flex-row"}>
                     <div className={"flex flex-col lg:hidden"}>
                       <div className="mt-1 text-xs">
-                        Subscribers: {communityView.counts.subscribers}
+                        Subscribers:
+                        <span className="font-bold ml-1">
+                          {communityView.counts.subscribers}
+                        </span>
                       </div>
                       <div className="text-xs">
-                        MAU: {communityView.counts.users_active_month}
+                        MAU:
+                        <span className="font-bold ml-1">
+                          {communityView.counts.users_active_month}
+                        </span>
                       </div>
                       <div className="text-xs">
-                        Posts: {communityView.counts.posts}
+                        Posts:
+                        <span className="font-bold ml-1">
+                          {communityView.counts.posts}
+                        </span>
                       </div>
                       <div className="text-xs">
-                        Comments: {communityView.counts.comments}
+                        Comments:
+                        <span className="font-bold ml-1">
+                          {communityView.counts.comments}
+                        </span>
                       </div>
                     </div>
 
@@ -118,6 +137,12 @@ const CommunitiesListPage = async ({
           ))}
         </tbody>
       </table>
+      <Pagination
+        prevPage={
+          currentPage && currentPage > 1 ? String(currentPage - 1) : undefined
+        }
+        nextPage={String((currentPage ?? 0) + 1)}
+      />
     </div>
   );
 };

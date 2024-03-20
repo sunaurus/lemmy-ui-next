@@ -3,10 +3,12 @@ import { apiClient } from "@/app/apiClient";
 import { getActiveSortAndListingType } from "@/app/post/getActiveSortAndListingType";
 import { PostListItem } from "@/app/post/PostListItem";
 import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
+import { Pagination } from "@/app/(ui)/Pagination";
 
 export type PostListSearchParams = {
   listingType?: ListingType;
   sortType: SortType;
+  page?: string;
 };
 
 export const PostList = async (props: {
@@ -22,11 +24,12 @@ export const PostList = async (props: {
     props.searchParams,
   );
 
-  const { posts } = await apiClient.getPosts({
+  const { posts, next_page: nextPage } = await apiClient.getPosts({
     community_id: props.community?.id,
     limit: 25,
     type_: listingType,
     sort: sortType,
+    page_cursor: props.searchParams.page,
   });
 
   const availableSortOptions: SortType[] = [
@@ -50,20 +53,23 @@ export const PostList = async (props: {
   }
 
   return (
-    <div>
+    <div className="m-1 lg:ml-4 flex flex-col">
       <SortTypeLinks
         enabledSortOptions={availableSortOptions}
         currentSortType={sortType}
         basePath={basePath}
         searchParams={props.searchParams}
       />
-      {posts.map((postView: PostView) => (
-        <PostListItem
-          key={postView.post.id}
-          postView={postView}
-          hideCommunityName={!!props.community}
-        />
-      ))}
+      <div>
+        {posts.map((postView: PostView) => (
+          <PostListItem
+            key={postView.post.id}
+            postView={postView}
+            hideCommunityName={!!props.community}
+          />
+        ))}
+      </div>
+      {nextPage && <Pagination nextPage={nextPage} />}
     </div>
   );
 };

@@ -111,7 +111,7 @@ const Comments = async (props: {
       <SortTypeLinks
         enabledSortOptions={enabledSortOptions}
         currentSortType={currentSortType}
-        className="mt-8"
+        className="mt-6 ml-1"
         basePath={
           props.commentThreadParentId
             ? `/comment/${props.commentThreadParentId}`

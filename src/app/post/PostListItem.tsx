@@ -20,7 +20,7 @@ type Props = {
 
 export const PostListItem = (props: Props) => {
   return (
-    <div className="mx-auto flex gap-y-2 rounded p-1 pl-0 lg:p-2 text-neutral-300 items-start">
+    <div className="mx-auto flex gap-y-2 rounded py-1 pl-0 lg:py-2 text-neutral-300 items-start">
       <div className="flex items-center">
         <VoteButtons postView={props.postView} />
         <Thumbnail post={props.postView.post} />

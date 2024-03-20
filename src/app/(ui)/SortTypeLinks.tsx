@@ -13,7 +13,7 @@ export const SortTypeLinks = (props: Props) => {
   return (
     <div
       className={classNames(
-        "m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm",
+        "flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm",
         props.className,
       )}
     >

@@ -21,7 +21,6 @@ export const VoteButtons = (props: Props) => {
     : props.postView.my_vote;
 
   const upvoteResultScore = (userScore ?? 0) <= 0 ? 1 : 0;
-  console.log("A", { upvoteResultScore, userScore });
   const downvoteResultScore = (userScore ?? 0) >= 0 ? -1 : 0;
 
   return (

@@ -17,7 +17,7 @@ export const ListingTypeLinks = (props: Props) => {
   }
 
   return (
-    <div className="m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm">
+    <div className="flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm">
       <div>Filter:</div>
       {enabledListingOptions.map((target) => {
         return (
