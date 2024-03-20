@@ -27,7 +27,10 @@ type Props = {
 };
 export default function RootLayout(props: Props) {
   return (
-    <html lang="en" className="h-full w-full overscroll-x-none">
+    <html
+      lang="en"
+      className="h-full w-full overscroll-x-none overflow-x-hidden"
+    >
       <body className="w-full bg-[#1f1f1f] overflow-x-hidden relative flex flex-col h-full">
         <NextTopLoader
           color="#94a3b8"
