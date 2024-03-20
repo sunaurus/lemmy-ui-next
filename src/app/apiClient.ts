@@ -39,8 +39,8 @@ const fetchWithNextConfig = async (
       ...additionalHeaders,
     },
     next: {
-      // Cache API responses for 60 seconds for logged out users
-      revalidate: 60,
+      // Cache API responses for 15 seconds for logged out users
+      revalidate: jwt !== null ? 0 : 15,
     },
   });
 };
