@@ -31,7 +31,7 @@ export default function RootLayout(props: Props) {
       lang="en"
       className="h-full w-full overscroll-x-none overflow-x-hidden"
     >
-      <body className="w-full bg-[#1f1f1f] overflow-x-hidden relative flex flex-col h-full">
+      <body className="w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col h-full">
         <NextTopLoader
           color="#94a3b8"
           showSpinner={false}
@@ -39,9 +39,7 @@ export default function RootLayout(props: Props) {
         />
         <Navbar />
 
-        <main className="w-full  text-slate-300 overflow-x-clip">
-          {props.children}
-        </main>
+        <main className="w-full overflow-x-clip">{props.children}</main>
         <footer className="h-11 mt-auto p-2 text-slate-300 flex items-center content-center justify-center w-full gap-4">
           <StyledLink
             className="text-neutral-400"
