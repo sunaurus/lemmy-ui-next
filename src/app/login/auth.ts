@@ -46,9 +46,12 @@ export const isLoggedIn = async (): Promise<boolean> => {
 };
 
 const setAuthCookie = (token: string) => {
+  const oneMonthMillis = 30 * 24 * 60 * 60 * 1000;
+
   cookies().set({
     name: AUTH_COOKIE_NAME,
     value: token,
+    expires: Date.now() + oneMonthMillis,
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV !== "development",
