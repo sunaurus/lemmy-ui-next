@@ -2,8 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 import { loginAction } from "@/app/login/auth";
-import { Input } from "@/app/_ui/Input";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { Input } from "@/app/(ui)/Input";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 
 export const LoginForm = () => {
   return (

@@ -2,10 +2,11 @@ import React from "react";
 import classNames from "classnames";
 import Link, { LinkProps } from "next/link";
 
-type Props = LinkProps & {
+type Props = {
   children?: React.ReactNode;
   className?: string;
-} & React.RefAttributes<HTMLAnchorElement>;
+} & LinkProps &
+  React.RefAttributes<HTMLAnchorElement>;
 
 export const StyledLink = (props: Props) => {
   const { className, ...rest } = props;

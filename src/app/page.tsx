@@ -1,12 +1,13 @@
-import { PostListItem } from "@/app/post/postListItem";
-import { PostView } from "lemmy-js-client";
 import { apiClient } from "@/app/apiClient";
 import { PageWithSidebar } from "@/app/PageWithSidebar";
+import { PostList, PostListSearchParams } from "@/app/post/PostList";
 
-const FrontPage = async () => {
+const FrontPage = async ({
+  searchParams,
+}: {
+  searchParams: PostListSearchParams;
+}) => {
   const { site_view: siteView, admins } = await apiClient.getSite();
-
-  const { posts } = await apiClient.getPosts({ limit: 25 });
 
   return (
     <div className="w-full">
@@ -15,9 +16,7 @@ const FrontPage = async () => {
         admins={admins.map((admin) => admin.person)}
         stats={siteView.counts}
       >
-        {posts.map((postView: PostView) => (
-          <PostListItem key={postView.post.id} postView={postView} />
-        ))}
+        <PostList path={"/"} searchParams={searchParams} />
       </PageWithSidebar>
     </div>
   );

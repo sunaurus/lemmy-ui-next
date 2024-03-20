@@ -1,4 +1,4 @@
-import { NotImplemented } from "@/app/_ui/NotImplemented";
+import { NotImplemented } from "@/app/(ui)/NotImplemented";
 
 const SearchPage = () => {
   return <NotImplemented />;

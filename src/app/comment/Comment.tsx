@@ -1,10 +1,10 @@
 import { CommentView } from "lemmy-js-client";
-import { VoteActions } from "@/app/_ui/VoteActions";
+import { VoteActions } from "@/app/(ui)/VoteActions";
 import { UserLink } from "@/app/u/UserLink";
-import { Markdown } from "@/app/_ui/Markdown";
-import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
+import { Markdown } from "@/app/(ui)/Markdown";
+import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import React, { ReactNode } from "react";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 
 export const Comment = (props: {
   commentView: CommentView;

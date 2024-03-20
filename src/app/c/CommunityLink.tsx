@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Community } from "lemmy-js-client";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 
 type Props = {
   community: Community;

@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { Markdown } from "@/app/_ui/Markdown";
+import { Markdown } from "@/app/(ui)/Markdown";
 import { UserLink } from "@/app/u/UserLink";
-import { Bars3Icon } from "@heroicons/react/24/solid";
 import {
   Community,
   CommunityAggregates,
@@ -10,7 +9,11 @@ import {
   SiteAggregates,
 } from "lemmy-js-client";
 import { ReactNode } from "react";
-import { formatCompactNumber } from "@/utils/formatCompactNumber";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
+import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+} from "@heroicons/react/16/solid";
 
 type SidebarProps = {
   children: ReactNode | ReactNode[];
@@ -92,9 +95,12 @@ const SidebarToggleButton = () => {
       />
       <label
         htmlFor="sidebar-toggle"
-        className="lg:hidden absolute cursor-pointer right-0 z-10 top-0 inline-block m-3  bg-neutral-900 rounded"
+        className="lg:hidden absolute cursor-pointer right-0 z-10 top-[42px] m-3 bg-neutral-900 group "
       >
-        <Bars3Icon className="h-6 peer-checked:rotate-180" />
+        <span className="hover:brightness-125 flex items-center">
+          <ChevronDoubleLeftIcon className="h-6 peer-checked:group-[]:hidden" />
+          <ChevronDoubleRightIcon className="h-6 hidden peer-checked:group-[]:inline" />
+        </span>
       </label>
     </>
   );
@@ -102,7 +108,7 @@ const SidebarToggleButton = () => {
 
 const SidebarToggleContents = (props: { children: ReactNode[] }) => {
   return (
-    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[48px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
+    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[42px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
       {props.children}
     </div>
   );

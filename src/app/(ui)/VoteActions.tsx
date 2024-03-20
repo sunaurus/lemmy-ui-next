@@ -1,4 +1,4 @@
-import { formatCompactNumber } from "@/utils/formatCompactNumber";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/16/solid";
 import classNames from "classnames";
 

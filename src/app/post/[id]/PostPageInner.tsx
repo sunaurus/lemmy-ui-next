@@ -1,10 +1,10 @@
 import { PageWithSidebar } from "@/app/PageWithSidebar";
-import { PostListItem } from "@/app/post/postListItem";
-import { Markdown } from "@/app/_ui/Markdown";
+import { PostListItem } from "@/app/post/PostListItem";
+import { Markdown } from "@/app/(ui)/Markdown";
 import { apiClient } from "@/app/apiClient";
 import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { CommentTree } from "@/app/comment/CommentTree";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 
 export const PostPageInner = async (props: {

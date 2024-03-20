@@ -1,11 +1,14 @@
 import { apiClient } from "@/app/apiClient";
-import { CommunityView, PostView } from "lemmy-js-client";
+import { CommunityView, SortType } from "lemmy-js-client";
 import Image from "next/image";
-import { PostListItem } from "@/app/post/postListItem";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { PageWithSidebar } from "@/app/PageWithSidebar";
+import { PostList } from "@/app/post/PostList";
 
-const CommunityPage = async (props: { params: { name: string } }) => {
+const CommunityPage = async (props: {
+  params: { name: string };
+  searchParams: { sortType: SortType };
+}) => {
   const communityName = decodeURIComponent(props.params.name);
 
   const {
@@ -14,11 +17,6 @@ const CommunityPage = async (props: { params: { name: string } }) => {
     site,
   } = await apiClient.getCommunity({
     name: communityName,
-  });
-
-  const { posts } = await apiClient.getPosts({
-    community_id: communityView.community.id,
-    limit: 25,
   });
 
   return (
@@ -31,13 +29,10 @@ const CommunityPage = async (props: { params: { name: string } }) => {
       <>
         <Header communityView={communityView} />
 
-        {posts.map((postView: PostView) => (
-          <PostListItem
-            key={postView.post.id}
-            postView={postView}
-            hideCommunityName={true}
-          />
-        ))}
+        <PostList
+          community={communityView.community}
+          searchParams={props.searchParams}
+        />
       </>
     </PageWithSidebar>
   );
@@ -46,7 +41,7 @@ const CommunityPage = async (props: { params: { name: string } }) => {
 const Header = (props: { communityView: CommunityView }) => {
   const bannerSrc = props.communityView.community.banner;
   return (
-    <header>
+    <header className="mx-1 lg:mx-4">
       {bannerSrc && (
         <div className="relative h-[240px] max-w-[1000px]">
           <Image

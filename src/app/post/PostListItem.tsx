@@ -3,15 +3,15 @@ import {
   LinkIcon,
 } from "@heroicons/react/24/outline";
 import { Post, PostView } from "lemmy-js-client";
-import { formatCompactNumber } from "@/utils/formatCompactNumber";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 import Image from "next/image";
 import Link from "next/link";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/16/solid";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
-import { VoteActions } from "@/app/_ui/VoteActions";
-import { FormattedTimestamp } from "@/app/_ui/FormattedTimestamp";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { VoteActions } from "@/app/(ui)/VoteActions";
+import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 
 type Props = {
   postView: PostView;

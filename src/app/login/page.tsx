@@ -1,7 +1,7 @@
 import { apiClient } from "@/app/apiClient";
 import Image from "next/image";
 import { LoginForm } from "@/app/login/LoginForm";
-import { StyledLink } from "@/app/_ui/StyledLink";
+import { StyledLink } from "@/app/(ui)/StyledLink";
 
 const LoginPage = async () => {
   const { site_view: siteView } = await apiClient.getSite();

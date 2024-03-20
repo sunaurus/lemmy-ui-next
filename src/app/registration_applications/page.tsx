@@ -1,7 +1,7 @@
 import { NotImplemented } from "@/app/(ui)/NotImplemented";
 
-const CreatePostPage = () => {
+const RegistrationApplicationsPage = () => {
   return <NotImplemented />;
 };
 
-export default CreatePostPage;
+export default RegistrationApplicationsPage;
