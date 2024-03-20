@@ -48,9 +48,11 @@ export const Navbar = async () => {
           <StyledLink className="text-neutral-300" href={"/search"}>
             <MagnifyingGlassIcon className="h-4" />
           </StyledLink>
-          <StyledLink className="text-neutral-300" href={"/inbox"}>
-            <BellAlertIcon className="h-4" />
-          </StyledLink>
+          {loggedInUser && (
+            <StyledLink className="text-neutral-300" href={"/inbox"}>
+              <BellAlertIcon className="h-4" />
+            </StyledLink>
+          )}
           {loggedInUser?.local_user_view.local_user.admin && (
             <StyledLink className="text-neutral-300" href={"/reports"}>
               <FlagIcon className="h-4" />
