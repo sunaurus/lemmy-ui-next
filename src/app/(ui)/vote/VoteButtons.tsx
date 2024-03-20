@@ -59,7 +59,7 @@ export const VoteButtons = (props: Props) => {
         </button>
       </form>
       {totalScore !== undefined && (
-        <div className="text-center w-8 font-semibold">
+        <div className="text-center w-8 font-semibold mb-0.5">
           {formatCompactNumber(totalScore)}
         </div>
       )}
