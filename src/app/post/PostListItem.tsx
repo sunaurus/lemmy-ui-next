@@ -9,7 +9,7 @@ import Link from "next/link";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/16/solid";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
-import { VoteActions } from "@/app/(ui)/VoteActions";
+import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 
@@ -22,7 +22,7 @@ export const PostListItem = (props: Props) => {
   return (
     <div className="mx-auto flex gap-y-2 rounded p-1 pl-0 lg:p-2 text-neutral-300 items-start">
       <div className="flex items-center">
-        <VoteActions score={props.postView.counts.score} />
+        <VoteButtons postView={props.postView} />
         <Thumbnail post={props.postView.post} />
       </div>
       <div>

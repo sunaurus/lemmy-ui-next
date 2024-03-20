@@ -1,5 +1,5 @@
 import { CommentView } from "lemmy-js-client";
-import { VoteActions } from "@/app/(ui)/VoteActions";
+import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
 import { UserLink } from "@/app/u/UserLink";
 import { Markdown } from "@/app/(ui)/Markdown";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
@@ -18,7 +18,10 @@ export const Comment = (props: {
         className="absolute peer sr-only"
         defaultChecked={false}
       />
-      <VoteActions className="peer-checked:collapse peer-checked:max-h-0" />
+      <VoteButtons
+        commentView={props.commentView}
+        className="peer-checked:collapse peer-checked:max-h-0"
+      />
       <div className="relative group">
         <div className={"text-xs flex items-center flex-wrap"}>
           <div className="flex items-center">
