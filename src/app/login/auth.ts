@@ -6,7 +6,7 @@ import process from "process";
 import { apiClient } from "@/app/apiClient";
 import { redirect } from "next/navigation";
 
-const AUTH_COOKIE_NAME = "auth";
+const AUTH_COOKIE_NAME = "session";
 
 export const loginAction = async (data: FormData) => {
   const username = data.get("username")?.toString();
@@ -66,6 +66,7 @@ const setAuthCookie = (token: string) => {
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV !== "development",
+    sameSite: "strict",
   });
 };
 export const getAuthData = async (): Promise<AuthData | null> => {
