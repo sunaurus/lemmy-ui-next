@@ -13,7 +13,7 @@ export const Markdown = (props: Props) => {
       className="max-w-none
       prose
       prose-sm
-      dark:prose-invert
+      prose-invert
       prose-neutral
       hover:prose-a:text-slate-300
       prose-a:text-slate-400
