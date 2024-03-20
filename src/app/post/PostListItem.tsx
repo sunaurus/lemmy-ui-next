@@ -1,6 +1,7 @@
 import {
   ChatBubbleBottomCenterTextIcon,
   LinkIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import { Post, PostView } from "lemmy-js-client";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
@@ -8,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   BellAlertIcon,
-  BookmarkIcon,
   ChatBubbleLeftRightIcon,
   GlobeAltIcon,
   LockClosedIcon,
@@ -112,20 +112,20 @@ const PostActions = (props: Props) => {
         href={`/post/${props.postView.post.id}`}
         className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
-        <ChatBubbleLeftRightIcon className="h-4 mr-1" />
+        <ChatBubbleLeftRightIcon className="h-4 mr-1" title="View comments" />
         {formatCompactNumber(commentCount)}
       </StyledLink>
       <StyledLink
         href={props.postView.post.ap_id}
         className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
-        <GlobeAltIcon className="h-4" />
+        <GlobeAltIcon className="h-4" title="View on original instance" />
       </StyledLink>
       <StyledLink
         href={"#"}
         className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
-        <BookmarkIcon className="h-4" />
+        <StarIcon className="h-4" title="Save post" />
       </StyledLink>
     </div>
   );
