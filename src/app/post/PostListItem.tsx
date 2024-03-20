@@ -7,15 +7,18 @@ import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  BellAlertIcon,
   BookmarkIcon,
   ChatBubbleLeftRightIcon,
   GlobeAltIcon,
+  LockClosedIcon,
 } from "@heroicons/react/16/solid";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { StyledLink } from "@/app/(ui)/StyledLink";
+import classNames from "classnames";
 
 type Props = {
   postView: PostView;
@@ -49,9 +52,27 @@ const Title = (props: TitleProps) => {
       <h1>
         <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}
-          className="text-neutral-300 visited:text-neutral-400 lg:text-xl font-bold"
+          className={classNames(
+            "text-neutral-300 visited:text-neutral-400 lg:text-xl font-bold",
+            { "text-slate-400": props.post.featured_community },
+          )}
         >
+          {props.post.featured_community && (
+            <BellAlertIcon
+              className={"h-4 inline mr-1 mb-0.5 text-slate-400"}
+              title={"Pined in community"}
+            />
+          )}
+          {props.post.featured_local && (
+            <BellAlertIcon
+              className={"h-4 inline mr-1 mb-0.5 text-neutral-200"}
+              title={"Pinned in instance"}
+            />
+          )}
           {props.post.name}
+          {props.post.locked && (
+            <LockClosedIcon className={"h-4 inline ml-1 mb-1 text-rose-500"} />
+          )}
         </StyledLink>
       </h1>
     </header>
