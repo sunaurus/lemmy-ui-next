@@ -1,6 +1,5 @@
 "use server";
 
-import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import process from "process";
 import { apiClient } from "@/app/apiClient";
@@ -47,32 +46,15 @@ export const isLoggedIn = async (): Promise<boolean> => {
 };
 
 const setAuthCookie = (token: string) => {
-  const decoded = jwt.decode(token, { json: true });
-
-  const localUserId = decoded?.sub;
-
-  if (!localUserId) {
-    throw new Error("Invalid JWT");
-  }
-
-  const authCookieValue: AuthData = {
-    jwt: token,
-    userId: localUserId,
-  };
-
   cookies().set({
     name: AUTH_COOKIE_NAME,
-    value: JSON.stringify(authCookieValue),
+    value: token,
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV !== "development",
     sameSite: "strict",
   });
 };
-export const getAuthData = async (): Promise<AuthData | null> => {
-  const cookieValue = cookies().get(AUTH_COOKIE_NAME)?.value;
-  if (!cookieValue) {
-    return null;
-  }
-  return JSON.parse(cookieValue);
+export const getJwtFromAuthCookie = async (): Promise<string | null> => {
+  return cookies().get(AUTH_COOKIE_NAME)?.value ?? null;
 };

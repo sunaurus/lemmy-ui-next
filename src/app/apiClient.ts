@@ -1,6 +1,6 @@
 import "server-only"; // All Lemmy API calls must be done on the server
 import { LemmyHttp } from "lemmy-js-client";
-import { getAuthData } from "@/app/login/auth";
+import { getJwtFromAuthCookie } from "@/app/login/auth";
 import { headers } from "next/headers";
 
 const baseUrl = process.env.LEMMY_BACKEND;
@@ -14,10 +14,10 @@ const fetchWithNextConfig = async (
   init?: RequestInit,
 ): Promise<Response> => {
   const additionalHeaders: Record<string, string> = {};
-  const authData = await getAuthData();
+  const jwt = await getJwtFromAuthCookie();
 
-  if (authData) {
-    additionalHeaders["authorization"] = `Bearer ${authData.jwt}`;
+  if (jwt) {
+    additionalHeaders["authorization"] = `Bearer ${jwt}`;
   }
 
   const incomingHeaders = headers();
