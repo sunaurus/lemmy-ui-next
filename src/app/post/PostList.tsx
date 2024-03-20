@@ -1,18 +1,25 @@
-import { Community, ListingType, PostView, SortType } from "lemmy-js-client";
+import {
+  Community,
+  ListingType,
+  Person,
+  PostView,
+  SortType,
+} from "lemmy-js-client";
 import { apiClient } from "@/app/apiClient";
 import { getActiveSortAndListingType } from "@/app/post/getActiveSortAndListingType";
 import { PostListItem } from "@/app/post/PostListItem";
-import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
 import { Pagination } from "@/app/(ui)/Pagination";
+import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 
 export type PostListSearchParams = {
   listingType?: ListingType;
-  sortType: SortType;
+  sortType?: SortType;
   page?: string;
 };
 
 export const PostList = async (props: {
   community?: Community;
+  person?: Person;
   searchParams: PostListSearchParams;
 }) => {
   const { site_view: siteView, my_user: loggedInUser } =
@@ -54,11 +61,11 @@ export const PostList = async (props: {
 
   return (
     <div className="m-1 lg:ml-4 flex flex-col">
-      <SortTypeLinks
-        enabledSortOptions={availableSortOptions}
-        currentSortType={sortType}
-        basePath={basePath}
-        searchParams={props.searchParams}
+      <SearchParamLinks
+        label={"Sort"}
+        searchParamKey={"sortType"}
+        options={availableSortOptions}
+        currentActiveValue={sortType}
       />
       <div>
         {posts.map((postView: PostView) => (

@@ -5,12 +5,14 @@ import classNames from "classnames";
 import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
-  enabledSortOptions: string[];
-  currentSortType: string;
+  label: string;
+  searchParamKey: string;
+  options: string[];
+  currentActiveValue?: string;
   className?: string;
 };
 
-export const SortTypeLinks = (props: Props) => {
+export const SearchParamLinks = (props: Props) => {
   return (
     <div
       className={classNames(
@@ -18,13 +20,14 @@ export const SortTypeLinks = (props: Props) => {
         props.className,
       )}
     >
-      <div>Sort:</div>
-      {props.enabledSortOptions.map((target) => {
+      <div>{props.label}:</div>
+      {props.options.map((target) => {
         return (
-          <SortTypeLink
+          <SearchParamLink
             key={target}
-            currentSortType={props.currentSortType}
-            targetSortType={target}
+            searchParamKey={props.searchParamKey}
+            currentActiveValue={props.currentActiveValue}
+            targetValue={target}
           />
         );
       })}
@@ -32,25 +35,27 @@ export const SortTypeLinks = (props: Props) => {
   );
 };
 
-const SortTypeLink = (props: {
-  currentSortType: string;
-  targetSortType: string;
+const SearchParamLink = (props: {
+  currentActiveValue?: string;
+  targetValue: string;
+  searchParamKey: string;
 }) => {
   const path = usePathname();
   const searchParams = useSearchParams();
 
   const newSearchParams = new URLSearchParams(searchParams.toString());
-  newSearchParams.set("sortType", props.targetSortType);
+  newSearchParams.set(props.searchParamKey, props.targetValue);
+  newSearchParams.delete("page"); // When changing sort, filters, etc, it makes sense to reset to the first page
 
   return (
     <StyledLink
       href={`${path}?${newSearchParams.toString()}`}
       className={classNames({
         "font-bold text-neutral-300":
-          props.currentSortType === props.targetSortType,
+          props.currentActiveValue === props.targetValue,
       })}
     >
-      {props.targetSortType}
+      {props.targetValue}
     </StyledLink>
   );
 };

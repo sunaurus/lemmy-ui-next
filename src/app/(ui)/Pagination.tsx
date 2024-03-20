@@ -6,8 +6,8 @@ import classNames from "classnames";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 
 export const Pagination = (props: {
-  prevPage?: string;
-  nextPage?: string;
+  prevPage?: string | number;
+  nextPage?: string | number;
   className?: string;
 }) => {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export const Pagination = (props: {
 
   if (props.nextPage) {
     const nextPageParams = new URLSearchParams(searchParams.toString());
-    nextPageParams.set("page", props.nextPage);
+    nextPageParams.set("page", String(props.nextPage));
     nextPageLink = (
       <StyledLink
         href={`${pathname}?${nextPageParams.toString()}`}
@@ -35,7 +35,7 @@ export const Pagination = (props: {
 
   if (props.prevPage) {
     const prevPageParams = new URLSearchParams(searchParams.toString());
-    prevPageParams.set("page", props.prevPage);
+    prevPageParams.set("page", String(props.prevPage));
     prevPageLink = (
       <StyledLink
         href={`${pathname}?${prevPageParams.toString()}`}

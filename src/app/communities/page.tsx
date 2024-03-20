@@ -2,12 +2,11 @@ import { apiClient } from "@/app/apiClient";
 import { ReactNode } from "react";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import classNames from "classnames";
-import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
 import { ListingType, SortType } from "lemmy-js-client";
-import { ListingTypeLinks } from "@/app/(ui)/ListingTypeLinks";
 import { SubscribeButton } from "@/app/communities/SubscribeButton";
 import { Pagination } from "@/app/(ui)/Pagination";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
+import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 
 const CommunitiesListPage = async ({
   searchParams,
@@ -40,20 +39,26 @@ const CommunitiesListPage = async ({
     "TopMonth",
   ];
 
+  let availableListingOptions: ListingType[] = ["Local", "All"];
+
+  if (loggedInUser) {
+    availableListingOptions = ["Subscribed", ...availableListingOptions];
+  }
+
   return (
     <div className="w-full flex flex-col items-start content-center">
       <div className="flex flex-col gap-1 m-2">
-        <SortTypeLinks
-          enabledSortOptions={availableSortOptions}
-          currentSortType={currentSortType}
-          basePath={"/communities"}
-          searchParams={searchParams}
+        <SearchParamLinks
+          label={"Sort"}
+          searchParamKey={"sortType"}
+          options={availableSortOptions}
+          currentActiveValue={currentSortType}
         />
-        <ListingTypeLinks
-          loggedInUser={loggedInUser}
-          currentListingType={currentListingType}
-          basePath={"/communities"}
-          searchParams={searchParams}
+        <SearchParamLinks
+          label={"Filter"}
+          searchParamKey={"listingType"}
+          options={availableListingOptions}
+          currentActiveValue={currentListingType}
         />
       </div>
       <table className="w-full table-auto divide-y divide-neutral-700">

@@ -6,8 +6,8 @@ import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
-import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
 import { CommentSortType } from "lemmy-js-client";
+import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 
 export const PostPageInner = async (props: {
   postId: number;
@@ -108,17 +108,14 @@ const Comments = async (props: {
           </StyledLink>
         </div>
       )}
-      <SortTypeLinks
-        enabledSortOptions={enabledSortOptions}
-        currentSortType={currentSortType}
+      <SearchParamLinks
+        label={"Sort"}
+        searchParamKey={"sortType"}
+        options={enabledSortOptions}
+        currentActiveValue={currentSortType}
         className="mt-6 ml-1"
-        basePath={
-          props.commentThreadParentId
-            ? `/comment/${props.commentThreadParentId}`
-            : `/post/${props.postId}`
-        }
-        searchParams={props.searchParams}
       />
+
       {commentTrees.map((node) => (
         <CommentTree key={node.commentView.comment.id} node={node} />
       ))}

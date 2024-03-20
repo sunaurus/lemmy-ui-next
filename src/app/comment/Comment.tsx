@@ -8,7 +8,7 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 
 export const Comment = (props: {
   commentView: CommentView;
-  children: ReactNode[]; // Child comments
+  children?: ReactNode[]; // Child comments
   parentId?: number;
 }) => {
   return (

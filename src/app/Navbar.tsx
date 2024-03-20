@@ -4,7 +4,7 @@ import { apiClient } from "@/app/apiClient";
 import Image from "next/image";
 import Link from "next/link";
 import { StyledLink } from "@/app/(ui)/StyledLink";
-import { AvatarMini } from "@/app/(ui)/AvatarMini";
+import { Avatar } from "@/app/(ui)/Avatar";
 import classNames from "classnames";
 import { NavbarCollapsibleLinks } from "@/app/NavbarCollapsibleLinks";
 import {
@@ -72,8 +72,9 @@ export const Navbar = async () => {
               className="text-neutral-200 flex items-center gap-1"
               href={"/settings"}
             >
-              <AvatarMini
+              <Avatar
                 avatarSrc={loggedInUser.local_user_view.person.avatar}
+                size={"mini"}
               />
               {loggedInUser.local_user_view.person.name}
             </StyledLink>
