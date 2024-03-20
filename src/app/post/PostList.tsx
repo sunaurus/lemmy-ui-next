@@ -44,7 +44,7 @@ export const PostList = async (props: {
 
   return (
     <div>
-      <div className="m-1 lg:ml-4 flex items-center gap-2 flex-wrap">
+      <div className="m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm">
         <div>Sort:</div>
         {sortTypes.map((target) => {
           let communityUrl = undefined;
