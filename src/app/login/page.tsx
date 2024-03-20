@@ -7,7 +7,7 @@ const LoginPage = async () => {
   const { site_view: siteView } = await apiClient.getSite();
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center items-center py-12 lg:px-8">
+    <div className="flex min-h-full flex-1 flex-col justify-center items-center py-12 px-4 lg:px-8">
       {siteView.site.banner && (
         <Image
           src={siteView.site.banner}
