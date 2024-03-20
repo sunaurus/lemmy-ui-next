@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import classNames from "classnames";
 import { ReactNode } from "react";
-import { getActiveSortAndListingType } from "@/app/getActiveSortAndListingType";
+import { getActiveSortAndListingType } from "@/app/post/getActiveSortAndListingType";
 
 export const NavbarCollapsibleLinks = ({
   siteView,

@@ -1,9 +1,8 @@
 import { Community, ListingType, PostView, SortType } from "lemmy-js-client";
 import { apiClient } from "@/app/apiClient";
-import { getActiveSortAndListingType } from "@/app/getActiveSortAndListingType";
-import { StyledLink } from "@/app/(ui)/StyledLink";
-import classNames from "classnames";
+import { getActiveSortAndListingType } from "@/app/post/getActiveSortAndListingType";
 import { PostListItem } from "@/app/post/PostListItem";
+import { SortTypeLinks } from "@/app/(ui)/SortTypeLinks";
 
 export type PostListSearchParams = {
   listingType?: ListingType;
@@ -30,7 +29,7 @@ export const PostList = async (props: {
     sort: sortType,
   });
 
-  const sortTypes: SortType[] = [
+  const availableSortOptions: SortType[] = [
     "Active",
     "Scaled",
     "Hot",
@@ -42,31 +41,22 @@ export const PostList = async (props: {
     "TopDay",
   ];
 
+  let basePath = "/";
+  if (props.community) {
+    basePath = `/c/${props.community.name}`;
+    if (!props.community.local) {
+      basePath = `${basePath}@${new URL(props.community.actor_id).host}`;
+    }
+  }
+
   return (
     <div>
-      <div className="m-1 lg:ml-4 flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm">
-        <div>Sort:</div>
-        {sortTypes.map((target) => {
-          let communityUrl = undefined;
-          if (props.community) {
-            communityUrl = `/c/${props.community.name}`;
-            if (!props.community.local) {
-              communityUrl = `${communityUrl}@${new URL(props.community.actor_id).host}`;
-            }
-          }
-
-          return (
-            <SortTypeLink
-              key={target}
-              path={communityUrl ?? "/"}
-              currentSortType={sortType}
-              currentSearchParams={props.searchParams}
-              targetSortType={target}
-            />
-          );
-        })}
-      </div>
-
+      <SortTypeLinks
+        enabledSortOptions={availableSortOptions}
+        currentSortType={sortType}
+        basePath={basePath}
+        searchParams={props.searchParams}
+      />
       {posts.map((postView: PostView) => (
         <PostListItem
           key={postView.post.id}
@@ -75,27 +65,5 @@ export const PostList = async (props: {
         />
       ))}
     </div>
-  );
-};
-
-const SortTypeLink = (props: {
-  path: string;
-  currentSearchParams: Record<string, string>;
-  currentSortType: SortType;
-  targetSortType: SortType;
-}) => {
-  return (
-    <StyledLink
-      href={`${props.path}?${new URLSearchParams({
-        ...props.currentSearchParams,
-        sortType: props.targetSortType,
-      }).toString()}`}
-      className={classNames({
-        "font-bold text-neutral-300":
-          props.currentSortType === props.targetSortType,
-      })}
-    >
-      {props.targetSortType}
-    </StyledLink>
   );
 };
