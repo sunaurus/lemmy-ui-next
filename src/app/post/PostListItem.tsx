@@ -87,7 +87,7 @@ const PostActions = (props: Props) => {
         className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
         <ChatBubbleLeftRightIcon className="h-4 mr-1" />
-        {formatCompactNumber.format(commentCount)}
+        {formatCompactNumber(commentCount)}
       </StyledLink>
       <StyledLink
         href={props.postView.post.ap_id}

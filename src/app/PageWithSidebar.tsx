@@ -163,7 +163,7 @@ const StatsSection = (props: {
 const StatItem = (props: { label: string; count: number }) => {
   return (
     <li className="flex items-center gap-2">
-      <p>{formatCompactNumber.format(props.count)}</p>
+      <p>{formatCompactNumber(props.count)}</p>
       <p className="text-sm">{props.label}</p>
     </li>
   );

@@ -7,6 +7,7 @@ import { ListingType, SortType } from "lemmy-js-client";
 import { ListingTypeLinks } from "@/app/(ui)/ListingTypeLinks";
 import { SubscribeButton } from "@/app/communities/SubscribeButton";
 import { Pagination } from "@/app/(ui)/Pagination";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 
 const CommunitiesListPage = async ({
   searchParams,
@@ -77,25 +78,29 @@ const CommunitiesListPage = async ({
                       <div className="mt-1 text-xs">
                         Subscribers:
                         <span className="font-bold ml-1">
-                          {communityView.counts.subscribers}
+                          {formatCompactNumber(
+                            communityView.counts.subscribers,
+                          )}
                         </span>
                       </div>
                       <div className="text-xs">
                         MAU:
                         <span className="font-bold ml-1">
-                          {communityView.counts.users_active_month}
+                          {formatCompactNumber(
+                            communityView.counts.users_active_month,
+                          )}
                         </span>
                       </div>
                       <div className="text-xs">
                         Posts:
                         <span className="font-bold ml-1">
-                          {communityView.counts.posts}
+                          {formatCompactNumber(communityView.counts.posts)}
                         </span>
                       </div>
                       <div className="text-xs">
                         Comments:
                         <span className="font-bold ml-1">
-                          {communityView.counts.comments}
+                          {formatCompactNumber(communityView.counts.comments)}
                         </span>
                       </div>
                     </div>
@@ -113,16 +118,16 @@ const CommunitiesListPage = async ({
                 </div>
               </Cell>
               <Cell className="hidden lg:table-cell">
-                {communityView.counts.subscribers}
+                {formatCompactNumber(communityView.counts.subscribers)}
               </Cell>
               <Cell className="hidden lg:table-cell">
-                {communityView.counts.users_active_month}
+                {formatCompactNumber(communityView.counts.users_active_month)}
               </Cell>
               <Cell className="hidden lg:table-cell">
-                {communityView.counts.posts}
+                {formatCompactNumber(communityView.counts.posts)}
               </Cell>
               <Cell className="hidden lg:table-cell">
-                {communityView.counts.comments}
+                {formatCompactNumber(communityView.counts.comments)}
               </Cell>
               {loggedInUser && (
                 <Cell className="hidden lg:table-cell">
