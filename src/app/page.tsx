@@ -16,7 +16,7 @@ const FrontPage = async ({
         admins={admins.map((admin) => admin.person)}
         stats={siteView.counts}
       >
-        <PostList path={"/"} searchParams={searchParams} />
+        <PostList searchParams={searchParams} />
       </PageWithSidebar>
     </div>
   );
