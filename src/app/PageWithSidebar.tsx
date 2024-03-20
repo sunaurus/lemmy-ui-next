@@ -14,6 +14,7 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/16/solid";
+import { formatCommunityName } from "@/app/c/formatCommunityName";
 
 type SidebarProps = {
   children: ReactNode | ReactNode[];
@@ -44,7 +45,7 @@ export const PageWithSidebar = (props: Props) => {
           <>
             <DetailsSection
               logoSrc={props.community.icon}
-              name={props.community.name}
+              name={formatCommunityName(props.community)}
               markdownContent={props.community.description}
             />
             <StatsSection title={"Community stats"} stats={props.stats} />
@@ -108,7 +109,7 @@ const SidebarToggleButton = () => {
 
 const SidebarToggleContents = (props: { children: ReactNode[] }) => {
   return (
-    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[42px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
+    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[84px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
       {props.children}
     </div>
   );
@@ -121,7 +122,7 @@ const DetailsSection = (props: {
 }) => {
   return (
     <SidebarSection>
-      <header className="flex flex-col items-center">
+      <header className="flex flex-col items-center mb-4">
         {props.logoSrc && (
           <div className="relative h-[90px] w-[230px]">
             <Image

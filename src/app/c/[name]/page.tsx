@@ -54,7 +54,10 @@ const Header = (props: { communityView: CommunityView }) => {
         </div>
       )}
 
-      <h1 className="text-2xl">{props.communityView.community.name}</h1>
+      <h1 className="text-2xl">
+        {props.communityView.community.title ??
+          props.communityView.community.name}
+      </h1>
       <div className="text-md text-neutral-400">
         !{formatCommunityName(props.communityView.community)}
       </div>
