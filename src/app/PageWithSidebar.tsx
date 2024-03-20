@@ -69,7 +69,7 @@ export const PageWithSidebar = (props: Props) => {
         )}
 
         {!isCommunitySidebar(props) && (
-          <StatsSection title={"Community stats"} stats={props.stats} />
+          <StatsSection title={"Instance stats"} stats={props.stats} />
         )}
 
         {!isCommunitySidebar(props) && (
