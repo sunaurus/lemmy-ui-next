@@ -11,7 +11,10 @@ export const CommentTree = (props: { node: CommentNode }) => {
         "pt-4 border-t": !props.node.parent,
       })}
     >
-      <Comment commentView={props.node.commentView}>
+      <Comment
+        commentView={props.node.commentView}
+        parentId={props.node.parent?.commentView.comment.id}
+      >
         {props.node.children.map((node) => (
           <CommentTree key={node.commentView.comment.id} node={node} />
         ))}

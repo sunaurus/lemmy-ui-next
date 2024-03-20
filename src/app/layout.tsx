@@ -29,12 +29,13 @@ export default function RootLayout(props: Props) {
   return (
     <html lang="en" className="h-full w-full overscroll-x-none">
       <body className="w-full bg-[#1f1f1f] overflow-x-hidden relative flex flex-col h-full">
-        <Navbar />
         <NextTopLoader
           color="#94a3b8"
           showSpinner={false}
           shadow={"0 0 10px #94a3b8,0 0 5px #94a3b8"}
         />
+        <Navbar />
+
         <main className="w-full  text-slate-300 overflow-x-clip">
           {props.children}
         </main>

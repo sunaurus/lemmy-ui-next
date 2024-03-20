@@ -6,7 +6,11 @@ import { Post, PostView } from "lemmy-js-client";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 import Image from "next/image";
 import Link from "next/link";
-import { ChatBubbleLeftRightIcon } from "@heroicons/react/16/solid";
+import {
+  BookmarkIcon,
+  ChatBubbleLeftRightIcon,
+  GlobeAltIcon,
+} from "@heroicons/react/16/solid";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
@@ -77,13 +81,25 @@ const PostDetails = (props: Props) => {
 const PostActions = (props: Props) => {
   const commentCount = props.postView.counts.comments;
   return (
-    <div className="text-xs mt-1">
+    <div className="text-xs mt-1 flex items-center gap-4">
       <StyledLink
         href={`/post/${props.postView.post.id}`}
         className="flex text-neutral-300 visited:text-neutral-400 items-center"
       >
         <ChatBubbleLeftRightIcon className="h-4 mr-1" />
         {formatCompactNumber.format(commentCount)}
+      </StyledLink>
+      <StyledLink
+        href={props.postView.post.ap_id}
+        className="flex text-neutral-300 visited:text-neutral-400 items-center"
+      >
+        <GlobeAltIcon className="h-4" />
+      </StyledLink>
+      <StyledLink
+        href={"#"}
+        className="flex text-neutral-300 visited:text-neutral-400 items-center"
+      >
+        <BookmarkIcon className="h-4" />
       </StyledLink>
     </div>
   );

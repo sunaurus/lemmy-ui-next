@@ -9,9 +9,13 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 export const Comment = (props: {
   commentView: CommentView;
   children: ReactNode[]; // Child comments
+  parentId?: number;
 }) => {
   return (
-    <div className="mr-2 flex items-start">
+    <div
+      id={`comment-${props.commentView.comment.id}`}
+      className="mr-2 flex items-start"
+    >
       <input
         type="checkbox"
         id={`comment-hide-${props.commentView.comment.id}`}
@@ -51,9 +55,16 @@ export const Comment = (props: {
             >
               permalink
             </StyledLink>
-            <div>embed</div>
             <div>save</div>
             <div>report</div>
+            {props.parentId && (
+              <a
+                className="text-neutral-300 hover:brightness-125"
+                href={`#comment-${props.parentId}`}
+              >
+                parent
+              </a>
+            )}
             <div>reply</div>
           </div>
         </div>
