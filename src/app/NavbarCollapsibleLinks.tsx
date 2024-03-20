@@ -86,7 +86,7 @@ const NavbarLink = (props: {
     <StyledLink
       href={props.href}
       className={classNames(props.className, "text-neutral-300", {
-        "border-b border-neutral-300": props.active,
+        "font-bold text-neutral-200": props.active,
       })}
     >
       {props.children}
