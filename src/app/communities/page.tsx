@@ -22,9 +22,7 @@ const CommunitiesListPage = async ({
   const currentListingType =
     searchParamsListingType ?? (loggedInUser ? "Subscribed" : "All");
 
-  const currentPage = searchParams["page"]
-    ? Number(searchParams["page"])
-    : undefined;
+  const currentPage = searchParams["page"] ? Number(searchParams["page"]) : 1;
   const { communities } = await apiClient.listCommunities({
     limit: 25,
     sort: currentSortType,
@@ -148,10 +146,8 @@ const CommunitiesListPage = async ({
         </tbody>
       </table>
       <Pagination
-        prevPage={
-          currentPage && currentPage > 1 ? String(currentPage - 1) : undefined
-        }
-        nextPage={String((currentPage ?? 0) + 1)}
+        prevPage={currentPage > 1 ? currentPage - 1 : undefined}
+        nextPage={currentPage + 1}
       />
     </div>
   );
