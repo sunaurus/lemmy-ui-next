@@ -2,6 +2,7 @@ import { Person } from "lemmy-js-client";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";
+import classNames from "classnames";
 
 type Props = {
   person: Person;
@@ -21,35 +22,44 @@ export const UserLink = (props: Props) => {
       <Avatar avatarSrc={props.person.avatar} size={"mini"} />
       <span title={creatorUsername}>{creatorFormattedName}</span>
       {props.showAdminBadge && (
-        <span
-          title="Instance admin"
-          className={
-            "rounded border-rose-500 border text-rose-500 text-xs/snug min-w-5 text-center font-bold"
-          }
-        >
-          A
-        </span>
+        <UserLinkBadge
+          title={"Instance admin"}
+          content={"A"}
+          className={"border-rose-500 text-rose-500"}
+        />
       )}
       {!props.showAdminBadge && props.showModBadge && (
-        <span
-          title="Community moderator"
-          className={
-            "rounded border-emerald-500 border text-emerald-500 text-xs/snug min-w-5  text-center font-bold"
-          }
-        >
-          M
-        </span>
+        <UserLinkBadge
+          title={"Community moderator"}
+          content={"M"}
+          className={"border-emerald-500 text-emerald-500"}
+        />
       )}
       {props.showOpBadge && (
-        <span
-          title="Original poster"
-          className={
-            "rounded border-indigo-400 border text-indigo-400 text-xs/snug min-w-5 px-0.5 text-center font-bold"
-          }
-        >
-          OP
-        </span>
+        <UserLinkBadge
+          title={"Original poster"}
+          content={"OP"}
+          className={"border-indigo-400 text-indigo-400"}
+        />
       )}
     </StyledLink>
+  );
+};
+
+const UserLinkBadge = (props: {
+  title: string;
+  content: string;
+  className: string;
+}) => {
+  return (
+    <span
+      title={props.title}
+      className={classNames(
+        "font-mono rounded border text-[10px]/snug px-1 text-center font-bold",
+        props.className,
+      )}
+    >
+      {props.content}
+    </span>
   );
 };
