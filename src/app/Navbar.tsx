@@ -31,6 +31,7 @@ export const Navbar = async () => {
               alt={`${siteView.site.name} logo`}
               width={32}
               height={32}
+              priority={true}
               className="mr-1"
             />
           )}

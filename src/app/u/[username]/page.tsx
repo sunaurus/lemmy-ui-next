@@ -48,7 +48,8 @@ const UserPage = async (props: {
               className={"object-cover rounded"}
               src={bannerSrc}
               fill={true}
-              alt={"Community banner"}
+              alt={"User banner"}
+              priority={true}
               sizes="1000px"
             />
           </div>

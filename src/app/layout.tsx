@@ -14,6 +14,18 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: site.site_view.site.name,
     description: site.site_view.site.description,
+    icons: {
+      icon: [
+        {
+          url: site.site_view.site.icon ?? "/lemmy-icon-96x96.webp",
+        },
+      ],
+      apple: [
+        {
+          url: site.site_view.site.icon ?? "/lemmy-icon-96x96.webp",
+        },
+      ],
+    },
   };
 }
 
@@ -29,7 +41,7 @@ export default function RootLayout(props: Props) {
   return (
     <html
       lang="en"
-      className="h-full w-full overscroll-x-none overflow-x-hidden"
+      className="h-full w-full overscroll-x-none overflow-x-hidden bg-neutral-900"
     >
       <body className="w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col h-full">
         <NextTopLoader

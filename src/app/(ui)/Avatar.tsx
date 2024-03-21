@@ -16,6 +16,7 @@ export const Avatar = (props: {
         src={props.avatarSrc ?? "/lemmy-icon-96x96.webp"}
         alt={`Avatar`}
         className="rounded object-cover"
+        priority={true}
         fill={true}
         sizes={props.size === "mini" ? "20px" : "100px"}
       />

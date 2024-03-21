@@ -128,6 +128,7 @@ const DetailsSection = (props: {
             <Image
               className="mt-4 object-cover h-auto"
               src={props.logoSrc}
+              priority={true}
               fill={true}
               sizes="230px"
               alt="Logo"

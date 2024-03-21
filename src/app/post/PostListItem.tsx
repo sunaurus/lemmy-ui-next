@@ -1,24 +1,24 @@
 import {
+  ArrowsPointingOutIcon,
   ChatBubbleBottomCenterTextIcon,
   LinkIcon,
-  StarIcon,
 } from "@heroicons/react/24/outline";
-import { Post, PostView } from "lemmy-js-client";
-import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
-import Image from "next/image";
-import Link from "next/link";
+
 import {
   BellAlertIcon,
   ChatBubbleLeftRightIcon,
-  GlobeAltIcon,
   LockClosedIcon,
 } from "@heroicons/react/16/solid";
+import { Post, PostView } from "lemmy-js-client";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
+import Image from "next/image";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import classNames from "classnames";
+import { isImage } from "@/app/(utils)/isImage";
 
 type Props = {
   postView: PostView;
@@ -27,20 +27,51 @@ type Props = {
 
 export const PostListItem = (props: Props) => {
   return (
-    <div className="mr-auto flex gap-y-2 rounded py-1 pl-0 lg:py-2 text-neutral-300 items-start">
-      <div className="flex items-center">
-        <VoteButtons postView={props.postView} />
-        <Thumbnail post={props.postView.post} />
+    <div key={props.postView.post.id} className="my-3">
+      <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
+        <div className="flex items-center">
+          <VoteButtons postView={props.postView} />
+          <Thumbnail post={props.postView.post} className={"hidden sm:flex"} />
+        </div>
+        <div className="w-full">
+          <Title post={props.postView.post} />
+
+          <PostDetails
+            postView={props.postView}
+            hideCommunityName={props.hideCommunityName}
+          />
+          <PostActions postView={props.postView} />
+        </div>
       </div>
-      <div>
-        <Title post={props.postView.post} />
-        <PostDetails
-          postView={props.postView}
-          hideCommunityName={props.hideCommunityName}
-        />
-        <PostActions postView={props.postView} />
-      </div>
+
+      <InlineImage postView={props.postView} />
     </div>
+  );
+};
+
+const InlineImage = (props: Props) => {
+  if (!isImage(props.postView.post.url)) {
+    return null;
+  }
+
+  return (
+    <>
+      <input
+        type="checkbox"
+        className="peer sr-only"
+        id={`toggle-${props.postView.post.id}`}
+      />
+      <div className="hidden peer-checked:block my-3">
+        <Image
+          src={props.postView.post.url}
+          alt={"Post image"}
+          placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(32, 32))}`}
+          width={1000}
+          height={1000}
+          sizes={"(max-width: 1000px) 100vw, 1000px"}
+        />
+      </div>
+    </>
   );
 };
 
@@ -49,11 +80,15 @@ type TitleProps = { post: Post };
 const Title = (props: TitleProps) => {
   return (
     <header>
-      <h1>
+      <Thumbnail
+        post={props.post}
+        className={"flex sm:hidden float-right mt-1 mr-2"}
+      />
+      <h1 className="">
         <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}
           className={classNames(
-            "text-neutral-300 visited:text-neutral-400 lg:text-xl font-bold",
+            "text-neutral-300 visited:text-neutral-400 text-xl font-bold",
             { "text-slate-400": props.post.featured_community },
           )}
         >
@@ -81,7 +116,7 @@ const Title = (props: TitleProps) => {
 
 const PostDetails = (props: Props) => {
   return (
-    <div className="text-gray-100 text-xs lg:text-sm flex flex-wrap gap-1">
+    <div className="text-gray-100 text-xs flex flex-wrap gap-1">
       <div className="flex items-center gap-1">
         posted <FormattedTimestamp timeString={props.postView.post.published} />{" "}
       </div>
@@ -107,25 +142,28 @@ const PostDetails = (props: Props) => {
 const PostActions = (props: Props) => {
   const commentCount = props.postView.counts.comments;
   return (
-    <div className="text-xs mt-1 flex items-center gap-4">
+    <div className="text-[12px]/snug font-semibold mt-1 flex items-center gap-2">
       <StyledLink
         href={`/post/${props.postView.post.id}`}
-        className="flex text-neutral-300 visited:text-neutral-400 items-center"
+        className="flex text-neutral-300 items-center"
       >
         <ChatBubbleLeftRightIcon className="h-4 mr-1" title="View comments" />
-        {formatCompactNumber(commentCount)}
+        {formatCompactNumber(commentCount)} comments
       </StyledLink>
       <StyledLink
         href={props.postView.post.ap_id}
-        className="flex text-neutral-300 visited:text-neutral-400 items-center"
+        className="flex text-neutral-300 items-center"
       >
-        <GlobeAltIcon className="h-4" title="View on original instance" />
+        share
       </StyledLink>
-      <StyledLink
-        href={"#"}
-        className="flex text-neutral-300 visited:text-neutral-400 items-center"
-      >
-        <StarIcon className="h-4" title="Save post" />
+      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+        save
+      </StyledLink>
+      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+        hide
+      </StyledLink>
+      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+        report
       </StyledLink>
     </div>
   );
@@ -133,26 +171,57 @@ const PostActions = (props: Props) => {
 
 type ThumbnailProps = {
   post: Post;
+  className: string;
 };
 
 const Thumbnail = (props: ThumbnailProps) => {
   return (
-    <Link href={props.post.url ?? `/post/${props.post.id}`}>
-      <div className="rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative mr-3 flex items-center justify-center">
-        {props.post.thumbnail_url ? (
-          <Image
-            className="rounded object-cover"
-            src={props.post.thumbnail_url}
-            alt="Thumbnail"
-            fill={true}
-            sizes="70px"
-          />
-        ) : props.post.url ? (
-          <LinkIcon className="h-8 text-neutral-900" />
-        ) : (
-          <ChatBubbleBottomCenterTextIcon className="h-8 text-neutral-900" />
-        )}
-      </div>
-    </Link>
+    <div
+      className={classNames(
+        "rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative flex items-center justify-center",
+        props.className,
+      )}
+    >
+      {props.post.thumbnail_url ? (
+        <Image
+          className="rounded object-cover"
+          src={props.post.thumbnail_url}
+          alt="Thumbnail"
+          fill={true}
+          sizes="70px"
+        />
+      ) : props.post.url ? (
+        <LinkIcon className="h-8 text-neutral-900" />
+      ) : (
+        <ChatBubbleBottomCenterTextIcon className="h-8 text-neutral-900" />
+      )}
+      {isImage(props.post.url) && (
+        <label
+          htmlFor={`toggle-${props.post.id}`}
+          className="cursor-pointer z-10 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
+        >
+          <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
+        </label>
+      )}
+    </div>
   );
 };
+
+const shimmer = (w: number, h: number) => `
+  <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <linearGradient id="g">
+        <stop stop-color="#333" offset="20%" />
+        <stop stop-color="#222" offset="50%" />
+        <stop stop-color="#333" offset="70%" />
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="#333" />
+    <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
+    <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+  </svg>`;
+
+const toBase64 = (str: string) =>
+  typeof window === "undefined"
+    ? Buffer.from(str).toString("base64")
+    : window.btoa(str);
