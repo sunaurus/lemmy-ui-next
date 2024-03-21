@@ -44,7 +44,7 @@ export const UserLink = (props: Props) => {
         <span
           title="Original poster"
           className={
-            "rounded border-slate-500 border text-indigo-400 text-xs/snug min-w-5 px-0.5 text-center font-bold"
+            "rounded border-indigo-400 border text-indigo-400 text-xs/snug min-w-5 px-0.5 text-center font-bold"
           }
         >
           OP
