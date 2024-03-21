@@ -198,7 +198,7 @@ const Thumbnail = (props: ThumbnailProps) => {
       {isImage(props.post.url) && (
         <label
           htmlFor={`toggle-${props.post.id}`}
-          className="cursor-pointer z-10 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
+          className="cursor-pointer z-1 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
         >
           <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
         </label>
