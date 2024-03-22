@@ -53,6 +53,7 @@ const CommentPage = async ({ params, searchParams }: CommentPageProps) => {
       postId={commentView.post.id}
       commentThreadParentId={commentView.comment.id}
       searchParams={searchParams}
+      highlightCommentId={commentView.comment.id}
     />
   );
 };

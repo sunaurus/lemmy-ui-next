@@ -10,7 +10,8 @@ export const Markdown = (props: Props) => {
 
   return (
     <div
-      className="max-w-none
+      className="max-w-full
+      min-w-none
       prose
       prose-sm
       prose-invert

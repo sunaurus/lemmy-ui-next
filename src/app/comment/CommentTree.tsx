@@ -3,7 +3,10 @@ import { Comment } from "@/app/comment/Comment";
 import classNames from "classnames";
 import { LazyChildComments } from "@/app/comment/LazyChildComments";
 
-export const CommentTree = (props: { node: CommentNode }) => {
+export const CommentTree = (props: {
+  node: CommentNode;
+  highlightRoot?: boolean;
+}) => {
   return (
     <div
       className={classNames("border-neutral-700 group mt-4", {
@@ -14,6 +17,7 @@ export const CommentTree = (props: { node: CommentNode }) => {
       <Comment
         commentView={props.node.commentView}
         parentId={props.node.parent?.commentView.comment.id}
+        highlight={props.highlightRoot}
       >
         {props.node.children.map((node) => (
           <CommentTree key={node.commentView.comment.id} node={node} />

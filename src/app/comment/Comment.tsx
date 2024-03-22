@@ -6,11 +6,14 @@ import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import React, { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { TrashIcon } from "@heroicons/react/16/solid";
+import Link from "next/link";
+import classNames from "classnames";
 
 export const Comment = (props: {
   commentView: CommentView;
   children?: ReactNode[]; // Child comments
   parentId?: number;
+  highlight?: boolean;
 }) => {
   let content = <Markdown content={props.commentView.comment.content} />;
 
@@ -27,6 +30,11 @@ export const Comment = (props: {
     );
   }
 
+  // props.parentId is only provided if it's visible on the current page
+  // If it's undefined, the comment might still have a parent, but as it's not on the page,
+  // we can't scroll to it, we can only link to it
+  const parentIdFromPath = getParentIdFromPath(props.commentView.comment.path);
+
   return (
     <div
       id={`comment-${props.commentView.comment.id}`}
@@ -42,9 +50,9 @@ export const Comment = (props: {
         commentView={props.commentView}
         className="peer-checked:collapse peer-checked:max-h-0"
       />
-      <div className="relative group">
-        <div className={"text-xs flex items-center flex-wrap"}>
-          <div className="flex items-center">
+      <div className="relative group min-w-0">
+        <div className={"text-xs flex items-center flex-wrap min-w-0"}>
+          <div className="flex items-center min-w-0">
             <label
               htmlFor={`comment-hide-${props.commentView.comment.id}`}
               className="hover:text-slate-400 hover:cursor-pointer mr-2 text-nowrap"
@@ -71,8 +79,14 @@ export const Comment = (props: {
             />
           </div>
         </div>
-        <div className="peer-checked:group-[]:hidden max-w-[840px] overflow-x-clip">
-          {content}
+        <div className="peer-checked:group-[]:hidden max-w-[840px] overflow-x-hidden">
+          <div
+            className={classNames(" px-1", {
+              "bg-neutral-700": props.highlight,
+            })}
+          >
+            {content}
+          </div>
           <div className="text-xs font-semibold mt-2 flex gap-1">
             <StyledLink
               className="text-neutral-300"
@@ -90,6 +104,14 @@ export const Comment = (props: {
                 parent
               </a>
             )}
+            {!props.parentId && parentIdFromPath !== "0" && (
+              <Link
+                href={`/comment/${parentIdFromPath}`}
+                className="text-neutral-300 hover:brightness-125"
+              >
+                parent
+              </Link>
+            )}
             <div>reply</div>
           </div>
         </div>
@@ -97,4 +119,9 @@ export const Comment = (props: {
       </div>
     </div>
   );
+};
+
+const getParentIdFromPath = (path: string): string => {
+  const chain = path.split(".");
+  return chain[chain.length - 2];
 };

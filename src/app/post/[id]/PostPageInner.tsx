@@ -13,6 +13,7 @@ export const PostPageInner = async (props: {
   postId: number;
   commentThreadParentId?: number;
   searchParams: Record<string, string>;
+  highlightCommentId?: number;
 }) => {
   const { post_view: postView } = await apiClient.getPost({
     id: props.postId,
@@ -38,6 +39,7 @@ export const PostPageInner = async (props: {
             commentThreadParentId={props.commentThreadParentId}
             searchParams={props.searchParams}
             commentCount={postView.counts.comments}
+            highlightCommentId={props.highlightCommentId}
           />
         ) : (
           <NoComments />
@@ -60,6 +62,7 @@ const Comments = async (props: {
   commentThreadParentId?: number;
   searchParams: Record<string, string>;
   commentCount: number;
+  highlightCommentId?: number;
 }) => {
   const searchParamsSortType = props.searchParams[
     "sortType"
@@ -98,8 +101,8 @@ const Comments = async (props: {
   return (
     <div>
       {props.commentThreadParentId && (
-        <div className="mt-6">
-          <div>You are viewing a single comment thread.</div>
+        <div className="mt-6 border-neutral-700 border p-2">
+          <div>You are viewing a single thread.</div>
           <StyledLink
             href={`/post/${props.postId}`}
             className="flex items-center"
@@ -117,7 +120,13 @@ const Comments = async (props: {
       />
 
       {commentTrees.map((node) => (
-        <CommentTree key={node.commentView.comment.id} node={node} />
+        <CommentTree
+          key={node.commentView.comment.id}
+          node={node}
+          highlightRoot={
+            props.highlightCommentId === node.commentView.comment.id
+          }
+        />
       ))}
     </div>
   );

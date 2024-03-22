@@ -21,7 +21,9 @@ export const UserLink = (props: Props) => {
       href={`/u/${creatorUsername}`}
     >
       <Avatar avatarSrc={props.person.avatar} size={"mini"} />
-      <span title={creatorUsername}>{creatorFormattedName}</span>
+      <span title={creatorUsername} className="min-w-0 break-words">
+        {creatorFormattedName}
+      </span>
       {props.showAdminBadge && (
         <UsernameBadge
           title={"Instance admin"}
