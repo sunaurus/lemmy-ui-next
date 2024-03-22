@@ -5,12 +5,28 @@ import { Markdown } from "@/app/(ui)/Markdown";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import React, { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
+import { TrashIcon } from "@heroicons/react/16/solid";
 
 export const Comment = (props: {
   commentView: CommentView;
   children?: ReactNode[]; // Child comments
   parentId?: number;
 }) => {
+  let content = <Markdown content={props.commentView.comment.content} />;
+
+  if (props.commentView.comment.deleted || props.commentView.comment.removed) {
+    content = (
+      <div className="font-semibold italic text-neutral-400 text-xs m-1 flex items-center gap-1">
+        <TrashIcon className={"h-3"} />
+        <span className="mt-0.5">
+          {props.commentView.comment.removed
+            ? "Removed by mod"
+            : "Deleted by creator"}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div
       id={`comment-${props.commentView.comment.id}`}
@@ -56,7 +72,7 @@ export const Comment = (props: {
           </div>
         </div>
         <div className="peer-checked:group-[]:hidden max-w-[840px] overflow-x-clip">
-          <Markdown content={props.commentView.comment.content} />
+          {content}
           <div className="text-xs font-semibold mt-2 flex gap-1">
             <StyledLink
               className="text-neutral-300"
