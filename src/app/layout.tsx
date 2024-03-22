@@ -37,7 +37,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       title: site.site_view.site.name,
       description: site.site_view.site.description,
       siteName: site.site_view.site.name,
-      images,
+      images: [images[0]],
     },
     icons: {
       icon: [

@@ -50,7 +50,7 @@ export const generateMetadata = async (
         },
       )} • ${personView.counts.post_count} posts and ${personView.counts.comment_count} comments`,
       siteName: siteView.site.name,
-      images,
+      images: [images[0]],
       username: formatPersonUsername(personView.person),
     },
   };

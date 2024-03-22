@@ -38,9 +38,9 @@ export const generateMetadata = async (
     description: communityView.community.title,
     openGraph: {
       title: `!${formatCommunityName(communityView.community)}`,
-      description: "The React Framework for the Web",
+      description: `${communityView.community.title} • ${communityView.counts.posts} posts and ${communityView.counts.comments} comments`,
       siteName: siteView.site.name,
-      images,
+      images: [images[0]],
       type: "website",
     },
   };

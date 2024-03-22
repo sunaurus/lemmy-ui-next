@@ -38,7 +38,7 @@ export const generateMetadata = async (
       title: `Comment by ${formatPersonUsername(commentView.creator)} on ${commentView.post.name}`,
       description: `Commented in ${formatCommunityName(commentView.community)} by ${formatPersonUsername(commentView.creator)} • ${commentView.counts.score} points and ${commentView.counts.child_count} replies`,
       siteName: siteView.site.name,
-      images,
+      images: [images[0]],
     },
   };
 };

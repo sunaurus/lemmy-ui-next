@@ -38,7 +38,7 @@ export const generateMetadata = async (
       title: postView.post.name,
       description: `Posted in ${formatCommunityName(postView.community)} by ${formatPersonUsername(postView.creator)} • ${postView.counts.score} points and ${postView.counts.comments} comments`,
       siteName: siteView.site.name,
-      images,
+      images: [images[0]],
     },
   };
 };
