@@ -8,12 +8,37 @@ import NextTopLoader from "nextjs-toploader";
 import { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 
-export async function generateMetadata(): Promise<Metadata> {
+export const generateMetadata = async (): Promise<Metadata> => {
   const site = await apiClient.getSite();
+
+  let images: string[] = [];
+
+  if (site.site_view.site.icon) {
+    images = [site.site_view.site.icon, ...images];
+  }
+
+  if (site.site_view.site.banner) {
+    images = [site.site_view.site.banner];
+  }
 
   return {
     title: site.site_view.site.name,
     description: site.site_view.site.description,
+    keywords: [
+      site.site_view.site.name,
+      "lemmy",
+      "vote",
+      "comment",
+      "post",
+      "threadiverse",
+      "fediverse",
+    ],
+    openGraph: {
+      title: site.site_view.site.name,
+      description: site.site_view.site.description,
+      siteName: site.site_view.site.name,
+      images,
+    },
     icons: {
       icon: [
         {
@@ -27,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
   };
-}
+};
 
 // noinspection JSUnusedGlobalSymbols
 export const viewport: Viewport = {

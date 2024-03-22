@@ -8,12 +8,57 @@ import { Pagination } from "@/app/(ui)/Pagination";
 import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 import { Comment } from "@/app/comment/Comment";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
+import { Metadata, ResolvingMetadata } from "next";
+import { formatPersonUsername } from "@/app/u/formatPersonUsername";
+import { formatDistanceToNowStrict } from "date-fns";
 
-type ViewType = "Overview" | "Comments" | "Posts";
-const UserPage = async (props: {
+type UserPageProps = {
   params: { username: string };
   searchParams: Record<string, string>;
-}) => {
+};
+export const generateMetadata = async (
+  props: UserPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> => {
+  const username = decodeURIComponent(props.params.username);
+
+  const { person_view: personView } = await apiClient.getPersonDetails({
+    username,
+  });
+
+  const { site_view: siteView } = await apiClient.getSite();
+
+  let images = (await parent).openGraph?.images || [];
+
+  if (personView.person.banner) {
+    images = [personView.person.banner, ...images];
+  }
+  if (personView.person.avatar) {
+    images = [personView.person.avatar, ...images];
+  }
+
+  const title = `Profile of ${formatPersonUsername(personView.person)} on ${siteView.site.name}`;
+  return {
+    title: title,
+    description: personView.person.bio,
+    openGraph: {
+      title: title,
+      description: `Joined ${formatDistanceToNowStrict(
+        new Date(personView.person.published),
+        {
+          addSuffix: true,
+        },
+      )} • ${personView.counts.post_count} posts and ${personView.counts.comment_count} comments`,
+      siteName: siteView.site.name,
+      images,
+      username: formatPersonUsername(personView.person),
+    },
+  };
+};
+
+type ViewType = "Overview" | "Comments" | "Posts";
+
+const UserPage = async (props: UserPageProps) => {
   const username = decodeURIComponent(props.params.username);
 
   const currentSortType: SortType =
