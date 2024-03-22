@@ -7,6 +7,7 @@ import { PostListItem } from "@/app/post/PostListItem";
 import { Pagination } from "@/app/(ui)/Pagination";
 import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 import { Comment } from "@/app/comment/Comment";
+import { UsernameBadge } from "@/app/u/UsernameBadge";
 
 type ViewType = "Overview" | "Comments" | "Posts";
 const UserPage = async (props: {
@@ -59,8 +60,22 @@ const UserPage = async (props: {
           <Avatar avatarSrc={personView.person.avatar} size="regular" />
 
           <div>
-            <h1 className="text-2xl">
+            <h1 className="text-2xl flex items-center gap-1">
               {personView.person.display_name ?? personView.person.name}
+              {personView.is_admin && (
+                <UsernameBadge
+                  title={"Instance admin"}
+                  content={"A"}
+                  className={"mt-1.5 border-rose-500 text-rose-500"}
+                />
+              )}
+              {personView.person.bot_account && (
+                <UsernameBadge
+                  title={"Bot account"}
+                  content={"B"}
+                  className={"mt-1.5 border-amber-500 text-amber-500"}
+                />
+              )}
             </h1>
             <div className="text-md">{username}</div>
           </div>

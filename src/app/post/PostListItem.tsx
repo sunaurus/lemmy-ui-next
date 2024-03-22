@@ -166,6 +166,7 @@ const PostDetails = (props: Props) => {
           person={props.postView.creator}
           showAdminBadge={props.postView.creator_is_admin}
           showModBadge={props.postView.creator_is_moderator}
+          showBotBadge={props.postView.creator.bot_account}
         />
       </div>
       {props.hideCommunityName ? (

@@ -2,13 +2,14 @@ import { Person } from "lemmy-js-client";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";
-import classNames from "classnames";
+import { UsernameBadge } from "@/app/u/UsernameBadge";
 
 type Props = {
   person: Person;
   showAdminBadge?: boolean;
   showModBadge?: boolean;
   showOpBadge?: boolean;
+  showBotBadge?: boolean;
 };
 
 export const UserLink = (props: Props) => {
@@ -22,44 +23,33 @@ export const UserLink = (props: Props) => {
       <Avatar avatarSrc={props.person.avatar} size={"mini"} />
       <span title={creatorUsername}>{creatorFormattedName}</span>
       {props.showAdminBadge && (
-        <UserLinkBadge
+        <UsernameBadge
           title={"Instance admin"}
           content={"A"}
           className={"border-rose-500 text-rose-500"}
         />
       )}
       {!props.showAdminBadge && props.showModBadge && (
-        <UserLinkBadge
+        <UsernameBadge
           title={"Community moderator"}
           content={"M"}
           className={"border-emerald-500 text-emerald-500"}
         />
       )}
       {props.showOpBadge && (
-        <UserLinkBadge
+        <UsernameBadge
           title={"Original poster"}
           content={"OP"}
           className={"border-indigo-400 text-indigo-400"}
         />
       )}
-    </StyledLink>
-  );
-};
-
-const UserLinkBadge = (props: {
-  title: string;
-  content: string;
-  className: string;
-}) => {
-  return (
-    <span
-      title={props.title}
-      className={classNames(
-        "font-mono rounded border text-[10px]/snug px-1 text-center font-bold",
-        props.className,
+      {props.showBotBadge && (
+        <UsernameBadge
+          title={"Bot account"}
+          content={"B"}
+          className={"border-amber-500 text-amber-500"}
+        />
       )}
-    >
-      {props.content}
-    </span>
+    </StyledLink>
   );
 };

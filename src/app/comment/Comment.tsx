@@ -44,6 +44,7 @@ export const Comment = (props: {
                 props.commentView.post.creator_id ===
                 props.commentView.comment.creator_id
               }
+              showBotBadge={props.commentView.creator.bot_account}
             />
           </div>
           <div className="flex items-center">
