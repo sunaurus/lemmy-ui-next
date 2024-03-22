@@ -27,12 +27,16 @@ The project is in its initial setup phase and not open to PRs yet. PRs will be w
 
 ## Running 
 
-**Prerequisites**: You only need nodejs. Check the [.nvmrc](.nvmrc) file in this repo to find out the exact version we are developing against. Optionally, you can use [nvm](https://github.com/nvm-sh/nvm) to automate downloading & setting up the correct nodejs version for you (it automatically checks the .nvmrc file and sets everything up for you).
+**Prerequisites**: You only need nodejs. Check the [.nvmrc](.nvmrc) file in this repo to find out the exact version we are developing against. Optionally, you can use [nvm](https://github.com/nvm-sh/nvm) to automate downloading & setting up the correct nodejs version for you (it automatically checks the `.nvmrc` file and sets everything up for you).
 
 ### Locally
 
 ```bash
+# Install dependencies
+npm i
+# Configure Lemmy backend
 echo "LEMMY_BACKEND=https://lemm.ee" > .env.local
+# Start dev server with hot-reload
 npm run dev
 ```
 
