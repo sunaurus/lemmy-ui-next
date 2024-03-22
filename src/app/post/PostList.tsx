@@ -73,6 +73,9 @@ export const PostList = async (props: {
             key={postView.post.id}
             postView={postView}
             hideCommunityName={!!props.community}
+            autoExpandMedia={
+              loggedInUser?.local_user_view.local_user.auto_expand
+            }
           />
         ))}
       </div>

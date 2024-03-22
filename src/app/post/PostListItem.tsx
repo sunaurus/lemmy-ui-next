@@ -25,6 +25,7 @@ import { isVideo } from "@/app/(utils)/isVideo";
 type Props = {
   postView: PostView;
   hideCommunityName?: boolean;
+  autoExpandMedia?: boolean;
 };
 
 export const PostListItem = (props: Props) => {
@@ -46,7 +47,10 @@ export const PostListItem = (props: Props) => {
         </div>
       </div>
 
-      <InlineExpandedMedia postView={props.postView} />
+      <InlineExpandedMedia
+        postView={props.postView}
+        autoExpandMedia={props.autoExpandMedia}
+      />
     </div>
   );
 };
@@ -64,6 +68,7 @@ const InlineExpandedMedia = (props: Props) => {
         type="checkbox"
         className="peer sr-only"
         id={`toggle-${props.postView.post.id}`}
+        defaultChecked={props.autoExpandMedia}
       />
       <div className="hidden peer-checked:block my-3 mx-2 lg:mx-4">
         {isImage(url) && (
