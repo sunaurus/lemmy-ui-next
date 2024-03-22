@@ -49,7 +49,7 @@ export const PostPageInner = async (props: {
 
 const PostBody = (props: { body: string }) => {
   return (
-    <div className="rounded bg-neutral-800 mx-4 p-4 max-w-[880px]">
+    <div className="rounded bg-neutral-800 mx-2 lg:mx-4 p-4 max-w-[880px]">
       <Markdown content={props.body} />
     </div>
   );

@@ -8,6 +8,7 @@ import {
   BellAlertIcon,
   ChatBubbleLeftRightIcon,
   LockClosedIcon,
+  PlayIcon,
 } from "@heroicons/react/16/solid";
 import { Post, PostView } from "lemmy-js-client";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
@@ -19,6 +20,7 @@ import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import classNames from "classnames";
 import { isImage } from "@/app/(utils)/isImage";
+import { isVideo } from "@/app/(utils)/isVideo";
 
 type Props = {
   postView: PostView;
@@ -44,15 +46,17 @@ export const PostListItem = (props: Props) => {
         </div>
       </div>
 
-      <InlineImage postView={props.postView} />
+      <InlineExpandedMedia postView={props.postView} />
     </div>
   );
 };
 
-const InlineImage = (props: Props) => {
-  if (!isImage(props.postView.post.url)) {
+const InlineExpandedMedia = (props: Props) => {
+  if (!hasExpandableMedia(props.postView.post)) {
     return null;
   }
+
+  const url = props.postView.post.url;
 
   return (
     <>
@@ -61,18 +65,38 @@ const InlineImage = (props: Props) => {
         className="peer sr-only"
         id={`toggle-${props.postView.post.id}`}
       />
-      <div className="hidden peer-checked:block my-3">
-        <Image
-          src={props.postView.post.url}
-          alt={"Post image"}
-          placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(32, 32))}`}
-          width={1000}
-          height={1000}
-          sizes={"(max-width: 1000px) 100vw, 1000px"}
-        />
+      <div className="hidden peer-checked:block my-3 mx-2 lg:mx-4">
+        {isImage(url) && (
+          <Image
+            src={url}
+            alt={"Post image"}
+            placeholder={`data:image/svg+xml;base64,${toBase64(ImageLoading(32, 32))}`}
+            width={880}
+            height={880}
+            sizes={"(max-width: 880px) 100vw, 880px"}
+          />
+        )}
+        {isVideo(url) && (
+          <video controls className="w-full max-w-[880px] aspect-video">
+            <source src={url} type="video/mp4" />
+          </video>
+        )}
+        {props.postView.post.embed_video_url && (
+          <iframe
+            allowFullScreen
+            src={props.postView.post.embed_video_url}
+            title={props.postView.post.embed_title}
+            className="w-full max-w-[880px] aspect-video"
+          ></iframe>
+        )}
       </div>
     </>
   );
+};
+
+const hasExpandableMedia = (post: Post) => {
+  const url = post.url;
+  return isImage(url) || isVideo(url) || post.embed_video_url;
 };
 
 type TitleProps = { post: Post };
@@ -195,19 +219,23 @@ const Thumbnail = (props: ThumbnailProps) => {
       ) : (
         <ChatBubbleBottomCenterTextIcon className="h-8 text-neutral-900" />
       )}
-      {isImage(props.post.url) && (
+      {hasExpandableMedia(props.post) && (
         <label
           htmlFor={`toggle-${props.post.id}`}
           className="cursor-pointer z-1 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
         >
-          <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
+          {isImage(props.post.url) ? (
+            <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
+          ) : (
+            <PlayIcon className="h-7 bg-neutral-800 rounded" />
+          )}
         </label>
       )}
     </div>
   );
 };
 
-const shimmer = (w: number, h: number) => `
+const ImageLoading = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <linearGradient id="g">
