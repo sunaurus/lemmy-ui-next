@@ -9,6 +9,7 @@ import {
   ChatBubbleLeftRightIcon,
   LockClosedIcon,
   PlayIcon,
+  TrashIcon,
 } from "@heroicons/react/16/solid";
 import { Post, PostView } from "lemmy-js-client";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
@@ -136,7 +137,16 @@ const Title = (props: TitleProps) => {
           {props.post.name}
 
           {props.post.locked && (
-            <LockClosedIcon className={"h-4 inline ml-1 mb-1 text-rose-500"} />
+            <LockClosedIcon
+              title="Post locked"
+              className={"h-4 inline ml-1 mb-1 text-rose-500"}
+            />
+          )}
+          {props.post.deleted && (
+            <TrashIcon
+              title="Post deleted"
+              className={"h-4 inline ml-1 mb-1 text-rose-500"}
+            />
           )}
         </StyledLink>
       </h1>
