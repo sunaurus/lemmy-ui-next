@@ -142,9 +142,9 @@ const Title = (props: TitleProps) => {
               className={"h-4 inline ml-1 mb-1 text-rose-500"}
             />
           )}
-          {props.post.deleted && (
+          {(props.post.deleted || props.post.removed) && (
             <TrashIcon
-              title="Post deleted"
+              title={`Post ${props.post.removed ? "removed by mod" : "deleted by creator"}`}
               className={"h-4 inline ml-1 mb-1 text-rose-500"}
             />
           )}
