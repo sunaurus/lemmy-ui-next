@@ -134,6 +134,7 @@ const Title = (props: TitleProps) => {
             />
           )}
           {props.post.name}
+
           {props.post.locked && (
             <LockClosedIcon className={"h-4 inline ml-1 mb-1 text-rose-500"} />
           )}
@@ -172,6 +173,15 @@ const PostActions = (props: Props) => {
   const commentCount = props.postView.counts.comments;
   return (
     <div className="text-[12px]/snug font-semibold mt-1 flex items-center gap-2">
+      {props.postView.post.nsfw && (
+        <span
+          className={
+            "inline text-[12px]/snug text-rose-500 border border-rose-500 rounded px-1"
+          }
+        >
+          NSFW
+        </span>
+      )}
       <StyledLink
         href={`/post/${props.postView.post.id}`}
         className="flex text-neutral-300 items-center"
