@@ -53,7 +53,7 @@ npm run build
 LEMMY_BACKEND=https://<your-lemmy-api> npm run start
 ```
 
-At this point, you will have lemmy-ui-next listening on 0.0.0.0:3000, and you can point your nginx or any other reverse proxy at it. You can improve performance at least a little by pointing lemmy-ui-next directly at your Lemmy backend process, for example if running on the same host, `LEMMY_BACKEND=https://localhost:8536
+At this point, you will have lemmy-ui-next listening on 0.0.0.0:3000, and you can point your nginx or any other reverse proxy at it. You can improve performance at least a little by pointing lemmy-ui-next directly at your Lemmy backend process. For examplem if running on the same host, you can use something like `LEMMY_BACKEND=https://localhost:8536`.
 
 *Sample systemd service file will be coming soon. Alternatively, a sample Dockerfile will also be provided. It's on the to-do list 😅.*
 
