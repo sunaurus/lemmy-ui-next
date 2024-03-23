@@ -88,7 +88,7 @@ const Footer = async () => {
 
   return (
     <footer className="mt-40 mb-1 text-neutral-400 flex flex-col items-center content-center justify-center w-full gap-1 text-xs ">
-      <div className="flex items-center content-center justify-center w-full gap-4">
+      <div className="flex items-center content-center justify-center w-full gap-x-4 gap-y-1 flex-wrap">
         <StyledLink className="text-neutral-400" href="/modlog">
           modlog
         </StyledLink>
@@ -108,7 +108,7 @@ const Footer = async () => {
           join-lemmy.org
         </StyledLink>
       </div>
-      <div className="flex items-center content-center justify-center w-full gap-4">
+      <div className="flex items-center content-center justify-center w-full gap-x-4 gap-y-1 flex-wrap">
         <span>lemmy-ui-next v0.0.1</span>
         <span>lemmy v{site.version}</span>
       </div>
