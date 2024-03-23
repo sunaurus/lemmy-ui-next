@@ -12,6 +12,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { formatDistanceToNowStrict } from "date-fns";
 import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
+import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
+import { CakeDayIcon } from "@/app/u/CakeDayIcon";
 
 type UserPageProps = {
   params: { username: string };
@@ -124,6 +126,11 @@ const UserPage = async (props: UserPageProps) => {
               )}
             </h1>
             <div className="text-md">{username}</div>
+            <div className="text-sm flex items-center gap-1 text-neutral-400">
+              <CakeDayIcon person={personView.person} />
+              Joined
+              <FormattedTimestamp timeString={personView.person.published} />
+            </div>
           </div>
         </div>
       </header>

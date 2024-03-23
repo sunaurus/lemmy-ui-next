@@ -3,6 +3,7 @@ import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
+import { CakeDayIcon } from "@/app/u/CakeDayIcon";
 
 type Props = {
   person: Person;
@@ -20,6 +21,7 @@ export const UserLink = (props: Props) => {
       className="flex gap-1 items-center"
       href={`/u/${creatorUsername}`}
     >
+      <CakeDayIcon person={props.person} />
       <Avatar avatarSrc={props.person.avatar} size={"mini"} />
       <span title={creatorUsername} className="min-w-0 break-words">
         {creatorFormattedName}
