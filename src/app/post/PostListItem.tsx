@@ -145,6 +145,11 @@ const Title = (props: TitleProps) => {
             />
           )}
           {props.post.name}
+          {props.post.url && (
+            <span className="text-xs text-neutral-400 font-normal ml-2">
+              ({new URL(props.post.url).host})
+            </span>
+          )}
 
           {props.post.locked && (
             <LockClosedIcon
@@ -237,6 +242,18 @@ type ThumbnailProps = {
 const Thumbnail = async (props: ThumbnailProps) => {
   const { my_user: loggedInUser } = await apiClient.getSite();
 
+  let src =
+    props.post.thumbnail_url ??
+    (isImage(props.post.url) ? props.post.url : undefined);
+
+  if (src?.includes("/pictrs/")) {
+    // If image is hosted on pictrs, request it with a smaller resolution
+    const srcUrl = new URL(src);
+    srcUrl.searchParams.delete("thumbnail");
+    srcUrl.searchParams.append("thumbnail", "280");
+    src = srcUrl.toString();
+  }
+
   return (
     <div
       className={classNames(
@@ -244,14 +261,14 @@ const Thumbnail = async (props: ThumbnailProps) => {
         props.className,
       )}
     >
-      {props.post.thumbnail_url || isImage(props.post.url) ? (
+      {src ? (
         <Image
           className={classNames("rounded object-cover", {
             "blur-sm":
               props.post.nsfw &&
               (loggedInUser?.local_user_view.local_user.blur_nsfw ?? true),
           })}
-          src={props.post.thumbnail_url ?? props.post.url!}
+          src={src}
           alt="Thumbnail"
           fill={true}
           sizes="70px"
