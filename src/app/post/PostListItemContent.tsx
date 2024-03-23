@@ -19,7 +19,7 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 
 type Props = {
@@ -27,8 +27,8 @@ type Props = {
   hideCommunityName?: boolean;
   loggedInUser?: MyUserInfo;
   remoteImageProps: {
-    thumbnail?: RemoteImageProps;
-    expanded?: RemoteImageProps;
+    thumbnail?: Promise<RemoteImageProps>;
+    expanded?: Promise<RemoteImageProps>;
   };
 };
 
@@ -42,13 +42,15 @@ export const PostListItemContent = (props: Props) => {
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
           <VoteButtons postView={props.postView} />
-          <PostThumbnail
-            post={props.postView.post}
-            className={"hidden sm:flex"}
-            loggedInUser={props.loggedInUser}
-            setInlineExpanded={setInlineExpanded}
-            remoteImageProps={props.remoteImageProps.thumbnail}
-          />
+          <Suspense fallback={<div />}>
+            <PostThumbnail
+              post={props.postView.post}
+              className={"hidden sm:flex"}
+              loggedInUser={props.loggedInUser}
+              setInlineExpanded={setInlineExpanded}
+              remoteImageProps={props.remoteImageProps.thumbnail}
+            />
+          </Suspense>
         </div>
         <div className="w-full">
           <Title
@@ -65,12 +67,13 @@ export const PostListItemContent = (props: Props) => {
           <PostActions postView={props.postView} />
         </div>
       </div>
-
-      <InlineExpandedMedia
-        postView={props.postView}
-        isExpanded={inlineExpanded}
-        remoteImageProps={props.remoteImageProps.expanded}
-      />
+      <Suspense fallback={<div />}>
+        <InlineExpandedMedia
+          postView={props.postView}
+          isExpanded={inlineExpanded}
+          remoteImageProps={props.remoteImageProps.expanded}
+        />
+      </Suspense>
     </div>
   );
 };
@@ -78,8 +81,15 @@ export const PostListItemContent = (props: Props) => {
 const InlineExpandedMedia = (props: {
   postView: PostView;
   isExpanded: boolean;
-  remoteImageProps?: RemoteImageProps;
+  remoteImageProps?: Promise<RemoteImageProps>;
 }) => {
+  const [remoteImageProps, setRemoteImageProps] =
+    useState<RemoteImageProps | null>(null);
+
+  useEffect(() => {
+    props.remoteImageProps?.then((res) => setRemoteImageProps(res));
+  }, []);
+
   if (!hasExpandableMedia(props.postView.post)) {
     return null;
   }
@@ -94,7 +104,7 @@ const InlineExpandedMedia = (props: {
   let content = null;
 
   if (isImage(url)) {
-    if (!props.remoteImageProps) {
+    if (!remoteImageProps) {
       return null;
     }
 
@@ -115,7 +125,7 @@ const InlineExpandedMedia = (props: {
         <Image
           alt={"Post image"}
           unoptimized={!proxied}
-          {...props.remoteImageProps}
+          {...remoteImageProps}
         />
       </>
     );
@@ -157,19 +167,21 @@ type TitleProps = {
   post: Post;
   loggedInUser?: MyUserInfo;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
-  remoteImageProps?: RemoteImageProps;
+  remoteImageProps?: Promise<RemoteImageProps>;
 };
 
 const Title = (props: TitleProps) => {
   return (
     <header>
-      <PostThumbnail
-        post={props.post}
-        className={"flex sm:hidden float-right mt-1 mr-2"}
-        loggedInUser={props.loggedInUser}
-        setInlineExpanded={props.setInlineExpanded}
-        remoteImageProps={props.remoteImageProps}
-      />
+      <Suspense fallback={<div />}>
+        <PostThumbnail
+          post={props.post}
+          className={"flex sm:hidden float-right mt-1 mr-2"}
+          loggedInUser={props.loggedInUser}
+          setInlineExpanded={props.setInlineExpanded}
+          remoteImageProps={props.remoteImageProps}
+        />
+      </Suspense>
       <h1 className="">
         <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}

@@ -17,10 +17,10 @@ export const PostListItem = async (props: Props) => {
   const postThumbnailSrc = getPostThumbnailSrc(props.postView.post);
   const remoteImageProps = {
     thumbnail: postThumbnailSrc
-      ? await getRemoteImageProps(postThumbnailSrc, 70, true)
+      ? getRemoteImageProps(postThumbnailSrc, 70, true)
       : undefined,
     expanded: isImage(props.postView.post.url)
-      ? await getRemoteImageProps(props.postView.post.url)
+      ? getRemoteImageProps(props.postView.post.url)
       : undefined,
   };
 

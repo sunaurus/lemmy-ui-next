@@ -11,7 +11,7 @@ import {
 import { PlayIcon } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post } from "lemmy-js-client";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { getPostThumbnailSrc } from "@/app/post/getPostThumbnailSrc";
 
@@ -20,11 +20,18 @@ type ThumbnailProps = {
   className: string;
   loggedInUser: MyUserInfo | undefined;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
-  remoteImageProps?: RemoteImageProps;
+  remoteImageProps?: Promise<RemoteImageProps>;
 };
 
 export const PostThumbnail = (props: ThumbnailProps) => {
   let src = getPostThumbnailSrc(props.post);
+
+  const [remoteImageProps, setRemoteImageProps] =
+    useState<RemoteImageProps | null>(null);
+
+  useEffect(() => {
+    props.remoteImageProps?.then((res) => setRemoteImageProps(res));
+  }, []);
 
   return (
     <div
@@ -33,7 +40,7 @@ export const PostThumbnail = (props: ThumbnailProps) => {
         props.className,
       )}
     >
-      {props.remoteImageProps ? (
+      {remoteImageProps ? (
         <Image
           className={classNames("rounded object-cover", {
             "blur-sm":
@@ -42,7 +49,7 @@ export const PostThumbnail = (props: ThumbnailProps) => {
                 true),
           })}
           alt="Thumbnail"
-          {...props.remoteImageProps}
+          {...remoteImageProps}
         />
       ) : props.post.url ? (
         <LinkIcon className="h-8 text-neutral-900" />
