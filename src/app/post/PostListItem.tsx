@@ -22,6 +22,7 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 import classNames from "classnames";
 import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
+import { apiClient } from "@/app/apiClient";
 
 type Props = {
   postView: PostView;
@@ -35,7 +36,11 @@ export const PostListItem = (props: Props) => {
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
           <VoteButtons postView={props.postView} />
-          <Thumbnail post={props.postView.post} className={"hidden sm:flex"} />
+          <Thumbnail
+            post={props.postView.post}
+            className={"hidden sm:flex"}
+            blurNsfw={props.postView}
+          />
         </div>
         <div className="w-full">
           <Title post={props.postView.post} />
@@ -233,18 +238,24 @@ type ThumbnailProps = {
   className: string;
 };
 
-const Thumbnail = (props: ThumbnailProps) => {
+const Thumbnail = async (props: ThumbnailProps) => {
+  const { my_user: loggedInUser } = await apiClient.getSite();
+
   return (
     <div
       className={classNames(
-        "rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative flex items-center justify-center",
+        "rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative flex items-center justify-center overflow-hidden",
         props.className,
       )}
     >
-      {props.post.thumbnail_url ? (
+      {props.post.thumbnail_url || isImage(props.post.url) ? (
         <Image
-          className="rounded object-cover"
-          src={props.post.thumbnail_url}
+          className={classNames("rounded object-cover", {
+            "blur-sm":
+              props.post.nsfw &&
+              (loggedInUser?.local_user_view.local_user.blur_nsfw ?? true),
+          })}
+          src={props.post.thumbnail_url ?? props.post.url!}
           alt="Thumbnail"
           fill={true}
           sizes="70px"
