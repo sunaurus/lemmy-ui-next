@@ -87,14 +87,23 @@ const InlineExpandedMedia = (props: Props) => {
             <source src={url} type="video/mp4" />
           </video>
         )}
-        {props.postView.post.embed_video_url && (
-          <iframe
-            allowFullScreen
-            src={props.postView.post.embed_video_url}
-            title={props.postView.post.embed_title}
-            className="w-full max-w-[880px] aspect-video"
-          ></iframe>
+        {isVideo(props.postView.post.embed_video_url) && (
+          <video controls className="w-full max-w-[880px] aspect-video">
+            <source
+              src={props.postView.post.embed_video_url}
+              type="video/mp4"
+            />
+          </video>
         )}
+        {!isVideo(props.postView.post.embed_video_url) &&
+          props.postView.post.embed_video_url && (
+            <iframe
+              allowFullScreen
+              src={props.postView.post.embed_video_url}
+              title={props.postView.post.embed_title}
+              className="w-full max-w-[880px] aspect-video"
+            ></iframe>
+          )}
       </div>
     </>
   );
