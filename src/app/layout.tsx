@@ -66,9 +66,9 @@ export default function RootLayout(props: Props) {
   return (
     <html
       lang="en"
-      className="h-full w-full overscroll-x-none overflow-x-hidden bg-neutral-900"
+      className="min-h-screen overscroll-x-none overflow-x-hidden bg-neutral-900"
     >
-      <body className="w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col h-full">
+      <body className="min-h-screen w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col ">
         <NextTopLoader
           color="#94a3b8"
           showSpinner={false}
