@@ -36,11 +36,7 @@ export const PostListItem = (props: Props) => {
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
           <VoteButtons postView={props.postView} />
-          <Thumbnail
-            post={props.postView.post}
-            className={"hidden sm:flex"}
-            blurNsfw={props.postView}
-          />
+          <Thumbnail post={props.postView.post} className={"hidden sm:flex"} />
         </div>
         <div className="w-full">
           <Title post={props.postView.post} />

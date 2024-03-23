@@ -14,7 +14,7 @@ export const Input = (
   return (
     <input
       className={classNames(
-        "text-sm rounded block w-full p-2.5 bg-neutral-700 border border-neutral-600 placeholder-neutral-400 text-white focus:ring-slate-500 focus:outline-none focus:border-slate-500 autofill:bg-slate-700",
+        "text-sm rounded block w-full p-2 bg-neutral-700 border border-neutral-600 placeholder-neutral-400 text-white focus:ring-slate-500 focus:outline-none focus:border-slate-500 autofill:bg-slate-700",
         className,
       )}
       {...rest}
