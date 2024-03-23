@@ -76,23 +76,42 @@ export default function RootLayout(props: Props) {
         />
         <Navbar />
 
-        <main className="w-full overflow-x-clip">{props.children}</main>
-        <footer className="h-11 mt-auto p-2 text-slate-300 flex items-center content-center justify-center w-full gap-4">
-          <StyledLink
-            className="text-neutral-400"
-            href="https://github.com/sunaurus/lemmy-ui-next"
-          >
-            github:lemmy-ui-next
-          </StyledLink>
-
-          <StyledLink
-            className="text-neutral-400"
-            href="https://join-lemmy.org"
-          >
-            join-lemmy.org
-          </StyledLink>
-        </footer>
+        <main className="w-full overflow-x-clip mb-auto">{props.children}</main>
+        <Footer />
       </body>
     </html>
   );
 }
+
+const Footer = async () => {
+  const site = await apiClient.getSite();
+
+  return (
+    <footer className="mt-40 mb-1 text-neutral-400 flex flex-col items-center content-center justify-center w-full gap-1 text-xs ">
+      <div className="flex items-center content-center justify-center w-full gap-4">
+        <StyledLink className="text-neutral-400" href="/modlog">
+          modlog
+        </StyledLink>
+        <StyledLink className="text-neutral-400" href="/legal">
+          legal
+        </StyledLink>
+        <StyledLink className="text-neutral-400" href="/instances">
+          instances
+        </StyledLink>
+        <StyledLink
+          className="text-neutral-400"
+          href="https://github.com/sunaurus/lemmy-ui-next"
+        >
+          github:sunaurus/lemmy-ui-next
+        </StyledLink>
+        <StyledLink className="text-neutral-400" href="https://join-lemmy.org">
+          join-lemmy.org
+        </StyledLink>
+      </div>
+      <div className="flex items-center content-center justify-center w-full gap-4">
+        <span>lemmy-ui-next v0.0.1</span>
+        <span>lemmy v{site.version}</span>
+      </div>
+    </footer>
+  );
+};
