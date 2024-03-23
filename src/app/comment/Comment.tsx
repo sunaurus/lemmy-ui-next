@@ -14,6 +14,7 @@ export const Comment = (props: {
   children?: ReactNode[]; // Child comments
   parentId?: number;
   highlight?: boolean;
+  className?: string;
 }) => {
   let content = <Markdown content={props.commentView.comment.content} />;
 
@@ -38,7 +39,7 @@ export const Comment = (props: {
   return (
     <div
       id={`comment-${props.commentView.comment.id}`}
-      className="mr-2 flex items-start"
+      className={classNames("mr-2 flex items-start", props.className)}
     >
       <input
         type="checkbox"

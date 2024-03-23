@@ -20,6 +20,5 @@ export const searchAction = async (
   }
 
   const newSearchParams = new URLSearchParams(newSearchParamsInput).toString();
-  console.log(newSearchParams);
   redirect(`/search?${newSearchParams}`);
 };

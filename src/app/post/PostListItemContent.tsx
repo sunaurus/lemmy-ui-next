@@ -33,7 +33,7 @@ export const PostListItemContent = (props: Props) => {
   );
 
   return (
-    <div key={props.postView.post.id} className="my-3">
+    <div key={props.postView.post.id} className="my-1">
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
           <VoteButtons postView={props.postView} />

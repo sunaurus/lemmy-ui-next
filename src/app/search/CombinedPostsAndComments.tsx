@@ -1,18 +1,31 @@
 import { CommentView, PostView, SortType } from "lemmy-js-client";
 import { isComment } from "@/app/(utils)/isComment";
+import { Comment } from "@/app/comment/Comment";
+import { PostListItem } from "@/app/post/PostListItem";
 
-export const combineAndSortPostAndComments = (
-  posts: PostView[],
-  comments: CommentView[],
-  currentSortType: SortType,
-): Array<PostView | CommentView> => {
-  switch (currentSortType) {
+type Props = {
+  posts: PostView[];
+  comments: CommentView[];
+  sortType: SortType;
+};
+export const CombinedPostsAndComments = (props: Props) => {
+  return sort(props).map((view) => {
+    return isComment(view) ? (
+      <Comment key={view.comment.id} commentView={view} className="my-2" />
+    ) : (
+      <PostListItem key={view.post.id} postView={view} />
+    );
+  });
+};
+
+const sort = (props: Props): Array<PostView | CommentView> => {
+  switch (props.sortType) {
     case "New":
-      return [...comments, ...posts].sort(sortNew);
+      return [...props.comments, ...props.posts].sort(sortNew);
     case "Old":
-      return [...comments, ...posts].sort(sortOld);
+      return [...props.comments, ...props.posts].sort(sortOld);
     default:
-      return [...comments, ...posts].sort(sortScore);
+      return [...props.comments, ...props.posts].sort(sortScore);
   }
 };
 

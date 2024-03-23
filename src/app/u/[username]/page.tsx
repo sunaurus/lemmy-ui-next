@@ -11,8 +11,7 @@ import { UsernameBadge } from "@/app/u/UsernameBadge";
 import { Metadata, ResolvingMetadata } from "next";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { formatDistanceToNowStrict } from "date-fns";
-import { isComment } from "@/app/(utils)/isComment";
-import { combineAndSortPostAndComments } from "@/app/(utils)/combineAndSortPostsAndComments";
+import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
 
 type UserPageProps = {
   params: { username: string };
@@ -154,16 +153,13 @@ const UserPage = async (props: UserPageProps) => {
           comments.map((commentView) => (
             <Comment key={commentView.comment.id} commentView={commentView} />
           ))}
-        {currentView === "Overview" &&
-          combineAndSortPostAndComments(posts, comments, currentSortType).map(
-            (view) => {
-              return isComment(view) ? (
-                <Comment key={view.comment.id} commentView={view} />
-              ) : (
-                <PostListItem key={view.post.id} postView={view} />
-              );
-            },
-          )}
+        {currentView === "Overview" && (
+          <CombinedPostsAndComments
+            posts={posts}
+            comments={comments}
+            sortType={currentSortType}
+          />
+        )}
       </div>
       <Pagination
         prevPage={currentPage > 1 ? currentPage - 1 : undefined}
