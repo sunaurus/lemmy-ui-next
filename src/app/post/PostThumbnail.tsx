@@ -12,26 +12,19 @@ import { PlayIcon } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post } from "lemmy-js-client";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
 import { Dispatch, SetStateAction } from "react";
+import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
+import { getPostThumbnailSrc } from "@/app/post/getPostThumbnailSrc";
 
 type ThumbnailProps = {
   post: Post;
   className: string;
   loggedInUser: MyUserInfo | undefined;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
+  remoteImageProps?: RemoteImageProps;
 };
 
 export const PostThumbnail = (props: ThumbnailProps) => {
-  let src =
-    props.post.thumbnail_url ??
-    (isImage(props.post.url) ? props.post.url : undefined);
-
-  if (src?.includes("/pictrs/")) {
-    // If image is hosted on pictrs, request it with a smaller resolution
-    const srcUrl = new URL(src);
-    srcUrl.searchParams.delete("thumbnail");
-    srcUrl.searchParams.append("thumbnail", "280");
-    src = srcUrl.toString();
-  }
+  let src = getPostThumbnailSrc(props.post);
 
   return (
     <div
@@ -40,7 +33,7 @@ export const PostThumbnail = (props: ThumbnailProps) => {
         props.className,
       )}
     >
-      {src ? (
+      {props.remoteImageProps ? (
         <Image
           className={classNames("rounded object-cover", {
             "blur-sm":
@@ -48,10 +41,8 @@ export const PostThumbnail = (props: ThumbnailProps) => {
               (props.loggedInUser?.local_user_view.local_user.blur_nsfw ??
                 true),
           })}
-          src={src}
           alt="Thumbnail"
-          fill={true}
-          sizes="70px"
+          {...props.remoteImageProps}
         />
       ) : props.post.url ? (
         <LinkIcon className="h-8 text-neutral-900" />

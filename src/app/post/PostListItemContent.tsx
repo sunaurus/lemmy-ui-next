@@ -20,11 +20,16 @@ import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
 import { Dispatch, SetStateAction, useState } from "react";
+import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 
 type Props = {
   postView: PostView;
   hideCommunityName?: boolean;
   loggedInUser?: MyUserInfo;
+  remoteImageProps: {
+    thumbnail?: RemoteImageProps;
+    expanded?: RemoteImageProps;
+  };
 };
 
 export const PostListItemContent = (props: Props) => {
@@ -42,6 +47,7 @@ export const PostListItemContent = (props: Props) => {
             className={"hidden sm:flex"}
             loggedInUser={props.loggedInUser}
             setInlineExpanded={setInlineExpanded}
+            remoteImageProps={props.remoteImageProps.thumbnail}
           />
         </div>
         <div className="w-full">
@@ -49,6 +55,7 @@ export const PostListItemContent = (props: Props) => {
             post={props.postView.post}
             loggedInUser={props.loggedInUser}
             setInlineExpanded={setInlineExpanded}
+            remoteImageProps={props.remoteImageProps.thumbnail}
           />
 
           <PostDetails
@@ -62,6 +69,7 @@ export const PostListItemContent = (props: Props) => {
       <InlineExpandedMedia
         postView={props.postView}
         isExpanded={inlineExpanded}
+        remoteImageProps={props.remoteImageProps.expanded}
       />
     </div>
   );
@@ -70,6 +78,7 @@ export const PostListItemContent = (props: Props) => {
 const InlineExpandedMedia = (props: {
   postView: PostView;
   isExpanded: boolean;
+  remoteImageProps?: RemoteImageProps;
 }) => {
   if (!hasExpandableMedia(props.postView.post)) {
     return null;
@@ -85,6 +94,10 @@ const InlineExpandedMedia = (props: {
   let content = null;
 
   if (isImage(url)) {
+    if (!props.remoteImageProps) {
+      return null;
+    }
+
     if (new URL(url).host !== "i.imgur.com") {
       // Only mark non-imgur images as proxied
       // We can't proxy imgur images due to aggressive rate limits on imgur
@@ -100,13 +113,9 @@ const InlineExpandedMedia = (props: {
           </div>
         )}
         <Image
-          src={url}
           alt={"Post image"}
-          placeholder={`data:image/svg+xml;base64,${toBase64(ImageLoading(32, 32))}`}
-          width={880}
-          height={880}
           unoptimized={!proxied}
-          sizes={"(max-width: 880px) 100vw, 880px"}
+          {...props.remoteImageProps}
         />
       </>
     );
@@ -117,7 +126,7 @@ const InlineExpandedMedia = (props: {
           Unable to proxy videos (remote server sees your IP address when
           expanding)
         </div>
-        <video controls className="w-full max-w-[880px] aspect-video">
+        <video controls className="w-full aspect-video">
           <source
             src={url ?? props.postView.post.embed_video_url}
             type="video/mp4"
@@ -136,18 +145,19 @@ const InlineExpandedMedia = (props: {
           allowFullScreen
           src={props.postView.post.embed_video_url}
           title={props.postView.post.embed_title}
-          className="w-full max-w-[880px] aspect-video"
+          className="w-full aspect-video"
         ></iframe>
       </>
     );
   }
-  return <div className="my-3 mx-2 lg:mx-4">{content}</div>;
+  return <div className="my-3 mx-2 lg:mx-4 max-w-[880px]">{content}</div>;
 };
 
 type TitleProps = {
   post: Post;
   loggedInUser?: MyUserInfo;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
+  remoteImageProps?: RemoteImageProps;
 };
 
 const Title = (props: TitleProps) => {
@@ -158,6 +168,7 @@ const Title = (props: TitleProps) => {
         className={"flex sm:hidden float-right mt-1 mr-2"}
         loggedInUser={props.loggedInUser}
         setInlineExpanded={props.setInlineExpanded}
+        remoteImageProps={props.remoteImageProps}
       />
       <h1 className="">
         <StyledLink
@@ -204,7 +215,10 @@ const Title = (props: TitleProps) => {
   );
 };
 
-const PostDetails = (props: Props) => {
+const PostDetails = (props: {
+  postView: PostView;
+  hideCommunityName?: boolean;
+}) => {
   return (
     <div className="text-gray-100 text-xs flex flex-wrap gap-1">
       <div className="flex items-center gap-1">
@@ -230,7 +244,7 @@ const PostDetails = (props: Props) => {
   );
 };
 
-const PostActions = (props: Props) => {
+const PostActions = (props: { postView: PostView }) => {
   const commentCount = props.postView.counts.comments;
   return (
     <div className="text-[12px]/snug font-semibold mt-1 flex items-center gap-2">

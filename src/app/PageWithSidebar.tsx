@@ -15,6 +15,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/16/solid";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
+import { getRemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 
 type SidebarProps = {
   children: ReactNode | ReactNode[];
@@ -115,7 +116,7 @@ const SidebarToggleContents = (props: { children: ReactNode[] }) => {
   );
 };
 
-const DetailsSection = (props: {
+const DetailsSection = async (props: {
   logoSrc?: string;
   name: string;
   markdownContent?: string;
@@ -124,16 +125,14 @@ const DetailsSection = (props: {
     <SidebarSection>
       <header className="flex flex-col items-center mb-4">
         {props.logoSrc && (
-          <div className="relative h-[90px] w-[230px]">
-            <Image
-              className="mt-4 object-cover h-auto"
-              src={props.logoSrc}
-              priority={true}
-              fill={true}
-              sizes="230px"
-              alt="Logo"
-            />
-          </div>
+          // <div className="relative h-[90px] w-[230px]">
+          <Image
+            className="mt-4 object-cover h-auto rounded"
+            priority={true}
+            alt="Logo"
+            {...await getRemoteImageProps(props.logoSrc, 230)}
+          />
+          // </div>
         )}
         <h1 className="mt-4">{props.name}</h1>
       </header>
