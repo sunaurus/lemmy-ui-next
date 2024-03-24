@@ -10,6 +10,7 @@ import Link from "next/link";
 import classNames from "classnames";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
+import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -64,6 +65,12 @@ export const Comment = (props: {
               [ <span className={`hidden peer-checked:group-[]:inline`}>+</span>
               <span className={`peer-checked:group-[]:hidden`}>-</span> ]
             </label>
+            {props.commentView.comment.distinguished && (
+              <ShieldExclamationIcon
+                className="h-5 mr-1 text-amber-500"
+                title={"Mod comment"}
+              />
+            )}
             <UserLink
               person={props.commentView.creator}
               showAdminBadge={props.commentView.creator_is_admin}
