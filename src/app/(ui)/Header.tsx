@@ -53,7 +53,7 @@ const Summary = (props: {
   return (
     <div
       className={classNames("flex items-end gap-2 sm:absolute max-w-full", {
-        "sm:bottom-0 sm:bg-neutral-900 sm:rounded-bl sm:rounded-tr p-2 sm:bg-opacity-90 ":
+        "sm:bottom-0 sm:bg-neutral-900 sm:rounded-bl sm:rounded-tr py-2 sm:p-2 sm:bg-opacity-90 ":
           props.addBackground,
       })}
     >
