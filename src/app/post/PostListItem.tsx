@@ -25,6 +25,7 @@ export const PostListItem = async (props: Props) => {
       loggedInUser={loggedInUser}
       remoteImageProps={remoteImageProps}
       voteConfig={getVoteConfig(siteView.local_site)}
+      siteView={siteView}
       {...props}
     />
   );
