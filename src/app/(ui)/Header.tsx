@@ -4,7 +4,7 @@ import { CommunityView, PersonView } from "lemmy-js-client";
 import classNames from "classnames";
 import { Avatar } from "@/app/(ui)/Avatar";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
-import { CakeDayIcon } from "@/app/u/CakeDayIcon";
+import { AgeIcon } from "@/app/u/AgeIcon";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
@@ -80,8 +80,8 @@ const Summary = (props: {
         </h1>
         <div className="text-md max-w-full break-words">{canonicalName}</div>
         <div className="text-sm flex items-center gap-1 text-neutral-400">
-          <CakeDayIcon
-            tooltip={isPerson(props.view) ? undefined : "Community cakeday!"}
+          <AgeIcon
+            type={isPerson(props.view) ? "person" : "community"}
             published={
               isPerson(props.view)
                 ? props.view.person.published
