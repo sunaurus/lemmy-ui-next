@@ -8,6 +8,7 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { CommentSortType } from "lemmy-js-client";
 import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
+import { getVoteConfig, VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 export const PostPageInner = async (props: {
   postId: number;
@@ -18,6 +19,8 @@ export const PostPageInner = async (props: {
   const { post_view: postView } = await apiClient.getPost({
     id: props.postId,
   });
+
+  const { site_view: siteView } = await apiClient.getSite();
 
   const { community_view: communityView, moderators } =
     await apiClient.getCommunity({
@@ -40,6 +43,7 @@ export const PostPageInner = async (props: {
             searchParams={props.searchParams}
             commentCount={postView.counts.comments}
             highlightCommentId={props.highlightCommentId}
+            voteConfig={getVoteConfig(siteView.local_site)}
           />
         ) : (
           <NoComments />
@@ -63,6 +67,7 @@ const Comments = async (props: {
   searchParams: Record<string, string>;
   commentCount: number;
   highlightCommentId?: number;
+  voteConfig: VoteConfig;
 }) => {
   const searchParamsSortType = props.searchParams[
     "sortType"
@@ -126,6 +131,7 @@ const Comments = async (props: {
           highlightRoot={
             props.highlightCommentId === node.commentView.comment.id
           }
+          voteConfig={props.voteConfig}
         />
       ))}
     </div>

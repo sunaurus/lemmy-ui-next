@@ -23,12 +23,14 @@ import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
+import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 type Props = {
   postView: PostView;
   hideCommunityName?: boolean;
   loggedInUser?: MyUserInfo;
   remoteImageProps?: Promise<RemoteImageProps>;
+  voteConfig: VoteConfig;
 };
 
 export const PostListItemContent = (props: Props) => {
@@ -40,7 +42,11 @@ export const PostListItemContent = (props: Props) => {
     <div key={props.postView.post.id} className="my-1">
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
-          <VoteButtons postView={props.postView} className={"mt-2 sm:mt-0"} />
+          <VoteButtons
+            voteConfig={props.voteConfig}
+            postView={props.postView}
+            className={"mt-2 sm:mt-0"}
+          />
           <PostThumbnail
             post={props.postView.post}
             className={"hidden sm:flex"}

@@ -5,9 +5,11 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/16/solid";
 import classNames from "classnames";
 import { CommentView, PostView } from "lemmy-js-client";
 import { voteCommentAction, votePostAction } from "@/app/(ui)/vote/voteActions";
+import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 type BaseProps = {
   className?: string;
+  voteConfig: VoteConfig;
 };
 
 type CommentProps = BaseProps & { commentView: CommentView };
@@ -58,39 +60,41 @@ export const VoteButtons = (props: Props) => {
           />
         </button>
       </form>
-      {totalScore !== undefined && (
+      {totalScore !== undefined && props.voteConfig.scoresVisible && (
         <div className="text-center w-8 font-semibold mb-0.5">
           {formatCompactNumber(totalScore)}
         </div>
       )}
-      <form
-        action={
-          isComment(props)
-            ? voteCommentAction.bind(
-                null,
-                props.commentView.post.id,
-                props.commentView.comment.id,
-                downvoteResultScore,
-              )
-            : votePostAction.bind(
-                null,
-                props.postView.post.id,
-                downvoteResultScore,
-              )
-        }
-      >
-        <button type="submit">
-          <ArrowDownIcon
-            className={classNames(
-              "h-5 w-8 hover:brightness-125 cursor-pointer",
-              {
-                "text-neutral-300 hover:text-rose-400": userScore !== -1,
-                "text-rose-400": userScore === -1,
-              },
-            )}
-          />
-        </button>
-      </form>
+      {props.voteConfig.downvotesEnabled && (
+        <form
+          action={
+            isComment(props)
+              ? voteCommentAction.bind(
+                  null,
+                  props.commentView.post.id,
+                  props.commentView.comment.id,
+                  downvoteResultScore,
+                )
+              : votePostAction.bind(
+                  null,
+                  props.postView.post.id,
+                  downvoteResultScore,
+                )
+          }
+        >
+          <button type="submit">
+            <ArrowDownIcon
+              className={classNames(
+                "h-5 w-8 hover:brightness-125 cursor-pointer",
+                {
+                  "text-neutral-300 hover:text-rose-400": userScore !== -1,
+                  "text-rose-400": userScore === -1,
+                },
+              )}
+            />
+          </button>
+        </form>
+      )}
     </div>
   );
 };

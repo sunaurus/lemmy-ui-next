@@ -8,8 +8,12 @@ import { loadChildCommentsAction } from "@/app/comment/loadChildCommentsAction";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { MouseEvent, useState } from "react";
+import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
-export const LazyChildComments = (props: { node: CommentNode }) => {
+export const LazyChildComments = (props: {
+  node: CommentNode;
+  voteConfig: VoteConfig;
+}) => {
   const [loadedComments, setLoadedComments] = useState<CommentNode[] | null>(
     null,
   );
@@ -44,6 +48,10 @@ export const LazyChildComments = (props: { node: CommentNode }) => {
   }
 
   return loadedComments.map((node) => (
-    <CommentTree key={node.commentView.comment.id} node={node} />
+    <CommentTree
+      key={node.commentView.comment.id}
+      node={node}
+      voteConfig={props.voteConfig}
+    />
   ));
 };

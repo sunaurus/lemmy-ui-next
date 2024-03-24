@@ -10,6 +10,7 @@ import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { formatDistanceToNowStrict } from "date-fns";
 import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
 import { Header } from "@/app/(ui)/Header";
+import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 type UserPageProps = {
   params: { username: string };
@@ -59,6 +60,8 @@ type ViewType = "Overview" | "Comments" | "Posts";
 
 const UserPage = async (props: UserPageProps) => {
   const username = decodeURIComponent(props.params.username);
+
+  const { site_view: siteView } = await apiClient.getSite();
 
   const currentSortType: SortType =
     (props.searchParams["sortType"] as SortType) ?? "New";
@@ -113,6 +116,7 @@ const UserPage = async (props: UserPageProps) => {
               key={commentView.comment.id}
               commentView={commentView}
               addPostLink={true}
+              voteConfig={getVoteConfig(siteView.local_site)}
             />
           ))}
         {currentView === "Overview" && (

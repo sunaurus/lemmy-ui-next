@@ -3,6 +3,7 @@ import { apiClient } from "@/app/apiClient";
 import { PostListItemContent } from "@/app/post/PostListItemContent";
 import { getRemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { isImage } from "@/app/(utils)/isImage";
+import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 type Props = {
   postView: PostView;
@@ -11,7 +12,8 @@ type Props = {
 };
 
 export const PostListItem = async (props: Props) => {
-  const { my_user: loggedInUser } = await apiClient.getSite();
+  const { my_user: loggedInUser, site_view: siteView } =
+    await apiClient.getSite();
 
   // noinspection ES6MissingAwait
   const remoteImageProps = isImage(props.postView.post.url)
@@ -22,6 +24,7 @@ export const PostListItem = async (props: Props) => {
       key={props.postView.post.id}
       loggedInUser={loggedInUser}
       remoteImageProps={remoteImageProps}
+      voteConfig={getVoteConfig(siteView.local_site)}
       {...props}
     />
   );

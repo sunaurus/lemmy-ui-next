@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
+import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -19,6 +20,7 @@ export const Comment = (props: {
   highlight?: boolean;
   className?: string;
   addPostLink?: boolean;
+  voteConfig: VoteConfig;
 }) => {
   let content = <Markdown content={props.commentView.comment.content} />;
 
@@ -52,6 +54,7 @@ export const Comment = (props: {
         defaultChecked={false}
       />
       <VoteButtons
+        voteConfig={props.voteConfig}
         commentView={props.commentView}
         className="peer-checked:collapse peer-checked:max-h-0"
       />
@@ -83,10 +86,12 @@ export const Comment = (props: {
             />
           </div>
           <div className="flex items-center gap-1 flex-wrap">
-            <div className="">
-              {props.commentView.counts.score}{" "}
-              {props.commentView.counts.score === 1 ? "point" : "points"}
-            </div>
+            {props.voteConfig.scoresVisible && (
+              <div className="">
+                {props.commentView.counts.score}{" "}
+                {props.commentView.counts.score === 1 ? "point" : "points"}
+              </div>
+            )}
             <FormattedTimestamp
               timeString={props.commentView.comment.published}
               className=""

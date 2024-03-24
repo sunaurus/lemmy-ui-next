@@ -19,6 +19,7 @@ import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { SearchButton } from "@/app/search/SearchButton";
 import { Input } from "@/app/(ui)/Input";
+import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 export type SearchPageSearchParams = {
   q?: string;
@@ -196,7 +197,8 @@ const Posts = (props: { posts: PostView[] }) => {
   );
 };
 
-const Comments = (props: { comments: CommentView[] }) => {
+const Comments = async (props: { comments: CommentView[] }) => {
+  const { site_view: siteView } = await apiClient.getSite();
   return (
     <>
       <ResultTitle>Comments</ResultTitle>
@@ -206,6 +208,7 @@ const Comments = (props: { comments: CommentView[] }) => {
             key={commentView.comment.id}
             commentView={commentView}
             addPostLink={true}
+            voteConfig={getVoteConfig(siteView.local_site)}
           />
         ))
       ) : (

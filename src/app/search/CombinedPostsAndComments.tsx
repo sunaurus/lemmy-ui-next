@@ -1,13 +1,17 @@
 import { CommentView, PostView, SortType } from "lemmy-js-client";
 import { Comment } from "@/app/comment/Comment";
 import { PostListItem } from "@/app/post/PostListItem";
+import { apiClient } from "@/app/apiClient";
+import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 
 type Props = {
   posts: PostView[];
   comments: CommentView[];
   sortType: SortType;
 };
-export const CombinedPostsAndComments = (props: Props) => {
+export const CombinedPostsAndComments = async (props: Props) => {
+  const { site_view: siteView } = await apiClient.getSite();
+
   return sort(props).map((view) => {
     return isComment(view) ? (
       <Comment
@@ -15,6 +19,7 @@ export const CombinedPostsAndComments = (props: Props) => {
         commentView={view}
         className="my-2"
         addPostLink={true}
+        voteConfig={getVoteConfig(siteView.local_site)}
       />
     ) : (
       <PostListItem key={view.post.id} postView={view} />
