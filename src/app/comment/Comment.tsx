@@ -74,7 +74,7 @@ export const Comment = (props: {
               showBotBadge={props.commentView.creator.bot_account}
             />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 flex-wrap">
             <div className="">
               {props.commentView.counts.score}{" "}
               {props.commentView.counts.score === 1 ? "point" : "points"}
@@ -84,7 +84,7 @@ export const Comment = (props: {
               className=""
             />
             {props.addPostLink && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-wrap">
                 in{" "}
                 <StyledLink href={`/c/${props.commentView.community.id}`}>
                   {formatCommunityName(props.commentView.community)}
