@@ -6,7 +6,12 @@ const nextConfig = {
             'image/webp',
         ],
         remotePatterns: [{protocol: 'https', hostname: '**'}]
-    }
+    },
+    logging: {
+        fetches: {
+            fullUrl: true,
+        },
+    },
 };
 
 export default nextConfig;

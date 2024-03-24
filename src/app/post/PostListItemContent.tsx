@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowPathIcon,
   BellAlertIcon,
   ChatBubbleLeftRightIcon,
   LockClosedIcon,
@@ -19,17 +20,14 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 
 type Props = {
   postView: PostView;
   hideCommunityName?: boolean;
   loggedInUser?: MyUserInfo;
-  remoteImageProps: {
-    thumbnail?: Promise<RemoteImageProps>;
-    expanded?: Promise<RemoteImageProps>;
-  };
+  remoteImageProps?: Promise<RemoteImageProps>;
 };
 
 export const PostListItemContent = (props: Props) => {
@@ -42,22 +40,18 @@ export const PostListItemContent = (props: Props) => {
       <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
         <div className="flex items-center">
           <VoteButtons postView={props.postView} />
-          <Suspense fallback={<div />}>
-            <PostThumbnail
-              post={props.postView.post}
-              className={"hidden sm:flex"}
-              loggedInUser={props.loggedInUser}
-              setInlineExpanded={setInlineExpanded}
-              remoteImageProps={props.remoteImageProps.thumbnail}
-            />
-          </Suspense>
+          <PostThumbnail
+            post={props.postView.post}
+            className={"hidden sm:flex"}
+            loggedInUser={props.loggedInUser}
+            setInlineExpanded={setInlineExpanded}
+          />
         </div>
         <div className="w-full">
           <Title
             post={props.postView.post}
             loggedInUser={props.loggedInUser}
             setInlineExpanded={setInlineExpanded}
-            remoteImageProps={props.remoteImageProps.thumbnail}
           />
 
           <PostDetails
@@ -67,13 +61,11 @@ export const PostListItemContent = (props: Props) => {
           <PostActions postView={props.postView} />
         </div>
       </div>
-      <Suspense fallback={<div />}>
-        <InlineExpandedMedia
-          postView={props.postView}
-          isExpanded={inlineExpanded}
-          remoteImageProps={props.remoteImageProps.expanded}
-        />
-      </Suspense>
+      <InlineExpandedMedia
+        postView={props.postView}
+        isExpanded={inlineExpanded}
+        remoteImageProps={props.remoteImageProps}
+      />
     </div>
   );
 };
@@ -86,9 +78,13 @@ const InlineExpandedMedia = (props: {
   const [remoteImageProps, setRemoteImageProps] =
     useState<RemoteImageProps | null>(null);
 
+  const [isImageError, setIsImageError] = useState(false);
+
+  const [allowUnproxied, setAllowUnproxied] = useState(false);
+
   useEffect(() => {
     props.remoteImageProps?.then((res) => setRemoteImageProps(res));
-  }, []);
+  }, [props.remoteImageProps]);
 
   if (!hasExpandableMedia(props.postView.post)) {
     return null;
@@ -100,7 +96,6 @@ const InlineExpandedMedia = (props: {
 
   const url = props.postView.post.url;
 
-  let proxied = false;
   let content = null;
 
   if (isImage(url)) {
@@ -108,27 +103,39 @@ const InlineExpandedMedia = (props: {
       return null;
     }
 
-    if (new URL(url).host !== "i.imgur.com") {
-      // Only mark non-imgur images as proxied
-      // We can't proxy imgur images due to aggressive rate limits on imgur
-      proxied = true;
+    if (isImageError) {
+      content = (
+        <div className="text-xs text-rose-400 mb-1 ml-6">
+          Failed to load image
+        </div>
+      );
+    } else {
+      content = (
+        <>
+          {remoteImageProps.unoptimized && !allowUnproxied && (
+            <div className="ml-6">
+              <div className="text-xs text-rose-400 mb-1">
+                Proxying this image failed, click below to try and load it
+                directly (remote server will see your IP!)
+              </div>
+              <button
+                className="rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500 flex items-center gap-1"
+                onClick={() => setAllowUnproxied(true)}
+              >
+                <ArrowPathIcon className="h-4" /> Reload without proxy
+              </button>
+            </div>
+          )}
+          {(!remoteImageProps.unoptimized || allowUnproxied) && (
+            <Image
+              alt={"Post image"}
+              onError={() => setIsImageError(true)}
+              {...remoteImageProps}
+            />
+          )}
+        </>
+      );
     }
-
-    content = (
-      <>
-        {!proxied && (
-          <div className="text-[9px] text-neutral-400 mb-1">
-            Unable to proxy imgur (remote server sees your IP address when
-            expanding)
-          </div>
-        )}
-        <Image
-          alt={"Post image"}
-          unoptimized={!proxied}
-          {...remoteImageProps}
-        />
-      </>
-    );
   } else if (isVideo(url) || isVideo(props.postView.post.embed_video_url)) {
     content = (
       <>
@@ -167,21 +174,17 @@ type TitleProps = {
   post: Post;
   loggedInUser?: MyUserInfo;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
-  remoteImageProps?: Promise<RemoteImageProps>;
 };
 
 const Title = (props: TitleProps) => {
   return (
     <header>
-      <Suspense fallback={<div />}>
-        <PostThumbnail
-          post={props.post}
-          className={"flex sm:hidden float-right mt-1 mr-2"}
-          loggedInUser={props.loggedInUser}
-          setInlineExpanded={props.setInlineExpanded}
-          remoteImageProps={props.remoteImageProps}
-        />
-      </Suspense>
+      <PostThumbnail
+        post={props.post}
+        className={"flex sm:hidden float-right mt-1 mr-2"}
+        loggedInUser={props.loggedInUser}
+        setInlineExpanded={props.setInlineExpanded}
+      />
       <h1 className="">
         <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}

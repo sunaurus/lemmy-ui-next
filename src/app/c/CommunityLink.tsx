@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Community } from "lemmy-js-client";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { StyledLink } from "@/app/(ui)/StyledLink";
+import { CakeDayIcon } from "@/app/u/CakeDayIcon";
 
 type Props = {
   community: Community;
@@ -13,6 +14,10 @@ export const CommunityLink = (props: Props) => {
       className="flex gap-1 items-center"
       href={`/c/${communityName}`}
     >
+      <CakeDayIcon
+        tooltip={"Community cakeday!"}
+        published={props.community.published}
+      />
       <div className="w-[20px] h-[20px] relative">
         <Image
           src={props.community.icon ?? "/lemmy-icon-96x96.webp"}

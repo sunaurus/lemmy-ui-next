@@ -45,7 +45,6 @@ export const PageWithSidebar = (props: Props) => {
         {isCommunitySidebar(props) && (
           <>
             <DetailsSection
-              logoSrc={props.community.icon}
               name={formatCommunityName(props.community)}
               markdownContent={props.community.description}
             />
@@ -125,14 +124,13 @@ const DetailsSection = async (props: {
     <SidebarSection>
       <header className="flex flex-col items-center mb-4">
         {props.logoSrc && (
-          // <div className="relative h-[90px] w-[230px]">
           <Image
             className="mt-4 object-cover h-auto rounded"
             priority={true}
             alt="Logo"
             {...await getRemoteImageProps(props.logoSrc, 230)}
+            placeholder={"empty"}
           />
-          // </div>
         )}
         <h1 className="mt-4">{props.name}</h1>
       </header>

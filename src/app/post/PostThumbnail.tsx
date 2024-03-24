@@ -7,12 +7,12 @@ import {
   ArrowsPointingOutIcon,
   ChatBubbleBottomCenterTextIcon,
   LinkIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { PlayIcon } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post } from "lemmy-js-client";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
+import { Dispatch, SetStateAction, useState } from "react";
 import { getPostThumbnailSrc } from "@/app/post/getPostThumbnailSrc";
 
 type ThumbnailProps = {
@@ -20,18 +20,13 @@ type ThumbnailProps = {
   className: string;
   loggedInUser: MyUserInfo | undefined;
   setInlineExpanded: Dispatch<SetStateAction<boolean>>;
-  remoteImageProps?: Promise<RemoteImageProps>;
 };
 
 export const PostThumbnail = (props: ThumbnailProps) => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isImageError, setIsImageERror] = useState(false);
+
   let src = getPostThumbnailSrc(props.post);
-
-  const [remoteImageProps, setRemoteImageProps] =
-    useState<RemoteImageProps | null>(null);
-
-  useEffect(() => {
-    props.remoteImageProps?.then((res) => setRemoteImageProps(res));
-  }, []);
 
   return (
     <div
@@ -40,17 +35,30 @@ export const PostThumbnail = (props: ThumbnailProps) => {
         props.className,
       )}
     >
-      {remoteImageProps ? (
-        <Image
-          className={classNames("rounded object-cover", {
-            "blur-sm":
-              props.post.nsfw &&
-              (props.loggedInUser?.local_user_view.local_user.blur_nsfw ??
-                true),
-          })}
-          alt="Thumbnail"
-          {...remoteImageProps}
-        />
+      {src ? (
+        <>
+          <Image
+            className={classNames("rounded object-cover", {
+              "blur-sm":
+                props.post.nsfw &&
+                (props.loggedInUser?.local_user_view.local_user.blur_nsfw ??
+                  true),
+              invisible: isImageLoading || isImageError,
+            })}
+            alt="Thumbnail"
+            fill={true}
+            src={src}
+            placeholder="empty"
+            sizes={"70px"}
+            onLoad={() => {
+              setIsImageLoading(false);
+            }}
+            onError={() => {
+              setIsImageERror(true);
+            }}
+          />
+          <PhotoIcon className="h-8 text-neutral-900" />
+        </>
       ) : props.post.url ? (
         <LinkIcon className="h-8 text-neutral-900" />
       ) : (

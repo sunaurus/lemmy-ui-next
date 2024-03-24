@@ -1,5 +1,4 @@
 import { CommentView, PostView, SortType } from "lemmy-js-client";
-import { isComment } from "@/app/(utils)/isComment";
 import { Comment } from "@/app/comment/Comment";
 import { PostListItem } from "@/app/post/PostListItem";
 
@@ -57,4 +56,8 @@ const sortScore = (
   const bScore = b.counts.score;
 
   return aScore > bScore ? 1 : -1;
+};
+
+const isComment = (input: PostView | CommentView): input is CommentView => {
+  return (input as CommentView).comment !== undefined;
 };

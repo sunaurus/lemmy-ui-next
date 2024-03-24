@@ -1,19 +1,15 @@
-import Image from "next/image";
 import { apiClient } from "@/app/apiClient";
-import { Avatar } from "@/app/(ui)/Avatar";
 import { Markdown } from "@/app/(ui)/Markdown";
 import { SortType } from "lemmy-js-client";
 import { PostListItem } from "@/app/post/PostListItem";
 import { Pagination } from "@/app/(ui)/Pagination";
 import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 import { Comment } from "@/app/comment/Comment";
-import { UsernameBadge } from "@/app/u/UsernameBadge";
 import { Metadata, ResolvingMetadata } from "next";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { formatDistanceToNowStrict } from "date-fns";
 import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
-import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
-import { CakeDayIcon } from "@/app/u/CakeDayIcon";
+import { Header } from "@/app/(ui)/Header";
 
 type UserPageProps = {
   params: { username: string };
@@ -86,54 +82,9 @@ const UserPage = async (props: UserPageProps) => {
     page: currentPage,
   });
 
-  const bannerSrc = personView.person.banner;
-
   return (
     <div className="m-2 mt-4">
-      <header className="mx-1 lg:mx-4">
-        {bannerSrc && (
-          <div className="relative h-[240px] max-w-[1000px]">
-            <Image
-              className={"object-cover rounded"}
-              src={bannerSrc}
-              fill={true}
-              alt={"User banner"}
-              priority={true}
-              sizes="1000px"
-            />
-          </div>
-        )}
-
-        <div className="flex items-end gap-2 mt-2">
-          <Avatar avatarSrc={personView.person.avatar} size="regular" />
-
-          <div>
-            <h1 className="text-2xl flex items-center gap-1">
-              {personView.person.display_name ?? personView.person.name}
-              {personView.is_admin && (
-                <UsernameBadge
-                  title={"Instance admin"}
-                  content={"A"}
-                  className={"mt-1.5 border-rose-500 text-rose-500"}
-                />
-              )}
-              {personView.person.bot_account && (
-                <UsernameBadge
-                  title={"Bot account"}
-                  content={"B"}
-                  className={"mt-1.5 border-amber-500 text-amber-500"}
-                />
-              )}
-            </h1>
-            <div className="text-md">{username}</div>
-            <div className="text-sm flex items-center gap-1 text-neutral-400">
-              <CakeDayIcon person={personView.person} />
-              Joined
-              <FormattedTimestamp timeString={personView.person.published} />
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header view={personView} />
       <div className="ml-4 mt-2">
         <Markdown content={personView.person.bio ?? ""} />
       </div>

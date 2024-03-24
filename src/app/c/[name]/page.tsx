@@ -1,10 +1,10 @@
 import { apiClient } from "@/app/apiClient";
-import { CommunityView, SortType } from "lemmy-js-client";
-import Image from "next/image";
+import { SortType } from "lemmy-js-client";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { PageWithSidebar } from "@/app/PageWithSidebar";
 import { PostList } from "@/app/post/PostList";
 import { Metadata, ResolvingMetadata } from "next";
+import { Header } from "@/app/(ui)/Header";
 
 type CommunityPageProps = {
   params: { name: string };
@@ -65,7 +65,7 @@ const CommunityPage = async (props: CommunityPageProps) => {
       site={site}
     >
       <>
-        <Header communityView={communityView} />
+        <Header view={communityView} />
 
         <PostList
           community={communityView.community}
@@ -73,33 +73,6 @@ const CommunityPage = async (props: CommunityPageProps) => {
         />
       </>
     </PageWithSidebar>
-  );
-};
-
-const Header = (props: { communityView: CommunityView }) => {
-  const bannerSrc = props.communityView.community.banner;
-  return (
-    <header className="mx-1 lg:mx-4">
-      {bannerSrc && (
-        <div className="relative h-[240px] max-w-[1000px]">
-          <Image
-            className={"object-cover rounded"}
-            src={bannerSrc}
-            fill={true}
-            alt={"Community banner"}
-            sizes="1000px"
-          />
-        </div>
-      )}
-
-      <h1 className="text-2xl">
-        {props.communityView.community.title ??
-          props.communityView.community.name}
-      </h1>
-      <div className="text-md text-neutral-400">
-        !{formatCommunityName(props.communityView.community)}
-      </div>
-    </header>
   );
 };
 
