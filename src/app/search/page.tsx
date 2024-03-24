@@ -202,7 +202,11 @@ const Comments = (props: { comments: CommentView[] }) => {
       <ResultTitle>Comments</ResultTitle>
       {props.comments.length > 0 ? (
         props.comments.map((commentView) => (
-          <Comment key={commentView.comment.id} commentView={commentView} />
+          <Comment
+            key={commentView.comment.id}
+            commentView={commentView}
+            addPostLink={true}
+          />
         ))
       ) : (
         <NoResults />

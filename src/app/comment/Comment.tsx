@@ -8,6 +8,7 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 import classNames from "classnames";
+import { formatCommunityName } from "@/app/c/formatCommunityName";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -15,6 +16,7 @@ export const Comment = (props: {
   parentId?: number;
   highlight?: boolean;
   className?: string;
+  addPostLink?: boolean;
 }) => {
   let content = <Markdown content={props.commentView.comment.content} />;
 
@@ -52,7 +54,7 @@ export const Comment = (props: {
         className="peer-checked:collapse peer-checked:max-h-0"
       />
       <div className="relative group min-w-0">
-        <div className={"text-xs flex items-center flex-wrap min-w-0"}>
+        <div className={"text-xs flex items-center flex-wrap min-w-0 gap-2"}>
           <div className="flex items-center min-w-0">
             <label
               htmlFor={`comment-hide-${props.commentView.comment.id}`}
@@ -72,12 +74,27 @@ export const Comment = (props: {
               showBotBadge={props.commentView.creator.bot_account}
             />
           </div>
-          <div className="flex items-center">
-            <div className="ml-2">{props.commentView.counts.score} points</div>
+          <div className="flex items-center gap-1">
+            <div className="">
+              {props.commentView.counts.score}{" "}
+              {props.commentView.counts.score === 1 ? "point" : "points"}
+            </div>
             <FormattedTimestamp
               timeString={props.commentView.comment.published}
-              className="ml-2"
+              className=""
             />
+            {props.addPostLink && (
+              <div className="flex items-center gap-1">
+                to{" "}
+                <StyledLink href={`/c/${props.commentView.community.id}`}>
+                  {formatCommunityName(props.commentView.community)}
+                </StyledLink>
+                •
+                <StyledLink href={`/post/${props.commentView.post.id}`}>
+                  {props.commentView.post.name}
+                </StyledLink>
+              </div>
+            )}
           </div>
         </div>
         <div className="peer-checked:group-[]:hidden max-w-[840px] overflow-x-hidden">

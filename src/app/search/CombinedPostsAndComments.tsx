@@ -10,7 +10,12 @@ type Props = {
 export const CombinedPostsAndComments = (props: Props) => {
   return sort(props).map((view) => {
     return isComment(view) ? (
-      <Comment key={view.comment.id} commentView={view} className="my-2" />
+      <Comment
+        key={view.comment.id}
+        commentView={view}
+        className="my-2"
+        addPostLink={true}
+      />
     ) : (
       <PostListItem key={view.post.id} postView={view} />
     );

@@ -109,7 +109,11 @@ const UserPage = async (props: UserPageProps) => {
           ))}
         {currentView === "Comments" &&
           comments.map((commentView) => (
-            <Comment key={commentView.comment.id} commentView={commentView} />
+            <Comment
+              key={commentView.comment.id}
+              commentView={commentView}
+              addPostLink={true}
+            />
           ))}
         {currentView === "Overview" && (
           <CombinedPostsAndComments
