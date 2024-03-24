@@ -163,6 +163,8 @@ const InlineExpandedMedia = (props: {
           src={props.postView.post.embed_video_url}
           title={props.postView.post.embed_title}
           className="w-full aspect-video"
+          sandbox="allow-scripts allow-same-origin"
+          allow="autoplay 'none'"
         ></iframe>
       </>
     );
