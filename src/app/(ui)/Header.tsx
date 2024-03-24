@@ -8,6 +8,7 @@ import { CakeDayIcon } from "@/app/u/CakeDayIcon";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
+import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 
 export const Header = async (props: { view: CommunityView | PersonView }) => {
   const bannerSrc = isPerson(props.view)
@@ -95,6 +96,16 @@ const Summary = (props: {
                 : props.view.community.published
             }
           />
+        </div>
+        <div className="text-sm flex items-center gap-1 text-neutral-400">
+          {isPerson(props.view) ? (
+            <div>
+              {formatCompactNumber(props.view.counts.post_count)} posts •{" "}
+              {formatCompactNumber(props.view.counts.comment_count)} comments
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>
