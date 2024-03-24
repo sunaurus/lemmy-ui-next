@@ -9,6 +9,7 @@ import { TrashIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 import classNames from "classnames";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
+import { EditIndicator } from "@/app/(ui)/EditIndicator";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -83,6 +84,7 @@ export const Comment = (props: {
               timeString={props.commentView.comment.published}
               className=""
             />
+            <EditIndicator editTime={props.commentView.comment.updated} />
             {props.addPostLink && (
               <div className="flex items-center gap-1 flex-wrap">
                 in{" "}

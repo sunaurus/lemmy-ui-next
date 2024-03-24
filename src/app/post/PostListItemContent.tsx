@@ -20,8 +20,9 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
+import { EditIndicator } from "@/app/(ui)/EditIndicator";
 
 type Props = {
   postView: PostView;
@@ -240,6 +241,7 @@ const PostDetails = (props: {
     <div className="text-gray-100 text-xs flex flex-wrap gap-1">
       <div className="flex items-center gap-1">
         posted <FormattedTimestamp timeString={props.postView.post.published} />{" "}
+        <EditIndicator editTime={props.postView.post.updated} />
       </div>
       <div className="flex items-center gap-1">
         by

@@ -3,7 +3,7 @@ import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
-import { AgeIcon } from "@/app/u/AgeIcon";
+import { AgeIcon } from "@/app/(ui)/AgeIcon";
 
 type Props = {
   person: Person;

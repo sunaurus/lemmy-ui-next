@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Community } from "lemmy-js-client";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { StyledLink } from "@/app/(ui)/StyledLink";
-import { AgeIcon } from "@/app/u/AgeIcon";
+import { AgeIcon } from "@/app/(ui)/AgeIcon";
 
 type Props = {
   community: Community;

@@ -4,7 +4,7 @@ import { CommunityView, PersonView } from "lemmy-js-client";
 import classNames from "classnames";
 import { Avatar } from "@/app/(ui)/Avatar";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
-import { AgeIcon } from "@/app/u/AgeIcon";
+import { AgeIcon } from "@/app/(ui)/AgeIcon";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import { formatPersonUsername } from "@/app/u/formatPersonUsername";
 import { UsernameBadge } from "@/app/u/UsernameBadge";
