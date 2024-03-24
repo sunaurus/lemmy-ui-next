@@ -85,7 +85,7 @@ export const Comment = (props: {
             />
             {props.addPostLink && (
               <div className="flex items-center gap-1">
-                to{" "}
+                in{" "}
                 <StyledLink href={`/c/${props.commentView.community.id}`}>
                   {formatCommunityName(props.commentView.community)}
                 </StyledLink>
