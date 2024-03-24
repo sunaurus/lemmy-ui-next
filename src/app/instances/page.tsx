@@ -7,7 +7,9 @@ const InstancesPage = async () => {
     await apiClient.getFederatedInstances();
 
   return (
-    <div className={"flex m-2 w-full justify-center gap-1 flex-wrap"}>
+    <div
+      className={"flex m-2 w-full justify-center gap-1 flex-wrap max-w-full"}
+    >
       <InstanceList
         title={"Linked instances"}
         instances={federatedInstances?.linked}
@@ -29,7 +31,7 @@ const InstanceList = (props: {
   }
 
   return (
-    <div>
+    <div className="max-w-full">
       <h1 className="text-xl font-bold">{props.title}</h1>
       {props.instances
         .sort((a, b) => {
@@ -55,12 +57,22 @@ const InstanceList = (props: {
           }
         })
         .map((instance) => (
-          <div key={instance.domain} className="flex items-center gap-2">
-            <StyledLink href={"https://" + instance.domain}>
+          <div
+            key={instance.domain}
+            className="flex items-center gap-x-2 flex-wrap break-words max-w-full"
+          >
+            <StyledLink
+              href={"https://" + instance.domain}
+              className="break-words"
+            >
               {instance.domain}
             </StyledLink>
-            <div>{instance.software ? `• ${instance.software}` : ""}</div>
-            <div>{instance.version ? `• ${instance.version}` : ""}</div>
+            <div className="break-words">
+              {instance.software ? `• ${instance.software}` : ""}
+            </div>
+            <div className="break-words">
+              {instance.version ? `• ${instance.version}` : ""}
+            </div>
           </div>
         ))}
     </div>
