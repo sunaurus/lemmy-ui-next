@@ -7,7 +7,10 @@ import { redirect } from "next/navigation";
 
 const AUTH_COOKIE_NAME = "session";
 
-export const loginAction = async (data: FormData) => {
+export const loginAction = async (
+  redirectUrl: string | undefined,
+  data: FormData,
+) => {
   const username = data.get("username")?.toString();
   const password = data.get("password")?.toString();
   const twofactor = data.get("twofactor")?.toString();
@@ -28,12 +31,17 @@ export const loginAction = async (data: FormData) => {
 
   setAuthCookie(loginResponse.jwt);
 
-  redirect("/");
+  redirect(redirectUrl ?? "/");
 };
 
-export const logoutAction = () => {
+export const logoutAction = async () => {
   cookies().delete(AUTH_COOKIE_NAME);
   redirect("/login");
+};
+
+export const loginPageWithRedirectAction = async (redirectUrl: string) => {
+  cookies().delete(AUTH_COOKIE_NAME);
+  redirect(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
 };
 
 export type AuthData = {

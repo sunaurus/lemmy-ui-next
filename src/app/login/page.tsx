@@ -3,9 +3,8 @@ import Image from "next/image";
 import { LoginForm } from "@/app/login/LoginForm";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 
-const LoginPage = async () => {
+const LoginPage = async (props: { searchParams: { redirect?: string } }) => {
   const { site_view: siteView } = await apiClient.getSite();
-
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center items-center py-12 px-4 lg:px-8">
       {siteView.site.banner && (
@@ -21,7 +20,7 @@ const LoginPage = async () => {
       </h2>
 
       <div className="mt-8 mx-auto max-w-sm w-full">
-        <LoginForm />
+        <LoginForm redirect={props.searchParams.redirect} />
 
         <p className="mt-10 text-center text-sm">
           No account?{" "}

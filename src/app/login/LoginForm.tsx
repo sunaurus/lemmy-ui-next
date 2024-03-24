@@ -5,9 +5,9 @@ import { loginAction } from "@/app/login/auth";
 import { Input } from "@/app/(ui)/Input";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 
-export const LoginForm = () => {
+export const LoginForm = (props: { redirect?: string }) => {
   return (
-    <form className="space-y-6" action={loginAction}>
+    <form className="space-y-6" action={loginAction.bind(null, props.redirect)}>
       <div>
         <label
           htmlFor="username"
