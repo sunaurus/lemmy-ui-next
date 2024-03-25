@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const middleware = (request: NextRequest) => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  // TODO: Remove these once there is a reliable workaround for next/image using inline styles (see @/app/(ui)/Image.tsx)
+  const nextImageStyleHashes = `'unsafe-hashes' 'sha256-zlqnbDt84zf1iSefLU/ImC54isoprH/MRiVZGskwexk=' 'sha256-ZDrxqUOB4m/L0JWL/+gS52g1CRH0l/qwMhjTw5Z/Fsc='`;
   const cspHeader = `
     default-src 'self';
     ${process.env.NODE_ENV !== "development" ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';` : "script-src 'self' 'unsafe-inline' 'unsafe-eval';"} 
-    style-src 'self' 'nonce-${nonce}';
+    style-src 'self' 'nonce-${nonce}' ${nextImageStyleHashes};
     font-src 'self';
     object-src 'none';
     base-uri 'self';
