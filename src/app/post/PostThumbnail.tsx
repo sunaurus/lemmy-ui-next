@@ -12,7 +12,7 @@ import {
 import { PlayIcon } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post } from "lemmy-js-client";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, memo, SetStateAction, useState } from "react";
+import { Dispatch, memo, SetStateAction, Suspense, useState } from "react";
 import { getPostThumbnailSrc } from "@/app/post/getPostThumbnailSrc";
 
 type ThumbnailProps = {
@@ -24,9 +24,6 @@ type ThumbnailProps = {
 
 export const PostThumbnail = memo(
   (props: ThumbnailProps) => {
-    const [isImageLoading, setIsImageLoading] = useState(true);
-    const [isImageError, setIsImageError] = useState(false);
-
     let src = getPostThumbnailSrc(props.post);
 
     return (
@@ -38,27 +35,10 @@ export const PostThumbnail = memo(
       >
         {src ? (
           <>
-            <Image
-              className={classNames("rounded object-cover", {
-                "blur-sm":
-                  props.post.nsfw &&
-                  (props.loggedInUser?.local_user_view.local_user.blur_nsfw ??
-                    true),
-                invisible: isImageLoading || isImageError,
-              })}
-              alt="Thumbnail"
-              fill={true}
-              src={src}
-              placeholder="empty"
-              sizes={"70px"}
-              onLoad={() => {
-                setIsImageLoading(false);
-              }}
-              onError={() => {
-                setIsImageError(true);
-              }}
-            />
-            <PhotoIcon className="h-8 text-neutral-900" />
+            <Suspense>
+              <ThumbnailImage props={props} src={src} />
+            </Suspense>
+            {<PhotoIcon className="h-8 text-neutral-900" />}
           </>
         ) : props.post.url ? (
           <LinkIcon className="h-8 text-neutral-900" />
@@ -89,3 +69,36 @@ export const PostThumbnail = memo(
 );
 
 PostThumbnail.displayName = "PostThumbnail";
+
+const ThumbnailImage = memo(
+  (props: {
+    props: ThumbnailProps;
+
+    src: string;
+  }) => {
+    const [isImageLoading, setIsImageLoading] = useState(true);
+    const [isImageError, setIsImageError] = useState(false);
+
+    return (
+      <Image
+        className={classNames("rounded object-cover", {
+          "blur-sm":
+            props.props.post.nsfw &&
+            (props.props.loggedInUser?.local_user_view.local_user.blur_nsfw ??
+              true),
+          invisible: isImageLoading || isImageError,
+        })}
+        alt="Thumbnail"
+        fill={true}
+        src={props.src}
+        placeholder="empty"
+        sizes={"70px"}
+        onLoad={() => setIsImageLoading(false)}
+        onError={() => setIsImageError(true)}
+      />
+    );
+  },
+  (prevProps, newProps) => prevProps.src === newProps.src,
+);
+
+ThumbnailImage.displayName = "ThumbnailImage";
