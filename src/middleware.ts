@@ -6,14 +6,14 @@ export const middleware = (request: NextRequest) => {
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
     style-src 'self' 'nonce-${nonce}';
-    img-src 'self' blob: data:;
+    img-src 'self' '${process.env.LEMMY_BACKEND}' blob: data:;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    block-all-mixed-content;
-    upgrade-insecure-requests;
+   
+    ${process.env.NODE_ENV !== "development" ? "block-all-mixed-content; upgrade-insecure-requests;" : ""} 
 `;
   // Replace newline characters and spaces
   const contentSecurityPolicyHeaderValue = cspHeader
