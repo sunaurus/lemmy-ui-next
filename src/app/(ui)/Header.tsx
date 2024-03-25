@@ -17,23 +17,22 @@ export const Header = async (props: { view: CommunityView | PersonView }) => {
 
   return (
     <header className="mx-1 lg:mx-4 relative min-h-[110px]">
-      {bannerSrc && <Banner src={bannerSrc} />}
+      {bannerSrc && (
+        <Banner
+          src={bannerSrc}
+          alt={isPerson(props.view) ? "User's banner" : "Community banner"}
+        />
+      )}
 
       <Summary view={props.view} addBackground={!!bannerSrc} />
     </header>
   );
 };
 
-export const Banner = async (props: { src: string }) => {
+export const Banner = async (props: { src: string; alt: string }) => {
   const remoteImageProps = await getRemoteImageProps(props.src, 1000);
 
-  return (
-    <Image
-      className={" rounded"}
-      alt={"Community banner"}
-      {...remoteImageProps}
-    />
-  );
+  return <Image className={" rounded"} alt={props.alt} {...remoteImageProps} />;
 };
 
 const Summary = (props: {

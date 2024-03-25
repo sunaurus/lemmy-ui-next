@@ -19,6 +19,7 @@ export const CommunityLink = (props: Props) => {
         <Image
           src={props.community.icon ?? "/lemmy-icon-96x96.webp"}
           alt={`Community icon`}
+          priority={true}
           fill={true}
           sizes={"20px"}
           className="rounded object-cover"
