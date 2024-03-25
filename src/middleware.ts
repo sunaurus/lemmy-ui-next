@@ -14,7 +14,7 @@ export const middleware = (request: NextRequest) => {
     form-action 'self';
     frame-ancestors 'none';
     frame-src *;
-    img-src *;
+    img-src * blob: data:;
     media-src *;
    
     ${process.env.NODE_ENV !== "development" ? "block-all-mixed-content; upgrade-insecure-requests;" : ""} 
