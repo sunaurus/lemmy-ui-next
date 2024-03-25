@@ -21,5 +21,5 @@ export const MarkdownImageReplacement = (props: {
     return null;
   }
 
-  return createPortal(<div>{props.children}</div>, containerElement);
+  return createPortal(props.children, containerElement);
 };

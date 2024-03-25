@@ -95,11 +95,9 @@ type BaseProps = {
   unoptimized?: boolean;
 };
 
+export type RemoteImageSizeProps = {
+  width: number;
+  height: number;
+};
 export type RemoteImageProps = BaseProps &
-  (
-    | {
-        width: number;
-        height: number;
-      }
-    | { fill: true; sizes: string }
-  );
+  (RemoteImageSizeProps | { fill: true; sizes: string });

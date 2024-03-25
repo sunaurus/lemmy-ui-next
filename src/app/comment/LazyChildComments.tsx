@@ -27,15 +27,18 @@ export const LazyChildComments = (props: {
   const onLoadMore = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
-    const commentTrees = await buildCommentTreesAction({
-      parent_id: props.node.commentView.comment.id,
-      max_depth: 8,
-      sort: "Hot",
-      type_: "All",
-      saved_only: false,
-    });
+    const commentTrees = await buildCommentTreesAction(
+      {
+        parent_id: props.node.commentView.comment.id,
+        max_depth: 8,
+        sort: "Hot",
+        type_: "All",
+        saved_only: false,
+      },
+      new Set(),
+    );
 
-    setLoadedComments(commentTrees[0].children);
+    setLoadedComments(commentTrees.rootNodes[0].children);
   };
 
   if (loadedComments === null) {

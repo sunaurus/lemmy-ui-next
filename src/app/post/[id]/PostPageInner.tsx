@@ -9,6 +9,8 @@ import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 import { getVoteConfig, VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 import { MarkdownWithFetchedContent } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 import { buildCommentTreesAction } from "@/app/comment/commentActions";
+import { LazyComments } from "@/app/comment/LazyComments";
+import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 
 export const PostPageInner = async (props: {
   postId: number;
@@ -85,14 +87,19 @@ const Comments = async (props: {
   } else if (props.commentCount > 100) {
     maxDepth = 3;
   }
-  const commentTrees = await buildCommentTreesAction({
+
+  const commentRequestForm: GetComments = {
     post_id: props.postId,
     parent_id: props.commentThreadParentId,
     max_depth: maxDepth,
     sort: currentSortType,
     type_: "All",
     saved_only: false,
-  });
+  };
+  const initialCommentTrees = await buildCommentTreesAction(
+    commentRequestForm,
+    new Set(),
+  );
 
   const enabledSortOptions: CommentSortType[] = [
     "Hot",
@@ -104,8 +111,15 @@ const Comments = async (props: {
 
   return (
     <div>
+      <SearchParamLinks
+        label={"Sort"}
+        searchParamKey={"sortType"}
+        options={enabledSortOptions}
+        currentActiveValue={currentSortType}
+        className="mt-6 ml-1"
+      />
       {props.commentThreadParentId && (
-        <div className="mt-6 border-neutral-700 border p-2">
+        <div className="mt-6 border-neutral-700 border-t p-4 pb-0">
           <div>You are viewing a single thread.</div>
           <StyledLink
             href={`/post/${props.postId}`}
@@ -115,15 +129,7 @@ const Comments = async (props: {
           </StyledLink>
         </div>
       )}
-      <SearchParamLinks
-        label={"Sort"}
-        searchParamKey={"sortType"}
-        options={enabledSortOptions}
-        currentActiveValue={currentSortType}
-        className="mt-6 ml-1"
-      />
-
-      {commentTrees.map((node) => (
+      {initialCommentTrees.rootNodes.map((node) => (
         <CommentTree
           key={node.commentView.comment.id}
           node={node}
@@ -133,6 +139,13 @@ const Comments = async (props: {
           voteConfig={props.voteConfig}
         />
       ))}
+      {initialCommentTrees.rootNodes.length > 0 && (
+        <LazyComments
+          form={commentRequestForm}
+          voteConfig={props.voteConfig}
+          initialSeenThreads={initialCommentTrees.seenThreads}
+        />
+      )}
     </div>
   );
 };

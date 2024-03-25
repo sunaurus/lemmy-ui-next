@@ -12,46 +12,67 @@ export type CommentNode = {
   parent: CommentNode | null;
   markdown: MarkdownPropsWithReplacements;
 };
+
+type Trees = {
+  rootNodes: CommentNode[];
+  seenThreads: Set<string>;
+};
+
+const LIMIT = 5;
+
 export const buildCommentTreesAction = async (
   form: GetComments,
-  rootNode?: CommentNode,
-): Promise<CommentNode[]> => {
+  seenThreads: Set<string>,
+): Promise<Trees> => {
   const [{ comments }, { site_view: siteView }] = await Promise.all([
     apiClient.getComments(form),
     apiClient.getSite(),
   ]);
 
   const commentNodeMap = new Map<string, CommentNode>();
+
   const topLevelNodes = [];
+  const currentBatchThreads = new Set<string>();
 
   for (const commentView of comments) {
     const path = commentView.comment.path.split(".");
+
     const commentId = path[path.length - 1];
     const parentId = path[path.length - 2];
-    let parentNode = null;
-    if (rootNode) {
-      if (String(rootNode.commentView.comment.id) == parentId) {
-        parentNode = rootNode;
-      }
-    } else if (parentId !== "0") {
-      parentNode = commentNodeMap.get(parentId) ?? null;
+    const threadId = path[1];
+
+    if (seenThreads.has(threadId)) {
+      continue;
     }
 
-    const commentNode =
-      rootNode && parentId === "0"
-        ? rootNode
-        : {
-            commentView,
-            children: [],
-            parent: parentNode,
-            markdown: {
-              ...(await getMarkdownWithRemoteImages(
-                commentView.comment.content,
-                `comment-${commentView.comment.id}`,
-              )),
-              localSiteName: siteView.site.name,
-            },
-          };
+    let parentNode = null;
+    const isTopLevelNode = form.parent_id
+      ? String(form.parent_id) === commentId
+      : parentId === "0";
+    if (isTopLevelNode) {
+      if (topLevelNodes.length >= LIMIT) {
+        continue;
+      }
+      currentBatchThreads.add(threadId);
+    } else {
+      parentNode = commentNodeMap.get(parentId) ?? null;
+      if (!parentNode) {
+        continue;
+      }
+    }
+
+    const commentNode = {
+      commentView,
+      children: [],
+      parent: parentNode,
+      markdown: {
+        ...(await getMarkdownWithRemoteImages(
+          commentView.comment.content,
+          `comment-${commentView.comment.id}`,
+        )),
+        localSiteName: siteView.site.name,
+      },
+    };
 
     if (parentNode) {
       parentNode.children.push(commentNode);
@@ -64,5 +85,12 @@ export const buildCommentTreesAction = async (
     commentNodeMap.set(commentId, commentNode);
   }
 
-  return topLevelNodes;
+  const combinedSeenThreads = [
+    ...Array.from(seenThreads),
+    ...Array.from(currentBatchThreads),
+  ];
+  return {
+    rootNodes: topLevelNodes,
+    seenThreads: new Set(combinedSeenThreads),
+  };
 };
