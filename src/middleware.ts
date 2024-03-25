@@ -4,7 +4,7 @@ export const middleware = (request: NextRequest) => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
     default-src 'self';
-    ${process.env.NODE_ENV !== "development" ? "script-src 'self' 'nonce-${nonce}' 'strict-dynamic';" : "script-src 'self' 'unsafe-inline' 'unsafe-eval';"} 
+    ${process.env.NODE_ENV !== "development" ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';` : "script-src 'self' 'unsafe-inline' 'unsafe-eval';"} 
     style-src 'self' 'nonce-${nonce}';
     font-src 'self';
     object-src 'none';
