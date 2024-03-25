@@ -1,10 +1,9 @@
 "use client";
 
 import {
-  buildCommentTrees,
+  buildCommentTreesAction,
   CommentNode,
-} from "@/app/comment/buildCommentTrees";
-import { loadChildCommentsAction } from "@/app/comment/loadChildCommentsAction";
+} from "@/app/comment/commentActions";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { MouseEvent, useState } from "react";
@@ -28,11 +27,15 @@ export const LazyChildComments = (props: {
   const onLoadMore = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
-    const comments = await loadChildCommentsAction(
-      props.node.commentView.comment.id,
-    );
+    const commentTrees = await buildCommentTreesAction({
+      parent_id: props.node.commentView.comment.id,
+      max_depth: 8,
+      sort: "Hot",
+      type_: "All",
+      saved_only: false,
+    });
 
-    setLoadedComments(buildCommentTrees(comments)[0].children);
+    setLoadedComments(commentTrees[0].children);
   };
 
   if (loadedComments === null) {

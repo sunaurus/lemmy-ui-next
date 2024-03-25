@@ -1,15 +1,24 @@
+"use server";
+
+import { apiClient } from "@/app/apiClient";
+import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { CommentView } from "lemmy-js-client";
+import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
+import { MarkdownPropsWithReplacements } from "@/app/(ui)/markdown/Markdown";
 
 export type CommentNode = {
   commentView: CommentView;
   children: CommentNode[];
   parent: CommentNode | null;
+  markdown: MarkdownPropsWithReplacements;
 };
-
-export const buildCommentTrees = (
-  comments: CommentView[],
+export const buildCommentTreesAction = async (
+  form: GetComments,
   rootNode?: CommentNode,
-): CommentNode[] => {
+): Promise<CommentNode[]> => {
+  const { comments } = await apiClient.getComments(form);
+  const { site_view: siteView } = await apiClient.getSite();
+
   const commentNodeMap = new Map<string, CommentNode>();
   const topLevelNodes = [];
 
@@ -33,6 +42,13 @@ export const buildCommentTrees = (
             commentView,
             children: [],
             parent: parentNode,
+            markdown: {
+              ...(await getMarkdownWithRemoteImages(
+                commentView.comment.content,
+                `comment-${commentView.comment.id}`,
+              )),
+              localSiteName: siteView.site.name,
+            },
           };
 
     if (parentNode) {

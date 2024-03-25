@@ -3,6 +3,7 @@ import { Comment } from "@/app/comment/Comment";
 import { PostListItem } from "@/app/post/PostListItem";
 import { apiClient } from "@/app/apiClient";
 import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
+import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 
 type Props = {
   posts: PostView[];
@@ -12,7 +13,7 @@ type Props = {
 export const CombinedPostsAndComments = async (props: Props) => {
   const { site_view: siteView } = await apiClient.getSite();
 
-  return sort(props).map((view) => {
+  return sort(props).map(async (view) => {
     return isComment(view) ? (
       <Comment
         key={view.comment.id}
@@ -20,6 +21,13 @@ export const CombinedPostsAndComments = async (props: Props) => {
         className="my-2"
         addPostLink={true}
         voteConfig={getVoteConfig(siteView.local_site)}
+        markdown={{
+          ...(await getMarkdownWithRemoteImages(
+            view.comment.content,
+            `comment-${view.comment.id}`,
+          )),
+          localSiteName: siteView.site.name,
+        }}
       />
     ) : (
       <PostListItem key={view.post.id} postView={view} />

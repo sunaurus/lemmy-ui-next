@@ -1,14 +1,14 @@
 import { PageWithSidebar } from "@/app/PageWithSidebar";
 import { PostListItem } from "@/app/post/PostListItem";
 import { apiClient } from "@/app/apiClient";
-import { buildCommentTrees } from "@/app/comment/buildCommentTrees";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { CommentSortType } from "lemmy-js-client";
 import { SearchParamLinks } from "@/app/(ui)/SearchParamLinks";
 import { getVoteConfig, VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
-import { MarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithRemoteImages";
+import { MarkdownWithFetchedContent } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
+import { buildCommentTreesAction } from "@/app/comment/commentActions";
 
 export const PostPageInner = async (props: {
   postId: number;
@@ -56,7 +56,7 @@ export const PostPageInner = async (props: {
 const PostBody = (props: { id: number }) => {
   return (
     <div className="rounded bg-neutral-800 mx-2 lg:mx-4 p-4 max-w-[880px]">
-      <MarkdownWithRemoteImages id={props.id} type={"post"} />
+      <MarkdownWithFetchedContent id={props.id} type={"post"} />
     </div>
   );
 };
@@ -84,7 +84,8 @@ const Comments = async (props: {
   } else if (props.commentCount > 100) {
     maxDepth = 3;
   }
-  const { comments } = await apiClient.getComments({
+
+  const commentTrees = await buildCommentTreesAction({
     post_id: props.postId,
     parent_id: props.commentThreadParentId,
     max_depth: maxDepth,
@@ -92,8 +93,6 @@ const Comments = async (props: {
     type_: "All",
     saved_only: false,
   });
-
-  const commentTrees = buildCommentTrees(comments);
 
   const enabledSortOptions: CommentSortType[] = [
     "Hot",

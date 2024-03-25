@@ -16,7 +16,7 @@ import {
 } from "@heroicons/react/16/solid";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { getRemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
-import { MarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithRemoteImages";
+import { MarkdownWithFetchedContent } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 
 type SidebarProps = {
   children: ReactNode | ReactNode[];
@@ -67,7 +67,7 @@ export const PageWithSidebar = (props: Props) => {
               siteName={props.site.name}
             >
               {isCommunitySidebar(props) ? (
-                <MarkdownWithRemoteImages
+                <MarkdownWithFetchedContent
                   type={"community_site"}
                   id={props.community.id}
                 />
@@ -157,7 +157,7 @@ const CommunityDetailsSection = async (props: {
         <h1 className="mt-4">{props.communityName}</h1>
       </header>
 
-      <MarkdownWithRemoteImages type={"community"} id={props.communityId} />
+      <MarkdownWithFetchedContent type={"community"} id={props.communityId} />
     </SidebarSection>
   );
 };

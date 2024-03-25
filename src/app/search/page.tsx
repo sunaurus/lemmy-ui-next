@@ -20,6 +20,7 @@ import { UserLink } from "@/app/u/UserLink";
 import { SearchButton } from "@/app/search/SearchButton";
 import { Input } from "@/app/(ui)/Input";
 import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
+import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 
 export type SearchPageSearchParams = {
   q?: string;
@@ -203,12 +204,19 @@ const Comments = async (props: { comments: CommentView[] }) => {
     <>
       <ResultTitle>Comments</ResultTitle>
       {props.comments.length > 0 ? (
-        props.comments.map((commentView) => (
+        props.comments.map(async (commentView) => (
           <Comment
             key={commentView.comment.id}
             commentView={commentView}
             addPostLink={true}
             voteConfig={getVoteConfig(siteView.local_site)}
+            markdown={{
+              ...(await getMarkdownWithRemoteImages(
+                commentView.comment.content,
+                `comment-${commentView.comment.id}`,
+              )),
+              localSiteName: siteView.site.name,
+            }}
           />
         ))
       ) : (

@@ -11,7 +11,10 @@ import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
-import { Markdown } from "@/app/(ui)/markdown/Markdown";
+import {
+  Markdown,
+  MarkdownPropsWithReplacements,
+} from "@/app/(ui)/markdown/Markdown";
 
 export const Comment = (props: {
   commentView: CommentView;
@@ -21,8 +24,15 @@ export const Comment = (props: {
   className?: string;
   addPostLink?: boolean;
   voteConfig: VoteConfig;
+  markdown: MarkdownPropsWithReplacements;
 }) => {
-  let content = <Markdown content={props.commentView.comment.content} />;
+  let content = (
+    <Markdown
+      localSiteName={"lemm.ee"}
+      html={props.markdown.html}
+      replacements={props.markdown.replacements}
+    />
+  );
 
   if (props.commentView.comment.deleted || props.commentView.comment.removed) {
     content = (

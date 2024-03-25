@@ -10,7 +10,10 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
 import { Header } from "@/app/(ui)/Header";
 import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
-import { MarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithRemoteImages";
+import {
+  getMarkdownWithRemoteImages,
+  MarkdownWithFetchedContent,
+} from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 
 type UserPageProps = {
   params: { username: string };
@@ -89,7 +92,7 @@ const UserPage = async (props: UserPageProps) => {
     <div className="m-2 mt-4">
       <Header view={personView} />
       <div className="ml-4 mt-2">
-        <MarkdownWithRemoteImages type="person" id={personView.person.id} />
+        <MarkdownWithFetchedContent type="person" id={personView.person.id} />
       </div>
       <div className="m-2 ml-3">
         <SearchParamLinks
@@ -111,12 +114,19 @@ const UserPage = async (props: UserPageProps) => {
             <PostListItem key={postView.post.id} postView={postView} />
           ))}
         {currentView === "Comments" &&
-          comments.map((commentView) => (
+          comments.map(async (commentView) => (
             <Comment
               key={commentView.comment.id}
               commentView={commentView}
               addPostLink={true}
               voteConfig={getVoteConfig(siteView.local_site)}
+              markdown={{
+                ...(await getMarkdownWithRemoteImages(
+                  commentView.comment.content,
+                  `comment-${commentView.comment.id}`,
+                )),
+                localSiteName: siteView.site.name,
+              }}
             />
           ))}
         {currentView === "Overview" && (

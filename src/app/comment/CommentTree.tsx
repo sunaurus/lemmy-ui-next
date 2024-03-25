@@ -1,4 +1,4 @@
-import { CommentNode } from "@/app/comment/buildCommentTrees";
+import { CommentNode } from "@/app/comment/commentActions";
 import { Comment } from "@/app/comment/Comment";
 import classNames from "classnames";
 import { LazyChildComments } from "@/app/comment/LazyChildComments";
@@ -21,6 +21,7 @@ export const CommentTree = (props: {
         parentId={props.node.parent?.commentView.comment.id}
         highlight={props.highlightRoot}
         voteConfig={props.voteConfig}
+        markdown={props.node.markdown}
       >
         {props.node.children.map((node) => (
           <CommentTree
