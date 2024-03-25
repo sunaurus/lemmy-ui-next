@@ -72,12 +72,14 @@ export const getMarkdownWithRemoteImages = async (
   content: string,
   prefix: string,
 ) => {
-  const imgRegex = /(<img src="\S+" alt=".*">)/;
-  const imgRegexWithCaptures = /<img src="(\S+)" alt="(.*)">/;
+  const imgRegex = /(<(?:img|emoji) src="\S+" alt=".*">)/;
+  const imgRegexWithCaptures = /<(img|emoji) src="(\S+)" alt="(.*)">/;
 
   const renderedHtml = md.render(content);
 
   const sections = renderedHtml.split(imgRegex);
+
+  console.log(sections);
 
   let replacedHtml = "";
   let replacements: MarkdownImage[] = [];
@@ -89,12 +91,15 @@ export const getMarkdownWithRemoteImages = async (
     if (match === null) {
       replacedHtml = replacedHtml + section;
     } else {
-      const [_, src, alt] = match;
+      const [_, type, src, alt] = match;
       const id = `${prefix}-img-${imageCounter}`;
 
       replacedHtml += `<span id="${id}"></span>`;
 
-      const remoteImageProps = await getRemoteImageProps(src, 830);
+      const remoteImageProps = await getRemoteImageProps(
+        src,
+        type === "emoji" ? 60 : 830,
+      );
       replacements.push({
         selector: id,
         remoteImageProps,

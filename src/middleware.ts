@@ -16,7 +16,6 @@ export const middleware = (request: NextRequest) => {
     frame-src *;
     img-src * blob: data:;
     media-src *;
-   
     ${process.env.NODE_ENV !== "development" ? "block-all-mixed-content; upgrade-insecure-requests;" : ""} 
 `;
   // Replace newline characters and spaces
