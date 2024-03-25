@@ -1,5 +1,4 @@
 import { apiClient } from "@/app/apiClient";
-import { Markdown } from "@/app/(ui)/Markdown";
 import { SortType } from "lemmy-js-client";
 import { PostListItem } from "@/app/post/PostListItem";
 import { Pagination } from "@/app/(ui)/Pagination";
@@ -11,6 +10,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments";
 import { Header } from "@/app/(ui)/Header";
 import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
+import { MarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithRemoteImages";
 
 type UserPageProps = {
   params: { username: string };
@@ -89,7 +89,7 @@ const UserPage = async (props: UserPageProps) => {
     <div className="m-2 mt-4">
       <Header view={personView} />
       <div className="ml-4 mt-2">
-        <Markdown content={personView.person.bio ?? ""} />
+        <MarkdownWithRemoteImages type="person" id={personView.person.id} />
       </div>
       <div className="m-2 ml-3">
         <SearchParamLinks

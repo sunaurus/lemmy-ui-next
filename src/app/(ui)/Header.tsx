@@ -48,7 +48,7 @@ const Summary = (props: {
     : props.view.community.title ?? props.view.community.name;
 
   const canonicalName = isPerson(props.view)
-    ? formatPersonUsername(props.view.person)
+    ? formatPersonUsername(props.view.person, true)
     : `!${formatCommunityName(props.view.community)}`;
 
   return (

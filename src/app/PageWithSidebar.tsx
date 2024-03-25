@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Markdown } from "@/app/(ui)/Markdown";
+import { Markdown } from "@/app/(ui)/markdown/Markdown";
 import { UserLink } from "@/app/u/UserLink";
 import {
   Community,
@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/16/solid";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { getRemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
+import { MarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithRemoteImages";
 
 type SidebarProps = {
   children: ReactNode | ReactNode[];
@@ -44,9 +45,9 @@ export const PageWithSidebar = (props: Props) => {
       <SidebarToggleContents>
         {isCommunitySidebar(props) && (
           <>
-            <DetailsSection
-              name={formatCommunityName(props.community)}
-              markdownContent={props.community.description}
+            <CommunityDetailsSection
+              communityName={formatCommunityName(props.community)}
+              communityId={props.community.id}
             />
             <StatsSection title={"Community stats"} stats={props.stats} />
           </>
@@ -61,11 +62,19 @@ export const PageWithSidebar = (props: Props) => {
 
         {props.site && (
           <>
-            <DetailsSection
+            <InstanceDetailsSection
               logoSrc={props.site.banner}
-              name={props.site.name}
-              markdownContent={props.site.sidebar}
-            />
+              siteName={props.site.name}
+            >
+              {isCommunitySidebar(props) ? (
+                <MarkdownWithRemoteImages
+                  type={"community_site"}
+                  id={props.community.id}
+                />
+              ) : (
+                <Markdown content={props.site.sidebar ?? ""} />
+              )}
+            </InstanceDetailsSection>
           </>
         )}
 
@@ -114,11 +123,10 @@ const SidebarToggleContents = (props: { children: ReactNode[] }) => {
     </div>
   );
 };
-
-const DetailsSection = async (props: {
+const InstanceDetailsSection = async (props: {
   logoSrc?: string;
-  name: string;
-  markdownContent?: string;
+  siteName: string;
+  children: ReactNode;
 }) => {
   return (
     <SidebarSection>
@@ -132,10 +140,24 @@ const DetailsSection = async (props: {
             placeholder={"empty"}
           />
         )}
-        <h1 className="mt-4">{props.name}</h1>
+        <h1 className="mt-4">{props.siteName}</h1>
+      </header>
+      {props.children}
+    </SidebarSection>
+  );
+};
+
+const CommunityDetailsSection = async (props: {
+  communityName: string;
+  communityId: number;
+}) => {
+  return (
+    <SidebarSection>
+      <header className="flex flex-col items-center mb-4">
+        <h1 className="mt-4">{props.communityName}</h1>
       </header>
 
-      <Markdown content={props.markdownContent ?? ""} />
+      <MarkdownWithRemoteImages type={"community"} id={props.communityId} />
     </SidebarSection>
   );
 };

@@ -1,4 +1,4 @@
-import { Markdown } from "@/app/(ui)/Markdown";
+import { Markdown } from "@/app/(ui)/markdown/Markdown";
 import { apiClient } from "@/app/apiClient";
 
 const LegalPage = async () => {

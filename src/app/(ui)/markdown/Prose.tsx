@@ -1,13 +1,11 @@
-import MarkdownIt from "markdown-it";
+import { ReactNode } from "react";
 
 type Props = {
-  content: string;
+  children: ReactNode | ReactNode[];
 };
-const md = new MarkdownIt({ linkify: true });
 
-export const Markdown = (props: Props) => {
-  const renderedHtml = md.render(props.content ?? "");
-
+// See: https://github.com/tailwindlabs/tailwindcss-typography
+export const Prose = (props: Props) => {
   return (
     <div
       className="max-w-full
@@ -27,7 +25,7 @@ export const Markdown = (props: Props) => {
       prose-p:my-1
       prose-p:break-words"
     >
-      <div dangerouslySetInnerHTML={{ __html: renderedHtml }} />
+      {props.children}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { CommentView } from "lemmy-js-client";
 import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
 import { UserLink } from "@/app/u/UserLink";
-import { Markdown } from "@/app/(ui)/Markdown";
 import { FormattedTimestamp } from "@/app/(ui)/FormattedTimestamp";
 import React, { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
@@ -12,6 +11,7 @@ import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
+import { Markdown } from "@/app/(ui)/markdown/Markdown";
 
 export const Comment = (props: {
   commentView: CommentView;

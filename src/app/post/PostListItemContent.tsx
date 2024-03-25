@@ -1,17 +1,13 @@
 "use client";
 
 import {
-  ArrowPathIcon,
   BellAlertIcon,
   ChatBubbleLeftRightIcon,
-  CheckIcon,
-  ExclamationTriangleIcon,
   LockClosedIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post, PostView, SiteView } from "lemmy-js-client";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
-import Image from "next/image";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
 import { VoteButtons } from "@/app/(ui)/vote/VoteButtons";
@@ -22,11 +18,11 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
-import { useLocalStorage } from "usehooks-ts";
+import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandableMedia";
 
 type Props = {
   postView: PostView;
@@ -72,143 +68,21 @@ export const PostListItemContent = (props: Props) => {
           <PostActions postView={props.postView} />
         </div>
       </div>
-      <InlineExpandedMedia
-        postView={props.postView}
-        isExpanded={inlineExpanded}
-        remoteImageProps={props.remoteImageProps}
-        localSiteDomain={props.siteView.site.name}
-      />
-    </div>
-  );
-};
-
-const InlineExpandedMedia = (props: {
-  postView: PostView;
-  isExpanded: boolean;
-  remoteImageProps?: Promise<RemoteImageProps>;
-  localSiteDomain: string;
-}) => {
-  const [remoteImageProps, setRemoteImageProps] =
-    useState<RemoteImageProps | null>(null);
-
-  const [isImageError, setIsImageError] = useState(false);
-
-  const [temporaryAllowUnproxied, setTemporaryAllowUnproxied] = useState(false);
-  const [alwaysAllowUnproxied, setAlwaysAllowUnproxied] = useLocalStorage(
-    "alwaysAllowUnproxied",
-    false,
-  );
-
-  useEffect(() => {
-    props.remoteImageProps?.then((res) => setRemoteImageProps(res));
-  }, [props.remoteImageProps]);
-
-  if (!hasExpandableMedia(props.postView.post)) {
-    return null;
-  }
-
-  if (!props.isExpanded) {
-    return null;
-  }
-
-  const url = props.postView.post.url;
-  const allowUnproxied = alwaysAllowUnproxied || temporaryAllowUnproxied;
-  const canProxy = isImage(url) && !remoteImageProps?.unoptimized;
-  const isHostedLocally =
-    (isImage(url) || isVideo(url)) &&
-    props.localSiteDomain === new URL(url).host;
-
-  let content = null;
-
-  if (isImage(url)) {
-    if (!remoteImageProps) {
-      return null;
-    }
-
-    if (isImageError) {
-      content = (
-        <div className="text-xs text-rose-400 mb-1 ml-6">
-          Failed to load image
-        </div>
-      );
-    } else {
-      content = (
-        <>
-          <Image
-            alt={"Post image"}
-            onError={() => setIsImageError(true)}
-            {...remoteImageProps}
-          />
-        </>
-      );
-    }
-  } else if (isVideo(url) || isVideo(props.postView.post.embed_video_url)) {
-    content = (
-      <video controls className="w-full aspect-video">
-        <source
-          src={url ?? props.postView.post.embed_video_url}
-          type="video/mp4"
+      {hasExpandableMedia(props.postView.post) && (
+        <InlineExpandedMedia
+          className={"my-3 mx-2 lg:mx-4 max-w-[880px]"}
+          embed={
+            isImage(props.postView.post.url) || isVideo(props.postView.post.url)
+              ? { url: props.postView.post.url }
+              : {
+                  iframeUrl: props.postView.post.embed_video_url!,
+                  title: props.postView.post.embed_title,
+                }
+          }
+          isExpanded={inlineExpanded}
+          remoteImageProps={props.remoteImageProps}
+          localSiteDomain={props.siteView.site.name}
         />
-      </video>
-    );
-  } else if (!isVideo(props.postView.post.embed_video_url)) {
-    content = (
-      <iframe
-        allowFullScreen
-        src={props.postView.post.embed_video_url}
-        title={props.postView.post.embed_title}
-        className="w-full aspect-video"
-        sandbox="allow-scripts allow-same-origin"
-        allow="autoplay 'none'"
-      ></iframe>
-    );
-  }
-
-  return (
-    <div className="my-3 mx-2 lg:mx-4 max-w-[880px]">
-      {!canProxy && !allowUnproxied ? (
-        <div className="ml-6">
-          <div className="text-xs text-rose-400 mb-1">
-            Proxying this content not possible, click below to try and load it
-            directly (remote server will see your IP!)
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <button
-              className="rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500 flex items-center gap-1"
-              onClick={() => setTemporaryAllowUnproxied(true)}
-            >
-              <ArrowPathIcon className="h-4" /> Reload without proxy
-            </button>
-            <button
-              className="rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500 flex items-center gap-1"
-              onClick={() => setAlwaysAllowUnproxied(true)}
-            >
-              <ExclamationTriangleIcon className="h-4" /> Permanently disable
-              warning for this browser
-            </button>
-          </div>
-        </div>
-      ) : (
-        <>
-          {!isHostedLocally && (
-            <div className="text-[9px] text-neutral-400 mb-1 flex items-center flex-wrap gap-1">
-              {canProxy ? (
-                <>
-                  <CheckIcon className={"h-3"} /> Your IP is hidden from the
-                  remote server
-                </>
-              ) : (
-                <>
-                  <ExclamationTriangleIcon className={"h-3"} /> Your IP is
-                  visible to remote server
-                  {}
-                </>
-              )}
-            </div>
-          )}
-
-          {content}
-        </>
       )}
     </div>
   );
