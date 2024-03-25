@@ -16,8 +16,10 @@ export const buildCommentTreesAction = async (
   form: GetComments,
   rootNode?: CommentNode,
 ): Promise<CommentNode[]> => {
-  const { comments } = await apiClient.getComments(form);
-  const { site_view: siteView } = await apiClient.getSite();
+  const [{ comments }, { site_view: siteView }] = await Promise.all([
+    apiClient.getComments(form),
+    apiClient.getSite(),
+  ]);
 
   const commentNodeMap = new Map<string, CommentNode>();
   const topLevelNodes = [];

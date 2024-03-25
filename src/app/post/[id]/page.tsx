@@ -12,11 +12,12 @@ export const generateMetadata = async (
   props: PostPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> => {
-  const { post_view: postView } = await apiClient.getPost({
-    id: Number(props.params.id),
-  });
-
-  const { site_view: siteView } = await apiClient.getSite();
+  const [{ post_view: postView }, { site_view: siteView }] = await Promise.all([
+    apiClient.getPost({
+      id: Number(props.params.id),
+    }),
+    apiClient.getSite(),
+  ]);
 
   let images = (await parent).openGraph?.images || [];
 

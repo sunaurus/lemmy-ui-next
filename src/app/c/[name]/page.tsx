@@ -17,12 +17,15 @@ export const generateMetadata = async (
 ): Promise<Metadata> => {
   const communityName = decodeURIComponent(props.params.name);
 
-  const { community_view: communityView, moderators } =
-    await apiClient.getCommunity({
+  const [
+    { community_view: communityView, moderators },
+    { site_view: siteView },
+  ] = await Promise.all([
+    apiClient.getCommunity({
       name: communityName,
-    });
-
-  const { site_view: siteView } = await apiClient.getSite();
+    }),
+    apiClient.getSite(),
+  ]);
 
   let images = (await parent).openGraph?.images || [];
 

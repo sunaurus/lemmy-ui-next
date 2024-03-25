@@ -25,11 +25,13 @@ export const generateMetadata = async (
 ): Promise<Metadata> => {
   const username = decodeURIComponent(props.params.username);
 
-  const { person_view: personView } = await apiClient.getPersonDetails({
-    username,
-  });
-
-  const { site_view: siteView } = await apiClient.getSite();
+  const [{ person_view: personView }, { site_view: siteView }] =
+    await Promise.all([
+      apiClient.getPersonDetails({
+        username,
+      }),
+      apiClient.getSite(),
+    ]);
 
   let images = (await parent).openGraph?.images || [];
 
@@ -64,8 +66,6 @@ type ViewType = "Overview" | "Comments" | "Posts";
 const UserPage = async (props: UserPageProps) => {
   const username = decodeURIComponent(props.params.username);
 
-  const { site_view: siteView } = await apiClient.getSite();
-
   const currentSortType: SortType =
     (props.searchParams["sortType"] as SortType) ?? "New";
   const currentPage = props.searchParams["page"]
@@ -76,17 +76,17 @@ const UserPage = async (props: UserPageProps) => {
   const availableSortTypes: SortType[] = ["New", "Old", "TopAll"];
   const availableViewOptions: ViewType[] = ["Overview", "Posts", "Comments"];
 
-  const {
-    person_view: personView,
-    moderates,
-    site,
-    comments,
-    posts,
-  } = await apiClient.getPersonDetails({
-    username,
-    sort: currentSortType,
-    page: currentPage,
-  });
+  const [
+    { person_view: personView, moderates, site, comments, posts },
+    { site_view: siteView },
+  ] = await Promise.all([
+    apiClient.getPersonDetails({
+      username,
+      sort: currentSortType,
+      page: currentPage,
+    }),
+    apiClient.getSite(),
+  ]);
 
   return (
     <div className="m-2 mt-4">

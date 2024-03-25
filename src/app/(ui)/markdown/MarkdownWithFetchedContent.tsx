@@ -79,8 +79,6 @@ export const getMarkdownWithRemoteImages = async (
 
   const sections = renderedHtml.split(imgRegex);
 
-  console.log(sections);
-
   let replacedHtml = "";
   let replacements: MarkdownImage[] = [];
   let imageCounter = 1;

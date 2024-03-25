@@ -16,11 +16,12 @@ export const PostPageInner = async (props: {
   searchParams: Record<string, string>;
   highlightCommentId?: number;
 }) => {
-  const { post_view: postView } = await apiClient.getPost({
-    id: props.postId,
-  });
-
-  const { site_view: siteView } = await apiClient.getSite();
+  const [{ post_view: postView }, { site_view: siteView }] = await Promise.all([
+    apiClient.getPost({
+      id: props.postId,
+    }),
+    apiClient.getSite(),
+  ]);
 
   const { community_view: communityView, moderators } =
     await apiClient.getCommunity({
@@ -84,7 +85,6 @@ const Comments = async (props: {
   } else if (props.commentCount > 100) {
     maxDepth = 3;
   }
-
   const commentTrees = await buildCommentTreesAction({
     post_id: props.postId,
     parent_id: props.commentThreadParentId,

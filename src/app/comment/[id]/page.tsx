@@ -12,11 +12,13 @@ export const generateMetadata = async (
   props: CommentPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> => {
-  const { comment_view: commentView } = await apiClient.getComment({
-    id: Number(props.params.id),
-  });
-
-  const { site_view: siteView } = await apiClient.getSite();
+  const [{ comment_view: commentView }, { site_view: siteView }] =
+    await Promise.all([
+      apiClient.getComment({
+        id: Number(props.params.id),
+      }),
+      apiClient.getSite(),
+    ]);
 
   let images = (await parent).openGraph?.images || [];
 
