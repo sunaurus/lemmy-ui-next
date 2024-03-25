@@ -1,5 +1,5 @@
 import { apiClient } from "@/app/apiClient";
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import { LoginForm } from "@/app/login/LoginForm";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 

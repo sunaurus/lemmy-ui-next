@@ -2,7 +2,7 @@
 
 import { isImage } from "@/app/(utils)/isImage";
 import classNames from "classnames";
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import {
   ArrowsPointingOutIcon,
   ChatBubbleBottomCenterTextIcon,

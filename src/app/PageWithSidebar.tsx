@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import { Markdown } from "@/app/(ui)/markdown/Markdown";
 import { UserLink } from "@/app/u/UserLink";
 import {

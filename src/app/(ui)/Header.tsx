@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import { getRemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { CommunityView, PersonView } from "lemmy-js-client";
 import classNames from "classnames";

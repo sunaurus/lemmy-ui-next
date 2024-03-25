@@ -1,7 +1,7 @@
 "use server";
 
 import { apiClient } from "@/app/apiClient";
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import Link from "next/link";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";

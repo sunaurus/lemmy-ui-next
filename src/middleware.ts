@@ -4,14 +4,16 @@ export const middleware = (request: NextRequest) => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    ${process.env.NODE_ENV !== "development" ? "script-src 'self' 'nonce-${nonce}' 'strict-dynamic';" : "script-src 'self' 'unsafe-inline' 'unsafe-eval';"} 
     style-src 'self' 'nonce-${nonce}';
-    img-src 'self' ${process.env.LEMMY_BACKEND} blob: data:;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
+    frame-src *;
+    img-src *;
+    media-src *;
    
     ${process.env.NODE_ENV !== "development" ? "block-all-mixed-content; upgrade-insecure-requests;" : ""} 
 `;

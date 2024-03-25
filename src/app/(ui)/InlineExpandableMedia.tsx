@@ -4,7 +4,7 @@ import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { isImage } from "@/app/(utils)/isImage";
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import {
   ArrowPathIcon,
   CheckIcon,

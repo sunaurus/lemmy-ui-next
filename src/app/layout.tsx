@@ -4,9 +4,9 @@ import { apiClient } from "@/app/apiClient";
 // These styles apply to every route in the application
 import "./globals.css";
 import { Navbar } from "@/app/Navbar";
-import NextTopLoader from "nextjs-toploader";
 import { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
+import { TopLoader } from "@/app/(ui)/TopLoader";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const site = await apiClient.getSite();
@@ -69,11 +69,7 @@ export default function RootLayout(props: Props) {
       className="min-h-screen overscroll-x-none overflow-x-hidden bg-neutral-900"
     >
       <body className="min-h-screen w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col ">
-        <NextTopLoader
-          color="#94a3b8"
-          showSpinner={false}
-          shadow={"0 0 10px #94a3b8,0 0 5px #94a3b8"}
-        />
+        <TopLoader />
         <Navbar />
 
         <main className="w-full overflow-x-clip mb-auto">{props.children}</main>

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "@/app/(ui)/Image";
 import { Community } from "lemmy-js-client";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
 import { StyledLink } from "@/app/(ui)/StyledLink";
