@@ -8,5 +8,8 @@ const config: Config = {
   ],
   theme: {},
   plugins: [require("@tailwindcss/typography")],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 };
 export default config;
