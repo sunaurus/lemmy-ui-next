@@ -26,7 +26,6 @@ export const voteCommentAction = async (
     await loginPageWithRedirectAction(`/comment/${commentId}`);
   }
 
-  revalidatePath("/");
   revalidatePath(`/post/${postId}`);
   revalidatePath(`/comment/[id]`, "page");
 };
