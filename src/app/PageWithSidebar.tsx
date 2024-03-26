@@ -59,7 +59,7 @@ const SidebarToggleButton = () => {
       <input
         type="checkbox"
         id="sidebar-toggle"
-        className="absolute sr-only peer"
+        className="absolute sr-only peer top-0 right-0"
         defaultChecked={false}
       />
       <label

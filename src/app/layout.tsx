@@ -66,13 +66,13 @@ export default function RootLayout(props: Props) {
   return (
     <html
       lang="en"
-      className="min-h-screen overscroll-x-none overflow-x-hidden bg-neutral-900"
+      className="min-h-screen overscroll-x-none bg-neutral-900 overflow-x-clip"
     >
-      <body className="min-h-screen w-full bg-[#1f1f1f] text-neutral-300 overflow-x-hidden relative flex flex-col ">
+      <body className="min-h-screen w-full bg-[#1f1f1f] text-neutral-300 overflow-x-clip relative flex flex-col">
         <TopLoader />
         <Navbar />
 
-        <main className="w-full overflow-x-clip mb-auto">{props.children}</main>
+        <main className="w-full mb-auto">{props.children}</main>
         <Footer />
       </body>
     </html>
