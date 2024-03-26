@@ -8,7 +8,7 @@ import {
   Site,
   SiteAggregates,
 } from "lemmy-js-client";
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
 import {
   ChevronDoubleLeftIcon,
@@ -22,27 +22,64 @@ type SidebarProps = {
   children: ReactNode | ReactNode[];
 };
 
-type InstanceSidebarProps = SidebarProps & {
+type InstanceSidebarProps = {
   site: Site;
   admins: Person[];
   stats: SiteAggregates;
 };
 
-type CommunitySidebarProps = SidebarProps & {
+type CommunitySidebarProps = {
   community: Community;
   site?: Site;
   mods: Person[];
   stats: CommunityAggregates;
 };
 
-type Props = InstanceSidebarProps | CommunitySidebarProps;
+type Props = SidebarProps & (InstanceSidebarProps | CommunitySidebarProps);
 
 export const PageWithSidebar = (props: Props) => {
   return (
     <div className="lg:flex w-full">
       <div className="p-1 lg:p-4 flex-grow">{props.children}</div>
       <SidebarToggleButton />
-      <SidebarToggleContents>
+      <SidebarToggleContents {...props} />
+    </div>
+  );
+};
+
+const isCommunitySidebar = (
+  props: SidebarContentProps,
+): props is CommunitySidebarProps => {
+  return (props as CommunitySidebarProps).community !== undefined;
+};
+
+const SidebarToggleButton = () => {
+  return (
+    <>
+      <input
+        type="checkbox"
+        id="sidebar-toggle"
+        className="absolute sr-only peer"
+        defaultChecked={false}
+      />
+      <label
+        htmlFor="sidebar-toggle"
+        className="lg:hidden absolute cursor-pointer right-0 z-10 top-[42px] m-3 bg-neutral-900 group "
+      >
+        <span className="hover:brightness-125 flex items-center">
+          <ChevronDoubleLeftIcon className="h-6 peer-checked:group-[]:hidden" />
+          <ChevronDoubleRightIcon className="h-6 hidden peer-checked:group-[]:inline" />
+        </span>
+      </label>
+    </>
+  );
+};
+
+type SidebarContentProps = CommunitySidebarProps | InstanceSidebarProps;
+const SidebarToggleContents = memo(
+  (props: SidebarContentProps) => {
+    return (
+      <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[84px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
         {isCommunitySidebar(props) && (
           <>
             <CommunityDetailsSection
@@ -85,44 +122,18 @@ export const PageWithSidebar = (props: Props) => {
         {!isCommunitySidebar(props) && (
           <ContactsSection title={"Instance admins"} persons={props.admins} />
         )}
-      </SidebarToggleContents>
-    </div>
-  );
-};
+      </div>
+    );
+  },
+  (prevProps, newProps) =>
+    isCommunitySidebar(prevProps)
+      ? isCommunitySidebar(newProps) &&
+        prevProps.community.id === newProps.community.id
+      : prevProps.site?.id === newProps.site?.id,
+);
 
-const isCommunitySidebar = (props: Props): props is CommunitySidebarProps => {
-  return (props as CommunitySidebarProps).community !== undefined;
-};
+SidebarToggleContents.displayName = "SidebarToggleContents";
 
-const SidebarToggleButton = () => {
-  return (
-    <>
-      <input
-        type="checkbox"
-        id="sidebar-toggle"
-        className="absolute sr-only peer"
-        defaultChecked={false}
-      />
-      <label
-        htmlFor="sidebar-toggle"
-        className="lg:hidden absolute cursor-pointer right-0 z-10 top-[42px] m-3 bg-neutral-900 group "
-      >
-        <span className="hover:brightness-125 flex items-center">
-          <ChevronDoubleLeftIcon className="h-6 peer-checked:group-[]:hidden" />
-          <ChevronDoubleRightIcon className="h-6 hidden peer-checked:group-[]:inline" />
-        </span>
-      </label>
-    </>
-  );
-};
-
-const SidebarToggleContents = (props: { children: ReactNode[] }) => {
-  return (
-    <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[84px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
-      {props.children}
-    </div>
-  );
-};
 const InstanceDetailsSection = async (props: {
   logoSrc?: string;
   siteName: string;

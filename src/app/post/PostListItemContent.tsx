@@ -18,7 +18,7 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useState } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
@@ -33,60 +33,69 @@ type Props = {
   siteView: SiteView;
 };
 
-export const PostListItemContent = (props: Props) => {
-  const [inlineExpanded, setInlineExpanded] = useState(
-    props.loggedInUser?.local_user_view.local_user.auto_expand ?? false,
-  );
+export const PostListItemContent = memo(
+  (props: Props) => {
+    const [inlineExpanded, setInlineExpanded] = useState(
+      props.loggedInUser?.local_user_view.local_user.auto_expand ?? false,
+    );
 
-  return (
-    <div key={props.postView.post.id} className="my-1">
-      <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
-        <div className="flex items-center">
-          <VoteButtons
-            voteConfig={props.voteConfig}
-            postView={props.postView}
-            className={"mt-2 sm:mt-0"}
-          />
-          <PostThumbnail
-            post={props.postView.post}
-            className={"hidden sm:flex"}
-            loggedInUser={props.loggedInUser}
-            setInlineExpanded={setInlineExpanded}
-          />
-        </div>
-        <div className="w-full">
-          <Title
-            post={props.postView.post}
-            loggedInUser={props.loggedInUser}
-            setInlineExpanded={setInlineExpanded}
-          />
+    return (
+      <div key={props.postView.post.id} className="my-1">
+        <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
+          <div className="flex items-center">
+            <VoteButtons
+              voteConfig={props.voteConfig}
+              postView={props.postView}
+              className={"mt-2 sm:mt-0"}
+            />
+            <PostThumbnail
+              post={props.postView.post}
+              className={"hidden sm:flex"}
+              loggedInUser={props.loggedInUser}
+              setInlineExpanded={setInlineExpanded}
+            />
+          </div>
+          <div className="w-full">
+            <Title
+              post={props.postView.post}
+              loggedInUser={props.loggedInUser}
+              setInlineExpanded={setInlineExpanded}
+            />
 
-          <PostDetails
-            postView={props.postView}
-            hideCommunityName={props.hideCommunityName}
-          />
-          <PostActions postView={props.postView} />
+            <PostDetails
+              postView={props.postView}
+              hideCommunityName={props.hideCommunityName}
+            />
+            <PostActions postView={props.postView} />
+          </div>
         </div>
+        {hasExpandableMedia(props.postView.post) && (
+          <InlineExpandedMedia
+            className={"my-3 mx-2 lg:mx-4 max-w-[880px]"}
+            embed={
+              isImage(props.postView.post.url) ||
+              isVideo(props.postView.post.url)
+                ? { url: props.postView.post.url }
+                : {
+                    iframeUrl: props.postView.post.embed_video_url!,
+                    title: props.postView.post.embed_title,
+                  }
+            }
+            isExpanded={inlineExpanded}
+            remoteImageProps={props.remoteImageProps}
+            localSiteDomain={props.siteView.site.name}
+          />
+        )}
       </div>
-      {hasExpandableMedia(props.postView.post) && (
-        <InlineExpandedMedia
-          className={"my-3 mx-2 lg:mx-4 max-w-[880px]"}
-          embed={
-            isImage(props.postView.post.url) || isVideo(props.postView.post.url)
-              ? { url: props.postView.post.url }
-              : {
-                  iframeUrl: props.postView.post.embed_video_url!,
-                  title: props.postView.post.embed_title,
-                }
-          }
-          isExpanded={inlineExpanded}
-          remoteImageProps={props.remoteImageProps}
-          localSiteDomain={props.siteView.site.name}
-        />
-      )}
-    </div>
-  );
-};
+    );
+  },
+  (prevProps, newProps) =>
+    prevProps.postView.post.id === newProps.postView.post.id &&
+    prevProps.postView.counts.comments === newProps.postView.counts.comments &&
+    prevProps.postView.counts.score === newProps.postView.counts.score,
+);
+
+PostListItemContent.displayName = "PostListItemContent";
 
 type TitleProps = {
   post: Post;
