@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { useIntersectionObserver } from "usehooks-ts";
+import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
 
 export const LazyComments = (props: {
   form: GetComments;
@@ -29,7 +30,8 @@ export const LazyComments = (props: {
     if (commentTrees.rootNodes.length > 0) {
       setLoadedComments((prev) => [...prev, ...commentTrees.rootNodes]);
       setSeenThreads(commentTrees.seenThreads);
-    } else {
+    }
+    if (commentTrees.rootNodes.length < ROOT_NODES_BATCH_SIZE) {
       setEndReached(true);
     }
     setIsLoading(false);
