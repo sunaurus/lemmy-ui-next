@@ -2,7 +2,12 @@ import { apiClient } from "@/app/apiClient";
 import { ReactNode } from "react";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import classNames from "classnames";
-import { ListingType, SortType } from "lemmy-js-client";
+import {
+  CommunityView,
+  ListingType,
+  MyUserInfo,
+  SortType,
+} from "lemmy-js-client";
 import { SubscribeButton } from "@/app/communities/SubscribeButton";
 import { Pagination } from "@/app/(ui)/Pagination";
 import { formatCompactNumber } from "@/app/(utils)/formatCompactNumber";
@@ -72,76 +77,11 @@ const CommunitiesListPage = async ({
         </thead>
         <tbody className="divide-y divide-neutral-700">
           {communities.map((communityView) => (
-            <tr key={communityView.community.id}>
-              <Cell>
-                <div className="flex flex-col">
-                  <CommunityLink community={communityView.community} />
-                  <div className={"flex flex-row"}>
-                    <div className={"flex flex-col lg:hidden"}>
-                      <div className="mt-1 text-xs">
-                        Subscribers:
-                        <span className="font-bold ml-1">
-                          {formatCompactNumber(
-                            communityView.counts.subscribers,
-                          )}
-                        </span>
-                      </div>
-                      <div className="text-xs">
-                        MAU:
-                        <span className="font-bold ml-1">
-                          {formatCompactNumber(
-                            communityView.counts.users_active_month,
-                          )}
-                        </span>
-                      </div>
-                      <div className="text-xs">
-                        Posts:
-                        <span className="font-bold ml-1">
-                          {formatCompactNumber(communityView.counts.posts)}
-                        </span>
-                      </div>
-                      <div className="text-xs">
-                        Comments:
-                        <span className="font-bold ml-1">
-                          {formatCompactNumber(communityView.counts.comments)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {loggedInUser && (
-                      <div className="ml-auto mr-2 mt-auto  lg:hidden">
-                        <SubscribeButton
-                          loggedInUser={loggedInUser}
-                          currentStatus={communityView.subscribed}
-                          communityId={communityView.community.id}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Cell>
-              <Cell className="hidden lg:table-cell">
-                {formatCompactNumber(communityView.counts.subscribers)}
-              </Cell>
-              <Cell className="hidden lg:table-cell">
-                {formatCompactNumber(communityView.counts.users_active_month)}
-              </Cell>
-              <Cell className="hidden lg:table-cell">
-                {formatCompactNumber(communityView.counts.posts)}
-              </Cell>
-              <Cell className="hidden lg:table-cell">
-                {formatCompactNumber(communityView.counts.comments)}
-              </Cell>
-              {loggedInUser && (
-                <Cell className="hidden lg:table-cell">
-                  <SubscribeButton
-                    loggedInUser={loggedInUser}
-                    currentStatus={communityView.subscribed}
-                    communityId={communityView.community.id}
-                  />
-                </Cell>
-              )}
-            </tr>
+            <Row
+              key={communityView.community.id}
+              communityView={communityView}
+              loggedInUser={loggedInUser}
+            />
           ))}
         </tbody>
       </table>
@@ -150,6 +90,82 @@ const CommunitiesListPage = async ({
         nextPage={currentPage + 1}
       />
     </div>
+  );
+};
+
+const Row = (props: {
+  communityView: CommunityView;
+  loggedInUser?: MyUserInfo;
+}) => {
+  return (
+    <tr key={props.communityView.community.id}>
+      <Cell>
+        <div className="flex flex-col">
+          <CommunityLink community={props.communityView.community} />
+          <div className={"flex flex-row"}>
+            <div className={"flex flex-col lg:hidden"}>
+              <div className="mt-1 text-xs">
+                Subscribers:
+                <span className="font-bold ml-1">
+                  {formatCompactNumber(props.communityView.counts.subscribers)}
+                </span>
+              </div>
+              <div className="text-xs">
+                MAU:
+                <span className="font-bold ml-1">
+                  {formatCompactNumber(
+                    props.communityView.counts.users_active_month,
+                  )}
+                </span>
+              </div>
+              <div className="text-xs">
+                Posts:
+                <span className="font-bold ml-1">
+                  {formatCompactNumber(props.communityView.counts.posts)}
+                </span>
+              </div>
+              <div className="text-xs">
+                Comments:
+                <span className="font-bold ml-1">
+                  {formatCompactNumber(props.communityView.counts.comments)}
+                </span>
+              </div>
+            </div>
+
+            {props.loggedInUser && (
+              <div className="ml-auto mr-2 mt-auto  lg:hidden">
+                <SubscribeButton
+                  loggedInUser={props.loggedInUser}
+                  currentStatus={props.communityView.subscribed}
+                  communityId={props.communityView.community.id}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </Cell>
+      <Cell className="hidden lg:table-cell">
+        {formatCompactNumber(props.communityView.counts.subscribers)}
+      </Cell>
+      <Cell className="hidden lg:table-cell">
+        {formatCompactNumber(props.communityView.counts.users_active_month)}
+      </Cell>
+      <Cell className="hidden lg:table-cell">
+        {formatCompactNumber(props.communityView.counts.posts)}
+      </Cell>
+      <Cell className="hidden lg:table-cell">
+        {formatCompactNumber(props.communityView.counts.comments)}
+      </Cell>
+      {props.loggedInUser && (
+        <Cell className="hidden lg:table-cell">
+          <SubscribeButton
+            loggedInUser={props.loggedInUser}
+            currentStatus={props.communityView.subscribed}
+            communityId={props.communityView.community.id}
+          />
+        </Cell>
+      )}
+    </tr>
   );
 };
 

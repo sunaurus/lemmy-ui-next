@@ -12,7 +12,7 @@ import {
 import { PlayIcon } from "@heroicons/react/16/solid";
 import { MyUserInfo, Post } from "lemmy-js-client";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import { Dispatch, memo, SetStateAction, Suspense, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useState } from "react";
 import { getPostThumbnailSrc } from "@/app/post/getPostThumbnailSrc";
 
 type ThumbnailProps = {
@@ -35,9 +35,7 @@ export const PostThumbnail = memo(
       >
         {src ? (
           <>
-            <Suspense>
-              <ThumbnailImage props={props} src={src} />
-            </Suspense>
+            <ThumbnailImage props={props} src={src} />
             {<PhotoIcon className="h-8 text-neutral-900" />}
           </>
         ) : props.post.url ? (
@@ -46,21 +44,10 @@ export const PostThumbnail = memo(
           <ChatBubbleBottomCenterTextIcon className="h-8 text-neutral-900" />
         )}
         {hasExpandableMedia(props.post) && (
-          <a
-            className="cursor-pointer z-1 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
-            href={src ?? props.post.embed_video_url}
-            onClick={(e) => {
-              e.preventDefault();
-              e.nativeEvent.stopImmediatePropagation();
-              props.setInlineExpanded((prev) => !prev);
-            }}
-          >
-            {isImage(props.post.url) ? (
-              <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
-            ) : (
-              <PlayIcon className="h-7 bg-neutral-800 rounded" />
-            )}
-          </a>
+          <ExpandOverlay
+            url={src ?? props.post.embed_video_url!}
+            onToggleExpanded={props.setInlineExpanded}
+          />
         )}
       </div>
     );
@@ -102,3 +89,27 @@ const ThumbnailImage = memo(
 );
 
 ThumbnailImage.displayName = "ThumbnailImage";
+
+function ExpandOverlay(props: {
+  url: string;
+  onToggleExpanded: Dispatch<SetStateAction<boolean>>;
+}) {
+  return (
+    <a
+      className="cursor-pointer z-1 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
+      href={props.url} // If JS is disabled, this href will still let users navigate to the content
+      onClick={(e) => {
+        e.preventDefault();
+        e.nativeEvent.stopImmediatePropagation();
+        props.onToggleExpanded((prev) => !prev);
+      }}
+    >
+      {isImage(props.url) ? (
+        <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
+      ) : (
+        // Videos get a different icon
+        <PlayIcon className="h-7 bg-neutral-800 rounded" />
+      )}
+    </a>
+  );
+}

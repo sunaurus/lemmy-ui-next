@@ -10,6 +10,11 @@ export const Image = (props: ImageProps) => {
   return (
     <NextImage
       {...props}
+      src={
+        typeof props.src === "string"
+          ? props.src.replace("http://", "https://")
+          : props.src
+      }
       className={classNames(
         "bg-transparent",
         { "absolute w-full h-full left-0 right-0 top-0 bottom-0": props.fill },

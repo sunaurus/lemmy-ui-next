@@ -18,11 +18,12 @@ import { isImage } from "@/app/(utils)/isImage";
 import { isVideo } from "@/app/(utils)/isVideo";
 import { PostThumbnail } from "@/app/post/PostThumbnail";
 import { hasExpandableMedia } from "@/app/post/hasExpandableMedia";
-import React, { Dispatch, memo, SetStateAction, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useEffect } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandableMedia";
+import { useSessionStorage } from "usehooks-ts";
 
 type Props = {
   postView: PostView;
@@ -35,9 +36,18 @@ type Props = {
 
 export const PostListItemContent = memo(
   (props: Props) => {
-    const [inlineExpanded, setInlineExpanded] = useState(
+    const [inlineExpanded, setInlineExpanded] = useSessionStorage(
+      `ie-${props.postView.post.id}`,
       props.loggedInUser?.local_user_view.local_user.auto_expand ?? false,
     );
+
+    const [remoteImageProps, setRemoteImageProps] = useSessionStorage<
+      RemoteImageProps | undefined
+    >(`rip-${props.postView.post.id}`, undefined);
+
+    useEffect(() => {
+      props.remoteImageProps?.then((res) => setRemoteImageProps(res));
+    }, [props.remoteImageProps, setRemoteImageProps]);
 
     return (
       <div key={props.postView.post.id} className="my-1">
@@ -84,7 +94,7 @@ export const PostListItemContent = memo(
                     }
             }
             isExpanded={inlineExpanded}
-            remoteImageProps={props.remoteImageProps}
+            remoteImageProps={remoteImageProps}
             localSiteDomain={props.siteView.site.name}
           />
         )}

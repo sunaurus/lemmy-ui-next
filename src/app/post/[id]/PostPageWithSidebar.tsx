@@ -13,7 +13,7 @@ import { LazyComments } from "@/app/comment/LazyComments";
 import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
 
-export const PostPageInner = async (props: {
+export const PostPageWithSidebar = async (props: {
   postId: number;
   commentThreadParentId?: number;
   searchParams: Record<string, string>;

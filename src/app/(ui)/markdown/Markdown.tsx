@@ -37,7 +37,7 @@ export const Markdown = (props: Props) => {
               embed={{ url: replacement.src, alt: replacement.alt }}
               isExpanded={true}
               localSiteDomain={props.localSiteName}
-              remoteImageProps={Promise.resolve(replacement.remoteImageProps)}
+              remoteImageProps={replacement.remoteImageProps}
             />
           </MarkdownImageReplacement>
         ))}

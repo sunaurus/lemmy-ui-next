@@ -1,4 +1,4 @@
-import { PostPageInner } from "@/app/post/[id]/PostPageInner";
+import { PostPageWithSidebar } from "@/app/post/[id]/PostPageWithSidebar";
 import { apiClient } from "@/app/apiClient";
 import { Metadata, ResolvingMetadata } from "next";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
@@ -51,7 +51,7 @@ const CommentPage = async ({ params, searchParams }: CommentPageProps) => {
   });
 
   return (
-    <PostPageInner
+    <PostPageWithSidebar
       postId={commentView.post.id}
       commentThreadParentId={commentView.comment.id}
       searchParams={searchParams}

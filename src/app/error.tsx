@@ -13,11 +13,16 @@ export default function Error({
       <div>
         Unfortunately, we ran into an issue when trying to display this page.
       </div>
-      <div>
-        When reporting this to instance admins, please include the error digest
-        in your report, as it may be used to find relevant logs on the server.
-      </div>
-      <div>Error digest: {error.digest}</div>
+      {error.digest && (
+        <>
+          <div>
+            When reporting this to instance admins, please include the error
+            digest in your report, as it may be used to find relevant logs on
+            the server.
+          </div>
+          <div>Error digest: {error.digest}</div>
+        </>
+      )}
       <button
         className="mt-4 rounded-md bg-slate-500 px-4 py-2 text-sm text-white transition-colors hover:bg-slate-400"
         onClick={() => reset()}

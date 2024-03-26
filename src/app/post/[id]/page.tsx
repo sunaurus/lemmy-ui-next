@@ -1,4 +1,4 @@
-import { PostPageInner } from "@/app/post/[id]/PostPageInner";
+import { PostPageWithSidebar } from "@/app/post/[id]/PostPageWithSidebar";
 import { Metadata, ResolvingMetadata } from "next";
 import { apiClient } from "@/app/apiClient";
 import { formatCommunityName } from "@/app/c/formatCommunityName";
@@ -46,7 +46,10 @@ export const generateMetadata = async (
 
 const PostPage = async ({ params, searchParams }: PostPageProps) => {
   return (
-    <PostPageInner postId={Number(params.id)} searchParams={searchParams} />
+    <PostPageWithSidebar
+      postId={Number(params.id)}
+      searchParams={searchParams}
+    />
   );
 };
 
