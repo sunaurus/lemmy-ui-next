@@ -51,8 +51,11 @@ export const LazyComments = (props: {
           voteConfig={props.voteConfig}
         />
       ))}
-      <div ref={ref} className={"text-neutral-400 mt-12"}>
-        {endReached && "You've reached the end!"}
+      <div
+        ref={ref}
+        className={"text-neutral-400 mt-20 w-full flex justify-center"}
+      >
+        <div>{endReached && "You've reached the end of the page!"}</div>
       </div>
     </>
   );

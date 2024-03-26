@@ -11,6 +11,7 @@ import { MarkdownWithFetchedContent } from "@/app/(ui)/markdown/MarkdownWithFetc
 import { buildCommentTreesAction } from "@/app/comment/commentActions";
 import { LazyComments } from "@/app/comment/LazyComments";
 import { GetComments } from "lemmy-js-client/dist/types/GetComments";
+import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
 
 export const PostPageInner = async (props: {
   postId: number;
@@ -139,7 +140,7 @@ const Comments = async (props: {
           voteConfig={props.voteConfig}
         />
       ))}
-      {initialCommentTrees.rootNodes.length > 0 && (
+      {initialCommentTrees.rootNodes.length >= ROOT_NODES_BATCH_SIZE && (
         <LazyComments
           form={commentRequestForm}
           voteConfig={props.voteConfig}

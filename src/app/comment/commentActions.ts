@@ -5,6 +5,7 @@ import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { CommentView } from "lemmy-js-client";
 import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 import { MarkdownPropsWithReplacements } from "@/app/(ui)/markdown/Markdown";
+import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
 
 export type CommentNode = {
   commentView: CommentView;
@@ -17,8 +18,6 @@ type Trees = {
   rootNodes: CommentNode[];
   seenThreads: Set<string>;
 };
-
-const LIMIT = 5;
 
 export const buildCommentTreesAction = async (
   form: GetComments,
@@ -50,7 +49,7 @@ export const buildCommentTreesAction = async (
       ? String(form.parent_id) === commentId
       : parentId === "0";
     if (isTopLevelNode) {
-      if (topLevelNodes.length >= LIMIT) {
+      if (topLevelNodes.length >= ROOT_NODES_BATCH_SIZE) {
         continue;
       }
       currentBatchThreads.add(threadId);
