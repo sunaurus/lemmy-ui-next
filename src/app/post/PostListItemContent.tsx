@@ -76,10 +76,12 @@ export const PostListItemContent = memo(
               isImage(props.postView.post.url) ||
               isVideo(props.postView.post.url)
                 ? { url: props.postView.post.url }
-                : {
-                    iframeUrl: props.postView.post.embed_video_url!,
-                    title: props.postView.post.embed_title,
-                  }
+                : isVideo(props.postView.post.embed_video_url)
+                  ? { url: props.postView.post.embed_video_url }
+                  : {
+                      iframeUrl: props.postView.post.embed_video_url!,
+                      title: props.postView.post.embed_title,
+                    }
             }
             isExpanded={inlineExpanded}
             remoteImageProps={props.remoteImageProps}

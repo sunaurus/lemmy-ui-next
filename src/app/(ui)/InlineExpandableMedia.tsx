@@ -69,7 +69,7 @@ export const InlineExpandedMedia = (props: {
   } else {
     if (isVideo(props.embed.url)) {
       content = (
-        <video controls className="w-full aspect-video">
+        <video controls className="w-full">
           <source src={props.embed.url} type="video/mp4" />
         </video>
       );
