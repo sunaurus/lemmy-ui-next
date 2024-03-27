@@ -2,8 +2,9 @@
 
 import { useFormStatus } from "react-dom";
 import { loginAction } from "@/app/login/auth";
-import { Input } from "@/app/(ui)/Input";
+import { Input } from "@/app/(ui)/form/Input";
 import { StyledLink } from "@/app/(ui)/StyledLink";
+import { SubmitButton } from "@/app/(ui)/button/SubmitButton";
 
 export const LoginForm = (props: { redirect?: string }) => {
   return (
@@ -66,20 +67,25 @@ export const LoginForm = (props: { redirect?: string }) => {
       </div>
 
       <div>
-        <SubmitButton />
+        <SubmitButton color={"neutral"} className={"w-full leading-6"}>
+          Sign in
+        </SubmitButton>
       </div>
     </form>
   );
 };
 
-const SubmitButton = () => {
+const SubmitButton2 = () => {
   const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
       disabled={pending}
-      className="flex w-full justify-center rounded bg-slate-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
+      className="bg-primary-500 hover:bg-primary-400 focus-visible:outline-primary-500 flex
+        w-full justify-center rounded px-3 py-1.5 text-sm font-semibold leading-6
+        text-white shadow-sm focus-visible:outline focus-visible:outline-2
+        focus-visible:outline-offset-2"
     >
       {pending ? "Loading..." : "Sign in"}
     </button>

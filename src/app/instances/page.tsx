@@ -8,7 +8,7 @@ const InstancesPage = async () => {
 
   return (
     <div
-      className={"flex m-2 w-full justify-center gap-1 flex-wrap max-w-full"}
+      className={"m-2 flex w-full max-w-full flex-wrap justify-center gap-1"}
     >
       <InstanceList
         title={"Linked instances"}
@@ -59,7 +59,7 @@ const InstanceList = (props: {
         .map((instance) => (
           <div
             key={instance.domain}
-            className="flex items-center gap-x-2 flex-wrap break-words max-w-full"
+            className="flex max-w-full flex-wrap items-center gap-x-2 break-words"
           >
             <StyledLink
               href={"https://" + instance.domain}

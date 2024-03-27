@@ -16,7 +16,7 @@ export const Header = async (props: { view: CommunityView | PersonView }) => {
     : props.view.community.banner;
 
   return (
-    <header className="mx-1 lg:mx-4 relative min-h-[110px]">
+    <header className="relative mx-1 min-h-[110px] lg:mx-4">
       {bannerSrc && (
         <Banner
           src={bannerSrc}
@@ -52,15 +52,15 @@ const Summary = (props: {
 
   return (
     <div
-      className={classNames("flex items-end gap-2 sm:absolute max-w-full", {
-        "sm:bottom-0 sm:bg-neutral-900 sm:rounded-bl sm:rounded-tr py-2 sm:p-2 sm:bg-opacity-90 ":
-          props.addBackground,
+      className={classNames("flex max-w-full items-end gap-2 sm:absolute", {
+        [`py-2 sm:bottom-0 sm:rounded-bl sm:rounded-tr sm:bg-neutral-900 sm:bg-opacity-90
+        sm:p-2`]: props.addBackground,
       })}
     >
       <Avatar avatarSrc={avatarSrc} size="regular" />
 
       <div className="mx-2 max-w-full">
-        <h1 className="text-2xl flex items-center gap-1 max-w-full break-words">
+        <h1 className="flex max-w-full items-center gap-1 break-words text-2xl">
           {displayName}
           {isPerson(props.view) && props.view.is_admin && (
             <UsernameBadge
@@ -78,7 +78,7 @@ const Summary = (props: {
           )}
         </h1>
         <div className="text-md max-w-full break-words">{canonicalName}</div>
-        <div className="text-sm flex items-center gap-1 text-neutral-400">
+        <div className="flex items-center gap-1 text-sm text-neutral-400">
           <AgeIcon
             type={isPerson(props.view) ? "person" : "community"}
             published={
@@ -96,7 +96,7 @@ const Summary = (props: {
             }
           />
         </div>
-        <div className="text-sm flex items-center gap-1 text-neutral-400">
+        <div className="flex items-center gap-1 text-sm text-neutral-400">
           {isPerson(props.view) ? (
             <div>
               {formatCompactNumber(props.view.counts.post_count)} posts •{" "}

@@ -47,7 +47,7 @@ export const VoteButtons = memo(
     return (
       <div
         className={classNames(
-          "text-xs flex-col w-8 items-center justify-center content-center",
+          "w-8 flex-col content-center items-center justify-center text-xs",
           props.className,
         )}
       >
@@ -73,7 +73,7 @@ export const VoteButtons = memo(
           <button type="submit">
             <ArrowUpIcon
               className={classNames(
-                "h-5 w-8 hover:brightness-125 cursor-pointer",
+                "h-5 w-8 cursor-pointer hover:brightness-125",
                 {
                   "text-neutral-300 hover:text-indigo-400":
                     optimisticUserScore !== 1,
@@ -84,7 +84,7 @@ export const VoteButtons = memo(
           </button>
         </form>
         {optimisticScore !== undefined && props.voteConfig.scoresVisible && (
-          <div className="text-center w-8 font-semibold mb-0.5">
+          <div className="mb-0.5 w-8 text-center font-semibold">
             {formatCompactNumber(optimisticScore)}
           </div>
         )}
@@ -110,7 +110,7 @@ export const VoteButtons = memo(
             <button type="submit">
               <ArrowDownIcon
                 className={classNames(
-                  "h-5 w-8 hover:brightness-125 cursor-pointer",
+                  "h-5 w-8 cursor-pointer hover:brightness-125",
                   {
                     "text-neutral-300 hover:text-rose-400":
                       optimisticUserScore !== -1,

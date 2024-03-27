@@ -39,8 +39,8 @@ type Props = SidebarProps & (InstanceSidebarProps | CommunitySidebarProps);
 
 export const PageWithSidebar = (props: Props) => {
   return (
-    <div className="lg:flex w-full">
-      <div className="p-1 lg:p-4 flex-grow">{props.children}</div>
+    <div className="w-full lg:flex">
+      <div className="flex-grow p-1 lg:p-4">{props.children}</div>
       <SidebarToggleButton />
       <SidebarToggleContents {...props} />
     </div>
@@ -59,16 +59,17 @@ const SidebarToggleButton = () => {
       <input
         type="checkbox"
         id="sidebar-toggle"
-        className="absolute sr-only peer top-0 right-0"
+        className="peer sr-only absolute right-0 top-0"
         defaultChecked={false}
       />
       <label
         htmlFor="sidebar-toggle"
-        className="lg:hidden absolute cursor-pointer right-0 z-10 top-[42px] m-3 bg-neutral-900 group "
+        className="group absolute right-0 top-[42px] z-10 m-3 cursor-pointer bg-neutral-900
+          lg:hidden"
       >
-        <span className="hover:brightness-125 flex items-center">
+        <span className="flex items-center hover:brightness-125">
           <ChevronDoubleLeftIcon className="h-6 peer-checked:group-[]:hidden" />
-          <ChevronDoubleRightIcon className="h-6 hidden peer-checked:group-[]:inline" />
+          <ChevronDoubleRightIcon className="hidden h-6 peer-checked:group-[]:inline" />
         </span>
       </label>
     </>
@@ -79,7 +80,11 @@ type SidebarContentProps = CommunitySidebarProps | InstanceSidebarProps;
 const SidebarToggleContents = memo(
   (props: SidebarContentProps) => {
     return (
-      <div className="max-w-[300px] min-w-[300px] absolute lg:relative top-[84px] lg:top-0 right-0 transition-transform duration-500 transform lg:peer-checked:translate-x-0 lg:translate-x-0 translate-x-[300px] peer-checked:translate-x-0">
+      <div
+        className="absolute right-0 top-[84px] min-w-[300px] max-w-[300px] translate-x-[300px]
+          transform transition-transform duration-500 peer-checked:translate-x-0
+          lg:relative lg:top-0 lg:translate-x-0 lg:peer-checked:translate-x-0"
+      >
         {isCommunitySidebar(props) && (
           <>
             <CommunityDetailsSection
@@ -141,10 +146,10 @@ const InstanceDetailsSection = async (props: {
 }) => {
   return (
     <SidebarSection>
-      <header className="flex flex-col items-center mb-4">
+      <header className="mb-4 flex flex-col items-center">
         {props.logoSrc && (
           <Image
-            className="mt-4 object-cover h-auto rounded"
+            className="mt-4 h-auto rounded object-cover"
             priority={true}
             alt="Logo"
             {...await getRemoteImageProps(props.logoSrc, 230)}
@@ -164,7 +169,7 @@ const CommunityDetailsSection = async (props: {
 }) => {
   return (
     <SidebarSection>
-      <header className="flex flex-col items-center mb-4">
+      <header className="mb-4 flex flex-col items-center">
         <h1 className="mt-4">{props.communityName}</h1>
       </header>
 
@@ -217,7 +222,10 @@ const ContactsSection = (props: { title: string; persons: Person[] }) => {
 };
 
 const SidebarSection = (props: { children: ReactNode[] | ReactNode }) => (
-  <div className="bg-neutral-900 last-of-type:rounded-b shadow-lg p-4 w-full border-b border-neutral-700 last-of-type:border-0">
+  <div
+    className="w-full border-b border-neutral-700 bg-neutral-900 p-4 shadow-lg
+      last-of-type:rounded-b last-of-type:border-0"
+  >
     {props.children}
   </div>
 );

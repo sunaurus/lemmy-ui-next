@@ -9,7 +9,7 @@ export default function Error({
 }) {
   return (
     <main className="flex h-full flex-col items-center justify-center">
-      <h2 className="text-center text-2xl mt-20">Something went wrong!</h2>
+      <h2 className="mt-20 text-center text-2xl">Something went wrong!</h2>
       <div>
         Unfortunately, we ran into an issue when trying to display this page.
       </div>
@@ -24,7 +24,8 @@ export default function Error({
         </>
       )}
       <button
-        className="mt-4 rounded-md bg-slate-500 px-4 py-2 text-sm text-white transition-colors hover:bg-slate-400"
+        className="bg-primary-500 hover:bg-primary-400 mt-4 rounded-md px-4 py-2 text-sm text-white
+          transition-colors"
         onClick={() => reset()}
       >
         Try again

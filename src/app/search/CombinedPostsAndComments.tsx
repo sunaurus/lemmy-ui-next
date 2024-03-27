@@ -11,12 +11,14 @@ type Props = {
   sortType: SortType;
 };
 export const CombinedPostsAndComments = async (props: Props) => {
-  const { site_view: siteView } = await apiClient.getSite();
+  const { site_view: siteView, my_user: loggedInUser } =
+    await apiClient.getSite();
 
   return sort(props).map(async (view) => {
     return isComment(view) ? (
       <Comment
         key={view.comment.id}
+        loggedInUser={loggedInUser}
         commentView={view}
         className="my-2"
         addPostLink={true}

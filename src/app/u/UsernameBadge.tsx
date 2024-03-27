@@ -9,7 +9,7 @@ export const UsernameBadge = (props: {
     <span
       title={props.title}
       className={classNames(
-        "font-mono rounded border text-[10px]/snug px-1 text-center font-bold",
+        "rounded border px-1 text-center font-mono text-[10px]/snug font-bold",
         props.className,
       )}
     >

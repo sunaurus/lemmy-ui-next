@@ -11,14 +11,14 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/16/solid";
 import { isVideo } from "@/app/(utils)/isVideo";
+import dynamic from "next/dynamic";
 
 type IframeEmbed = { iframeUrl: string; title?: string };
 type UrlEmbed = { url: string; alt?: string };
 type Embed = IframeEmbed | UrlEmbed;
 
-export const InlineExpandedMedia = (props: {
+const InlineExpandedMediaInternal = (props: {
   embed: Embed;
-  isExpanded: boolean;
   remoteImageProps?: RemoteImageProps;
   localSiteDomain: string;
   className?: string;
@@ -30,10 +30,6 @@ export const InlineExpandedMedia = (props: {
     "alwaysAllowUnproxied",
     false,
   );
-
-  if (!props.isExpanded) {
-    return null;
-  }
 
   const allowUnproxied = alwaysAllowUnproxied || temporaryAllowUnproxied;
   const canProxy =
@@ -68,6 +64,10 @@ export const InlineExpandedMedia = (props: {
     </div>
   );
 };
+export const InlineExpandedMedia = dynamic(
+  () => Promise.resolve(InlineExpandedMediaInternal),
+  { ssr: false },
+);
 
 const Media = (props: {
   embed: Embed;
@@ -96,7 +96,7 @@ const IframeMedia = (props: { url: string; title?: string }) => {
       allowFullScreen
       src={props.url}
       title={props.title}
-      className="w-full aspect-video"
+      className="aspect-video w-full"
       sandbox="allow-scripts allow-same-origin"
       allow="autoplay 'none'"
     ></iframe>
@@ -136,7 +136,7 @@ const ImageMedia = (props: {
 
 const ImageLoadError = () => {
   return (
-    <div className="text-xs text-rose-400 mb-1 ml-6">Failed to load image</div>
+    <div className="mb-1 ml-6 text-xs text-rose-400">Failed to load image</div>
   );
 };
 
@@ -147,19 +147,19 @@ const UnproxiedWarning = (props: {
 }) => {
   return (
     <div className="mt-1">
-      <div className="text-xs text-rose-400 mb-1">
+      <div className="mb-1 text-xs text-rose-400">
         Unable to proxy content from {props.host}, click below to try and load
         it directly (remote server will see your IP!)
       </div>
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2">
         <button
-          className="rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500 flex items-center gap-1"
+          className="flex items-center gap-1 rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500"
           onClick={props.onReloadClick}
         >
           <ArrowPathIcon className="h-4" /> Reload without proxy
         </button>
         <button
-          className="rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500 flex items-center gap-1"
+          className="flex items-center gap-1 rounded bg-neutral-600 p-2 text-xs hover:bg-neutral-500"
           onClick={props.onAlwaysAllowClick}
         >
           <ExclamationTriangleIcon className="h-4" /> Always automatically
@@ -177,7 +177,7 @@ const ProxyStatus = (props: {
 }) => {
   return (
     !props.isHostedLocally && (
-      <div className="text-[9px] text-neutral-400 flex items-center flex-wrap gap-1">
+      <div className="flex flex-wrap items-center gap-1 text-[9px] text-neutral-400">
         {props.canProxy ? (
           <>
             <CheckIcon className={"h-[9px]"} /> Your IP is hidden from{" "}

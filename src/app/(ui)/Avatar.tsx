@@ -15,7 +15,7 @@ export const Avatar = memo(
 
     return (
       <div
-        className={classNames(`relative`, {
+        className={classNames("relative", {
           "h-[20px] w-[20px]": props.size === "mini",
           "h-[100px] w-[100px]": props.size === "regular",
         })}

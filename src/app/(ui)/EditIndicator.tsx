@@ -8,7 +8,7 @@ export const EditIndicator = (props: { editTime?: string }) => {
 
   return (
     <div
-      className="h-4 -ml-1"
+      className="-ml-1 h-4"
       suppressHydrationWarning={true} // The exact time can differ when rendering on the server vs on the client
       title={`Edited ${formatDistanceToNowStrict(date, { addSuffix: true })}`}
     >

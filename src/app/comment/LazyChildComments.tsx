@@ -8,10 +8,12 @@ import { ArrowRightIcon } from "@heroicons/react/16/solid";
 import { CommentTree } from "@/app/comment/CommentTree";
 import { MouseEvent, useState } from "react";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
+import { MyUserInfo } from "lemmy-js-client";
 
 export const LazyChildComments = (props: {
   node: CommentNode;
   voteConfig: VoteConfig;
+  loggedInUser?: MyUserInfo;
 }) => {
   const [loadedComments, setLoadedComments] = useState<CommentNode[] | null>(
     null,
@@ -45,7 +47,8 @@ export const LazyChildComments = (props: {
     return (
       <a
         href={`/comment/${props.node.commentView.comment.id}`} // If JS is disabled, we can just navigate to the comment page
-        className="flex items-center text-slate-400 hover:text-slate-300 mt-2 ml-10 cursor-pointer text-xs"
+        className="text-primary-400 hover:text-primary-300 ml-10 mt-2 flex cursor-pointer
+          items-center text-xs"
         onClick={onLoadMore}
       >
         Show more comments <ArrowRightIcon className="ml-2 h-4" />
@@ -58,6 +61,7 @@ export const LazyChildComments = (props: {
       key={node.commentView.comment.id}
       node={node}
       voteConfig={props.voteConfig}
+      loggedInUser={props.loggedInUser}
     />
   ));
 };

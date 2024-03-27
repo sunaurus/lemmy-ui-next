@@ -17,7 +17,7 @@ export const Image = (props: ImageProps) => {
       }
       className={classNames(
         "bg-transparent",
-        { "absolute w-full h-full left-0 right-0 top-0 bottom-0": props.fill },
+        { "absolute bottom-0 left-0 right-0 top-0 h-full w-full": props.fill },
         props.className,
       )}
       style={{

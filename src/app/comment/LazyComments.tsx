@@ -10,11 +10,13 @@ import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { useIntersectionObserver } from "usehooks-ts";
 import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
+import { MyUserInfo } from "lemmy-js-client";
 
 export const LazyComments = (props: {
   form: GetComments;
   voteConfig: VoteConfig;
   initialSeenThreads: Set<string>;
+  loggedInUser?: MyUserInfo;
 }) => {
   const [loadedComments, setLoadedComments] = useState<CommentNode[]>([]);
   const [seenThreads, setSeenThreads] = useState(props.initialSeenThreads);
@@ -51,11 +53,12 @@ export const LazyComments = (props: {
           key={node.commentView.comment.id}
           node={node}
           voteConfig={props.voteConfig}
+          loggedInUser={props.loggedInUser}
         />
       ))}
       <div
         ref={ref}
-        className={"text-neutral-400 mt-20 w-full flex justify-center"}
+        className={"mt-20 flex w-full justify-center text-neutral-400"}
       >
         <div>{endReached && "You've reached the end of the page!"}</div>
       </div>

@@ -24,7 +24,7 @@ export const Navbar = async () => {
   return (
     <>
       <nav className={navbarClassName}>
-        <Link href={"/"} className="flex items-center mr-auto lg:mr-6">
+        <Link href={"/"} className="mr-auto flex items-center lg:mr-6">
           {siteView.site.icon && (
             <Image
               src={siteView.site.icon}
@@ -39,13 +39,13 @@ export const Navbar = async () => {
             {siteView.site.name}
           </h1>
         </Link>
-        <span className="hidden lg:flex items-center gap-2">
+        <span className="hidden items-center gap-2 lg:flex">
           <NavbarCollapsibleLinks
             siteView={siteView}
             loggedInUser={loggedInUser}
           />
         </span>
-        <span className="flex items-center gap-2 ml-auto">
+        <span className="ml-auto flex items-center gap-2">
           <StyledLink className="text-neutral-300" href={"/search"}>
             <MagnifyingGlassIcon className="h-4" />
           </StyledLink>
@@ -70,7 +70,7 @@ export const Navbar = async () => {
             )}
           {loggedInUser ? (
             <StyledLink
-              className="text-neutral-200 flex items-center gap-1"
+              className="flex items-center gap-1 text-neutral-200"
               href={"/settings"}
             >
               <Avatar

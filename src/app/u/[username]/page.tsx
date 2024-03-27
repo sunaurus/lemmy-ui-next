@@ -78,7 +78,7 @@ const UserPage = async (props: UserPageProps) => {
 
   const [
     { person_view: personView, moderates, site, comments, posts },
-    { site_view: siteView },
+    { site_view: siteView, my_user: loggedInUser },
   ] = await Promise.all([
     apiClient.getPersonDetails({
       username,
@@ -108,7 +108,7 @@ const UserPage = async (props: UserPageProps) => {
           currentActiveValue={currentSortType}
         />
       </div>
-      <div className="flex flex-col gap-2 items-start">
+      <div className="flex flex-col items-start gap-2">
         {currentView === "Posts" &&
           posts.map((postView) => (
             <PostListItem key={postView.post.id} postView={postView} />
@@ -117,6 +117,7 @@ const UserPage = async (props: UserPageProps) => {
           comments.map(async (commentView) => (
             <Comment
               key={commentView.comment.id}
+              loggedInUser={loggedInUser}
               commentView={commentView}
               addPostLink={true}
               voteConfig={getVoteConfig(siteView.local_site)}

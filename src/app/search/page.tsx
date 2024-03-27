@@ -17,10 +17,10 @@ import { CombinedPostsAndComments } from "@/app/search/CombinedPostsAndComments"
 import { searchAction } from "@/app/search/searchAction";
 import { CommunityLink } from "@/app/c/CommunityLink";
 import { UserLink } from "@/app/u/UserLink";
-import { SearchButton } from "@/app/search/SearchButton";
-import { Input } from "@/app/(ui)/Input";
+import { Input } from "@/app/(ui)/form/Input";
 import { getVoteConfig } from "@/app/(ui)/vote/getVoteConfig";
 import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
+import { SubmitButton } from "@/app/(ui)/button/SubmitButton";
 
 export type SearchPageSearchParams = {
   q?: string;
@@ -97,7 +97,7 @@ const SearchPage = async (props: { searchParams: SearchPageSearchParams }) => {
         <div className="flex items-end gap-2">
           <label
             htmlFor="q"
-            className="block text-sm font-medium leading-6 sr-only"
+            className="sr-only block text-sm font-medium leading-6"
           >
             Search term
           </label>
@@ -107,7 +107,7 @@ const SearchPage = async (props: { searchParams: SearchPageSearchParams }) => {
             className="mt-2 max-w-[400px]"
             defaultValue={props.searchParams.q}
           />
-          <SearchButton />
+          <SubmitButton size={"md"}>Search</SubmitButton>
         </div>
       </form>
 
@@ -183,7 +183,7 @@ const PostsAndComments = (props: {
   );
 };
 
-const Posts = (props: { posts: PostView[] }) => {
+const Posts = async (props: { posts: PostView[] }) => {
   return (
     <>
       <ResultTitle>Posts</ResultTitle>
@@ -199,7 +199,8 @@ const Posts = (props: { posts: PostView[] }) => {
 };
 
 const Comments = async (props: { comments: CommentView[] }) => {
-  const { site_view: siteView } = await apiClient.getSite();
+  const { site_view: siteView, my_user: loggedInUser } =
+    await apiClient.getSite();
   return (
     <>
       <ResultTitle>Comments</ResultTitle>
@@ -207,6 +208,7 @@ const Comments = async (props: { comments: CommentView[] }) => {
         props.comments.map(async (commentView) => (
           <Comment
             key={commentView.comment.id}
+            loggedInUser={loggedInUser}
             commentView={commentView}
             addPostLink={true}
             voteConfig={getVoteConfig(siteView.local_site)}
@@ -256,14 +258,14 @@ const Users = (props: { users: PersonView[] }) => {
 
 const ResultTitle = (props: { children: string }) => {
   return (
-    <h1 className="text-sm font-semibold text-neutral-400 mt-4">
+    <h1 className="mt-4 text-sm font-semibold text-neutral-400">
       {props.children}
     </h1>
   );
 };
 
 const NoResults = () => {
-  return <div className={"text-xs m-1"}>No results found</div>;
+  return <div className={"m-1 text-xs"}>No results found</div>;
 };
 
 export default SearchPage;

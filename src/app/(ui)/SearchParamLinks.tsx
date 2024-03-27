@@ -16,7 +16,7 @@ export const SearchParamLinks = (props: Props) => {
   return (
     <div
       className={classNames(
-        "flex items-center gap-1 lg:gap-2 flex-wrap text-xs lg:text-sm",
+        "flex flex-wrap items-center gap-1 text-xs lg:gap-2 lg:text-sm",
         props.className,
       )}
     >

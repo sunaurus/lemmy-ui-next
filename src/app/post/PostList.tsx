@@ -60,7 +60,7 @@ export const PostList = async (props: {
   }
 
   return (
-    <div className="m-1 lg:ml-4 flex flex-col">
+    <div className="m-1 flex flex-col lg:ml-4">
       <SearchParamLinks
         label={"Sort"}
         searchParamKey={"sortType"}

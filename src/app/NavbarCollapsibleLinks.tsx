@@ -70,7 +70,7 @@ export const NavbarCollapsibleLinks = memo(
         )}
         <NavbarLink
           href={"/communities"}
-          className="lg:ml-6 mr-8 ml-2"
+          className="ml-2 mr-8 lg:ml-6"
           active={path === "/communities"}
         >
           Communities

@@ -8,22 +8,10 @@ type Props = {
 export const Prose = (props: Props) => {
   return (
     <div
-      className="max-w-full
-      min-w-none
-      prose
-      prose-sm
-      prose-invert
-      prose-neutral
-      hover:prose-a:text-slate-300
-      prose-a:text-slate-400
-      prose-a:no-underline
-      prose-hr:border-neutral-700
-      prose-ul:list-disc
-      prose-li:leading-snug
-      prose-p:leading-snug
-      prose-p:mx-0
-      prose-p:my-1
-      prose-p:break-words"
+      className="min-w-none prose-a:text-primary-400 hover:prose-a:text-primary-300 prose
+        prose-sm prose-neutral prose-invert max-w-full prose-p:mx-0 prose-p:my-1
+        prose-p:break-words prose-p:leading-snug prose-a:no-underline prose-ul:list-disc
+        prose-li:leading-snug prose-hr:border-neutral-700"
     >
       {props.children}
     </div>

@@ -18,7 +18,7 @@ export const UserLink = (props: Props) => {
   const creatorUsername = `${props.person.name}@${new URL(props.person.actor_id).host}`;
   return (
     <StyledLink
-      className="flex gap-1 items-center"
+      className="flex items-center gap-1"
       href={`/u/${creatorUsername}`}
     >
       <AgeIcon type={"person"} published={props.person.published} />

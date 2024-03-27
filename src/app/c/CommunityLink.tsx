@@ -13,7 +13,7 @@ export const CommunityLink = memo(
     const communityName = formatCommunityName(props.community);
     return (
       <StyledLink
-        className="flex gap-1 items-center"
+        className="flex items-center gap-1"
         href={`/c/${communityName}`}
       >
         <AgeIcon type={"community"} published={props.community.published} />

@@ -15,7 +15,7 @@ export const StyledLink = (props: Props) => {
     <Link
       className={classNames(
         "hover:brightness-125",
-        { "text-slate-400": !className?.includes("text-") },
+        { "text-primary-400": !className?.includes("text-") },
         className,
       )}
       {...rest}

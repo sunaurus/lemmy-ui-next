@@ -22,8 +22,8 @@ import React, { Dispatch, memo, SetStateAction, useEffect } from "react";
 import { RemoteImageProps } from "@/app/(utils)/getRemoteImageProps";
 import { EditIndicator } from "@/app/(ui)/EditIndicator";
 import { VoteConfig } from "@/app/(ui)/vote/getVoteConfig";
-import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandableMedia";
 import { useSessionStorage } from "usehooks-ts";
+import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandedMedia";
 
 type Props = {
   postView: PostView;
@@ -51,7 +51,7 @@ export const PostListItemContent = memo(
 
     return (
       <div key={props.postView.post.id} className="my-1">
-        <div className="mr-auto flex py-1 gap-1.5 pl-0 lg:py-2 items-start">
+        <div className="mr-auto flex items-start gap-1.5 py-1 pl-0 lg:py-2">
           <div className="flex items-center">
             <VoteButtons
               voteConfig={props.voteConfig}
@@ -79,9 +79,9 @@ export const PostListItemContent = memo(
             <PostActions postView={props.postView} />
           </div>
         </div>
-        {hasExpandableMedia(props.postView.post) && (
+        {hasExpandableMedia(props.postView.post) && inlineExpanded && (
           <InlineExpandedMedia
-            className={"my-3 mx-2 lg:mx-4 max-w-[880px]"}
+            className={"mx-2 my-3 max-w-[880px] lg:mx-4"}
             embed={
               isImage(props.postView.post.url) ||
               isVideo(props.postView.post.url)
@@ -93,7 +93,6 @@ export const PostListItemContent = memo(
                       title: props.postView.post.embed_title,
                     }
             }
-            isExpanded={inlineExpanded}
             remoteImageProps={remoteImageProps}
             localSiteDomain={props.siteView.site.name}
           />
@@ -120,7 +119,7 @@ const Title = (props: TitleProps) => {
     <header>
       <PostThumbnail
         post={props.post}
-        className={"flex sm:hidden float-right mt-1 mr-2"}
+        className={"float-right mr-2 mt-1 flex sm:hidden"}
         loggedInUser={props.loggedInUser}
         setInlineExpanded={props.setInlineExpanded}
       />
@@ -128,25 +127,25 @@ const Title = (props: TitleProps) => {
         <StyledLink
           href={props.post.url ?? `/post/${props.post.id}`}
           className={classNames(
-            "text-neutral-300 visited:text-neutral-400 text-xl font-bold",
-            { "text-slate-400": props.post.featured_community },
+            "text-xl font-bold text-neutral-300 visited:text-neutral-400",
+            { "text-primary-400": props.post.featured_community },
           )}
         >
           {props.post.featured_community && (
             <BellAlertIcon
-              className={"h-4 inline mr-1 mb-0.5 text-slate-400"}
+              className={"text-primary-400 mb-0.5 mr-1 inline h-4"}
               title={"Pined in community"}
             />
           )}
           {props.post.featured_local && (
             <BellAlertIcon
-              className={"h-4 inline mr-1 mb-0.5 text-neutral-200"}
+              className={"mb-0.5 mr-1 inline h-4 text-neutral-200"}
               title={"Pinned in instance"}
             />
           )}
           {props.post.name}
           {props.post.url && (
-            <span className="text-xs text-neutral-400 font-normal ml-2">
+            <span className="ml-2 text-xs font-normal text-neutral-400">
               ({new URL(props.post.url).host})
             </span>
           )}
@@ -154,13 +153,13 @@ const Title = (props: TitleProps) => {
           {props.post.locked && (
             <LockClosedIcon
               title="Post locked"
-              className={"h-4 inline ml-1 mb-1 text-rose-500"}
+              className={"mb-1 ml-1 inline h-4 text-rose-500"}
             />
           )}
           {(props.post.deleted || props.post.removed) && (
             <TrashIcon
               title={`Post ${props.post.removed ? "removed by mod" : "deleted by creator"}`}
-              className={"h-4 inline ml-1 mb-1 text-rose-500"}
+              className={"mb-1 ml-1 inline h-4 text-rose-500"}
             />
           )}
         </StyledLink>
@@ -174,7 +173,7 @@ const PostDetails = (props: {
   hideCommunityName?: boolean;
 }) => {
   return (
-    <div className="text-gray-100 text-xs flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1 text-xs text-gray-100">
       <div className="flex items-center gap-1">
         posted <FormattedTimestamp timeString={props.postView.post.published} />{" "}
         <EditIndicator editTime={props.postView.post.updated} />
@@ -202,11 +201,11 @@ const PostDetails = (props: {
 const PostActions = (props: { postView: PostView }) => {
   const commentCount = props.postView.counts.comments;
   return (
-    <div className="text-[12px]/snug font-semibold mt-1 flex items-center gap-2">
+    <div className="mt-1 flex items-center gap-2 text-[12px]/snug font-semibold">
       {props.postView.post.nsfw && (
         <span
           className={
-            "inline text-[12px]/snug text-rose-500 border border-rose-500 rounded px-1"
+            "inline rounded border border-rose-500 px-1 text-[12px]/snug text-rose-500"
           }
         >
           NSFW
@@ -214,24 +213,24 @@ const PostActions = (props: { postView: PostView }) => {
       )}
       <StyledLink
         href={`/post/${props.postView.post.id}`}
-        className="flex text-neutral-300 items-center"
+        className="flex items-center text-neutral-300"
       >
-        <ChatBubbleLeftRightIcon className="h-4 mr-1" title="View comments" />
+        <ChatBubbleLeftRightIcon className="mr-1 h-4" title="View comments" />
         {formatCompactNumber(commentCount)} comments
       </StyledLink>
       <StyledLink
         href={props.postView.post.ap_id}
-        className="flex text-neutral-300 items-center"
+        className="flex items-center text-neutral-300"
       >
         share
       </StyledLink>
-      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+      <StyledLink href={"#"} className="flex items-center text-neutral-300">
         save
       </StyledLink>
-      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+      <StyledLink href={"#"} className="flex items-center text-neutral-300">
         hide
       </StyledLink>
-      <StyledLink href={"#"} className="flex text-neutral-300 items-center">
+      <StyledLink href={"#"} className="flex items-center text-neutral-300">
         report
       </StyledLink>
     </div>

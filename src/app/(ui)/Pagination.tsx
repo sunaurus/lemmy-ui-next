@@ -22,7 +22,7 @@ export const Pagination = (props: {
       <StyledLink
         href={`${pathname}?${nextPageParams.toString()}`}
         className={classNames(
-          "text-xs flex items-center gap-1",
+          "flex items-center gap-1 text-xs",
           props.className,
         )}
       >
@@ -40,7 +40,7 @@ export const Pagination = (props: {
       <StyledLink
         href={`${pathname}?${prevPageParams.toString()}`}
         className={classNames(
-          "text-xs flex items-center gap-1",
+          "flex items-center gap-1 text-xs",
           props.className,
         )}
       >
@@ -51,7 +51,7 @@ export const Pagination = (props: {
   }
 
   return (
-    <div className={"w-full flex gap-6 justify-center mt-4"}>
+    <div className={"mt-4 flex w-full justify-center gap-6"}>
       {prevPageLink}
       {nextPageLink}
     </div>

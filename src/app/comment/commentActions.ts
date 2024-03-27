@@ -4,17 +4,19 @@ import { apiClient } from "@/app/apiClient";
 import { GetComments } from "lemmy-js-client/dist/types/GetComments";
 import { CommentView } from "lemmy-js-client";
 import { getMarkdownWithRemoteImages } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
-import { MarkdownPropsWithReplacements } from "@/app/(ui)/markdown/Markdown";
+import { MarkdownProps } from "@/app/(ui)/markdown/Markdown";
 import { ROOT_NODES_BATCH_SIZE } from "@/app/comment/constants";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export type CommentNode = {
   commentView: CommentView;
   children: CommentNode[];
   parent: CommentNode | null;
-  markdown: MarkdownPropsWithReplacements;
+  markdown: MarkdownProps;
 };
 
-type Trees = {
+export type CommentTrees = {
   rootNodes: CommentNode[];
   seenThreads: Set<string>;
 };
@@ -22,7 +24,7 @@ type Trees = {
 export const buildCommentTreesAction = async (
   form: GetComments,
   seenThreads: Set<string>,
-): Promise<Trees> => {
+): Promise<CommentTrees> => {
   const [{ comments }, { site_view: siteView }] = await Promise.all([
     apiClient.getComments(form),
     apiClient.getSite(),
@@ -92,4 +94,57 @@ export const buildCommentTreesAction = async (
     rootNodes: topLevelNodes,
     seenThreads: new Set(combinedSeenThreads),
   };
+};
+
+export const createCommentAction = async (
+  postId: number,
+  parentId: number | undefined,
+  data: FormData,
+): Promise<CommentView> => {
+  const response = await apiClient.createComment({
+    post_id: postId,
+    parent_id: parentId,
+    content: data.get("content")?.toString() ?? "",
+  });
+
+  revalidatePath(`/comment/[id]`, "page");
+  revalidatePath(`/post/[id]`, "page");
+  if (parentId) {
+    return response.comment_view;
+  } else {
+    redirect(`/comment/${response.comment_view.comment.id}`);
+  }
+};
+
+export const editCommentAction = async (
+  commentId: number,
+  data: FormData,
+): Promise<CommentView> => {
+  const content = data.get("content")?.toString() ?? "";
+  const response = await apiClient.editComment({
+    comment_id: commentId,
+    content,
+  });
+
+  revalidatePath(`/comment/[id]`, "page");
+  revalidatePath(`/post/[id]`, "page");
+  return response.comment_view;
+};
+export const deleteCommentAction = async (commentId: number) => {
+  await apiClient.deleteComment({
+    comment_id: commentId,
+    deleted: true,
+  });
+
+  revalidatePath(`/comment/[id]`, "page");
+  revalidatePath(`/post/[id]`, "page");
+};
+export const restoreCommentAction = async (commentId: number) => {
+  await apiClient.deleteComment({
+    comment_id: commentId,
+    deleted: false,
+  });
+
+  revalidatePath(`/comment/[id]`, "page");
+  revalidatePath(`/post/[id]`, "page");
 };

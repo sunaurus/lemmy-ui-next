@@ -49,8 +49,8 @@ const CommunitiesListPage = async ({
   }
 
   return (
-    <div className="w-full flex flex-col items-start content-center">
-      <div className="flex flex-col gap-1 m-2">
+    <div className="flex w-full flex-col content-center items-start">
+      <div className="m-2 flex flex-col gap-1">
         <SearchParamLinks
           label={"Sort"}
           searchParamKey={"sortType"}
@@ -106,13 +106,13 @@ const Row = (props: {
             <div className={"flex flex-col lg:hidden"}>
               <div className="mt-1 text-xs">
                 Subscribers:
-                <span className="font-bold ml-1">
+                <span className="ml-1 font-bold">
                   {formatCompactNumber(props.communityView.counts.subscribers)}
                 </span>
               </div>
               <div className="text-xs">
                 MAU:
-                <span className="font-bold ml-1">
+                <span className="ml-1 font-bold">
                   {formatCompactNumber(
                     props.communityView.counts.users_active_month,
                   )}
@@ -120,20 +120,20 @@ const Row = (props: {
               </div>
               <div className="text-xs">
                 Posts:
-                <span className="font-bold ml-1">
+                <span className="ml-1 font-bold">
                   {formatCompactNumber(props.communityView.counts.posts)}
                 </span>
               </div>
               <div className="text-xs">
                 Comments:
-                <span className="font-bold ml-1">
+                <span className="ml-1 font-bold">
                   {formatCompactNumber(props.communityView.counts.comments)}
                 </span>
               </div>
             </div>
 
             {props.loggedInUser && (
-              <div className="ml-auto mr-2 mt-auto  lg:hidden">
+              <div className="ml-auto mr-2 mt-auto lg:hidden">
                 <SubscribeButton
                   loggedInUser={props.loggedInUser}
                   currentStatus={props.communityView.subscribed}
@@ -174,7 +174,8 @@ const ColumnHeader = (props: { children?: ReactNode; className?: string }) => {
     <th
       scope="col"
       className={classNames(
-        "px-4 py-3 text-xs font-medium text-neutral-300 uppercase tracking-wider text-center first-of-type:text-left last-of-type:text-right",
+        `px-4 py-3 text-center text-xs font-medium uppercase tracking-wider
+        text-neutral-300 first-of-type:text-left last-of-type:text-right`,
         props.className,
       )}
     >
@@ -187,7 +188,8 @@ const Cell = (props: { children: ReactNode; className?: string }) => {
   return (
     <td
       className={classNames(
-        "px-4 py-2 whitespace-nowrap text-center first-of-type:text-left last-of-type:text-right",
+        `whitespace-nowrap px-4 py-2 text-center first-of-type:text-left
+        last-of-type:text-right`,
         props.className,
       )}
     >

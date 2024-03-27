@@ -29,7 +29,8 @@ export const PostThumbnail = memo(
     return (
       <div
         className={classNames(
-          "rounded ml-1 bg-neutral-600 h-[70px] w-[70px] min-h-[70px] min-w-[70px] relative flex items-center justify-center overflow-hidden",
+          `relative ml-1 flex h-[70px] min-h-[70px] w-[70px] min-w-[70px] items-center
+          justify-center overflow-hidden rounded bg-neutral-600`,
           props.className,
         )}
       >
@@ -96,7 +97,8 @@ function ExpandOverlay(props: {
 }) {
   return (
     <a
-      className="cursor-pointer z-1 h-full w-full flex items-end justify-end hover:brightness-125 absolute"
+      className="z-1 absolute flex h-full w-full cursor-pointer items-end justify-end
+        hover:brightness-125"
       href={props.url} // If JS is disabled, this href will still let users navigate to the content
       onClick={(e) => {
         e.preventDefault();
@@ -105,10 +107,10 @@ function ExpandOverlay(props: {
       }}
     >
       {isImage(props.url) ? (
-        <ArrowsPointingOutIcon className="h-7 bg-neutral-800 rounded" />
+        <ArrowsPointingOutIcon className="h-7 rounded bg-neutral-800" />
       ) : (
         // Videos get a different icon
-        <PlayIcon className="h-7 bg-neutral-800 rounded" />
+        <PlayIcon className="h-7 rounded bg-neutral-800" />
       )}
     </a>
   );

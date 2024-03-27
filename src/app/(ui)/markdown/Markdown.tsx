@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it";
 import { Prose } from "@/app/(ui)/markdown/Prose";
 import { MarkdownImageReplacement } from "@/app/(ui)/markdown/MarkdownImageReplacement";
-import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandableMedia";
+import { InlineExpandedMedia } from "@/app/(ui)/InlineExpandedMedia";
 import { MarkdownImage } from "@/app/(ui)/markdown/MarkdownWithFetchedContent";
 
 export type MarkdownPropsWithReplacements = {
@@ -10,13 +10,13 @@ export type MarkdownPropsWithReplacements = {
   localSiteName: string;
 };
 
-type RawMarkdownProps = {
+export type RawMarkdownProps = {
   content: string;
 };
-type Props = RawMarkdownProps | MarkdownPropsWithReplacements;
+export type MarkdownProps = RawMarkdownProps | MarkdownPropsWithReplacements;
 const md = new MarkdownIt({ linkify: true });
 
-export const Markdown = (props: Props) => {
+export const Markdown = (props: MarkdownProps) => {
   const isRaw = isRawMarkdown(props);
 
   const renderedHtml = isRaw ? md.render(props.content ?? "") : props.html;
@@ -35,7 +35,6 @@ export const Markdown = (props: Props) => {
             <InlineExpandedMedia
               className={"max-w-[830px]"}
               embed={{ url: replacement.src, alt: replacement.alt }}
-              isExpanded={true}
               localSiteDomain={props.localSiteName}
               remoteImageProps={replacement.remoteImageProps}
             />
@@ -45,6 +44,6 @@ export const Markdown = (props: Props) => {
   );
 };
 
-const isRawMarkdown = (props: Props): props is RawMarkdownProps => {
+const isRawMarkdown = (props: MarkdownProps): props is RawMarkdownProps => {
   return (props as RawMarkdownProps).content !== undefined;
 };

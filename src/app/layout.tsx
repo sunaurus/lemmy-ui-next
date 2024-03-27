@@ -7,6 +7,7 @@ import { Navbar } from "@/app/Navbar";
 import { ReactNode } from "react";
 import { StyledLink } from "@/app/(ui)/StyledLink";
 import { TopLoader } from "@/app/(ui)/TopLoader";
+import { ThemePicker } from "@/app/ThemePicker";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const site = await apiClient.getSite();
@@ -66,13 +67,16 @@ export default function RootLayout(props: Props) {
   return (
     <html
       lang="en"
-      className="min-h-screen overscroll-x-none bg-neutral-900 overflow-x-clip"
+      className="min-h-screen overflow-x-clip overscroll-x-none bg-neutral-900"
     >
-      <body className="min-h-screen w-full bg-[#1f1f1f] text-neutral-300 overflow-x-clip relative flex flex-col">
+      <body
+        className="relative flex min-h-screen w-full flex-col overflow-x-clip bg-[#1f1f1f]
+          text-neutral-300"
+      >
         <TopLoader />
         <Navbar />
 
-        <main className="w-full mb-auto">{props.children}</main>
+        <main className="mb-auto w-full">{props.children}</main>
         <Footer />
       </body>
     </html>
@@ -83,8 +87,12 @@ const Footer = async () => {
   const site = await apiClient.getSite();
 
   return (
-    <footer className="mt-40 mb-1 text-neutral-400 flex flex-col items-center content-center justify-center w-full gap-1 text-xs ">
-      <div className="flex items-center content-center justify-center w-full gap-x-4 gap-y-1 flex-wrap">
+    <footer
+      className="mb-1 mt-40 flex w-full flex-col content-center items-center justify-center gap-1
+        text-xs text-neutral-400"
+    >
+      <ThemePicker />
+      <div className="flex w-full flex-wrap content-center items-center justify-center gap-x-4 gap-y-1">
         <StyledLink className="text-neutral-400" href="/modlog">
           modlog
         </StyledLink>
@@ -104,7 +112,7 @@ const Footer = async () => {
           join-lemmy.org
         </StyledLink>
       </div>
-      <div className="flex items-center content-center justify-center w-full gap-x-4 gap-y-1 flex-wrap">
+      <div className="flex w-full flex-wrap content-center items-center justify-center gap-x-4 gap-y-1">
         <span>lemmy-ui-next v0.0.1</span>
         <span>lemmy v{site.version}</span>
       </div>
