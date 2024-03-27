@@ -46,7 +46,7 @@ export const PostThumbnail = memo(
         )}
         {hasExpandableMedia(props.post) && (
           <ExpandOverlay
-            url={src ?? props.post.embed_video_url!}
+            url={props.post.embed_video_url ?? src!}
             onToggleExpanded={props.setInlineExpanded}
           />
         )}
