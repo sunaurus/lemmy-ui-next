@@ -7,12 +7,9 @@ import { StyledLink } from "@/app/(ui)/StyledLink";
 import { Avatar } from "@/app/(ui)/Avatar";
 import classNames from "classnames";
 import { NavbarCollapsibleLinks } from "@/app/NavbarCollapsibleLinks";
-import {
-  BellAlertIcon,
-  FlagIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/16/solid";
-import { ClipboardIcon } from "@heroicons/react/20/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import { LoggedInUserIcons } from "@/app/u/LoggedInUserIcons";
+import { getUnreadCounts } from "@/app/settings/loggedInUserActions";
 
 export const Navbar = async () => {
   const { site_view: siteView, my_user: loggedInUser } =
@@ -20,6 +17,15 @@ export const Navbar = async () => {
 
   const navbarClassName =
     "bg-neutral-900 shadow-lg text-neutral-300 py-2 px-4 pr-4 flex items-center gap-2 h-11";
+
+  let unreadCounts = undefined;
+  if (loggedInUser) {
+    unreadCounts = await getUnreadCounts(
+      loggedInUser.local_user_view.local_user.admin,
+      loggedInUser.moderates.length > 0,
+      siteView.local_site.registration_mode === "RequireApplication",
+    );
+  }
 
   return (
     <>
@@ -50,24 +56,14 @@ export const Navbar = async () => {
             <MagnifyingGlassIcon className="h-4" />
           </StyledLink>
           {loggedInUser && (
-            <StyledLink className="text-neutral-300" href={"/inbox"}>
-              <BellAlertIcon className="h-4" />
-            </StyledLink>
+            <LoggedInUserIcons
+              loggedInUser={loggedInUser}
+              applicationsRequired={
+                siteView.local_site.registration_mode === "RequireApplication"
+              }
+              initialCounts={unreadCounts}
+            />
           )}
-          {loggedInUser?.local_user_view.local_user.admin && (
-            <StyledLink className="text-neutral-300" href={"/reports"}>
-              <FlagIcon className="h-4" />
-            </StyledLink>
-          )}
-          {loggedInUser?.local_user_view.local_user.admin &&
-            siteView.local_site.registration_mode === "RequireApplication" && (
-              <StyledLink
-                className="text-neutral-300"
-                href={"/registration_applications"}
-              >
-                <ClipboardIcon className="h-4" />
-              </StyledLink>
-            )}
           {loggedInUser ? (
             <StyledLink
               className="flex items-center gap-1 text-neutral-200"
