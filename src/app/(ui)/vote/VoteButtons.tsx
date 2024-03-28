@@ -19,7 +19,7 @@ type PostProps = BaseProps & { postView: PostView };
 type Props = CommentProps | PostProps;
 export const VoteButtons = memo(
   (props: Props) => {
-    const totalScore = getScore(props);
+    const totalScore = !isComment(props) ? getScore(props) : undefined;  // We only show score between vote buttons for posts, not comments
     const userScore = isComment(props)
       ? props.commentView.my_vote
       : props.postView.my_vote;
@@ -138,4 +138,4 @@ const isComment = (props: Props): props is CommentProps => {
 };
 
 const getScore = (props: Props): number | undefined =>
-  isComment(props) ? undefined : props.postView.counts.score; // We only show score between vote buttons for posts, not comments
+  isComment(props) ? props.commentView.counts.score : props.postView.counts.score;
