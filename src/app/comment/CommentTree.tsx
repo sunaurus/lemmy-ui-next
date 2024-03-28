@@ -33,7 +33,9 @@ export const CommentTree = memo(
   },
   (prevProps, newProps) =>
     prevProps.node.commentView.comment.id ===
-    newProps.node.commentView.comment.id,
+    newProps.node.commentView.comment.id && 
+    prevProps.node.commentView.counts.score === 
+    newProps.node.commentView.counts.score,
 );
 
 CommentTree.displayName = "CommentTree";
